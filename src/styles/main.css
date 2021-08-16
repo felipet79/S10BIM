@@ -1,0 +1,54 @@
+@import url('http://fonts.cdnfonts.com/css/segoe-ui-4');
+
+*{
+	font-size: "Segoe UI", Roboto !important;
+	/* font-weight: 400 !important; */
+}
+
+a{
+    color:#2d2d2d;
+}
+
+.breadcrumb-item a:hover, .breadcrumb-item a{
+	color: #2d2d2d !important;
+	cursor: default !important;
+}
+
+::-webkit-scrollbar{
+    width: 8px;
+    height: 8px;
+    }
+    ::-webkit-scrollbar-thumb{
+    background: linear-gradient(39deg, #826ABD 14%,#6DAFDB 64%);
+    border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover{
+    background: linear-gradient(10deg, #A090C7 14%,#99C1DB 64%);
+    }
+    ::-webkit-scrollbar-track{
+    background: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: inset 7px 10px 12px 0px #F0F0F0;
+    }
+
+
+@media screen and (max-width: 500px){
+    .tree-fixed{
+        position: relative;
+    }
+}
+
+.breadcrumb{
+    padding: 0;
+    margin: 0;
+    background: none !important;
+	font-size: 12px;
+}
+
+.MuiTypography-body1{
+	font-size: 0.8rem !important;
+}
+
+.font-12{font-size: 8px;}
+
+.content-wrapper{ height: 90.8vh;}

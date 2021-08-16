@@ -1,0 +1,73 @@
+{
+  "name": "s10",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.12.0",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.59",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "@types/forge-viewer": "^7.41.0",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.41",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
+    "chart.js": "^3.4.1",
+    "devextreme": "21.1.5",
+    "devextreme-react": "21.1.5",
+    "forge-apis": "^0.8.5",
+    "forge-dataviz-iot-data-modules": "^0.1.9",
+    "forge-dataviz-iot-react-components": "^0.1.14",
+    "formik": "^2.2.9",
+    "jquery": "^3.6.0",
+    "moment-timezone": "^0.5.33",
+    "re-resizable": "^6.9.0",
+    "react": "^17.0.2",
+    "react-bootstrap": "^1.6.1",
+    "react-chartjs-2": "^3.0.4",
+    "react-dom": "^17.0.2",
+    "react-load-script": "0.0.6",
+    "react-moment": "^1.1.1",
+    "react-redux": "^7.2.4",
+    "react-reflex": "^4.0.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "redux": "^4.1.0",
+    "redux-thunk": "^2.3.0",
+    "signalr": "^2.4.2",
+    "signalr-no-jquery": "^0.2.0",
+    "systemjs": "^3.1.6",
+    "three": "^0.131.2",
+    "typescript": "^4.3.5",
+    "web-vitals": "^1.1.2",
+    "yup": "^0.32.9"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+export const SIGN_IN = 'SIGN_IN';
+export const REFRESH_TOKEN = 'REFRESH_TOKEN ';
+export const ERROR = 'ERROR';
+export const LOG_OUT = 'LOG_OUT';
+export const LOADING_LOGIN = 'LOADING_LOGIN';
+
+export const SELECT_COMPANY = 'SELECT_COMPANY';
+export const RELOAD_COMPANY = 'RELOAD_COMPANY';
+export const REFRESH_IDCONNECTION = 'REFRESH_IDCONNECTION';
+
+
+//signalr =====================================
+
+export const ARBOL = 'ARBOL';
+export const TREE_PARTS = 'TREE_PARTS';
+export const DATA_GENERAL = 'DATA_GENERAL';
+export const ID_DATA_TABLE = 'ID_DATA_TABLE';
+export const TREE_COUNT = 'TREE_COUNT';
+export const LISTAR_POR_PERIODO = 'LISTAR_POR_PERIODO';
+export const PROJECT_DETAILS = 'PROJECT_DETAILS';
+export const LIST_HISTORY = 'LIST_HISTORY';
+
+
+export const PARTY_CONTROL = 'PARTY_CONTROL';
+export const PARTY_CONTROL1 = 'PARTY_CONTROL1';
+
+export const LISTAR_SUBS = 'LISTAR_SUBS';
+
+export const LISTAR_CLIENTES = 'LISTAR_CLIENTES';
+export const LISTAR_UBICACIONES = 'LISTAR_UBICACIONES';
+export const LIMPIAR_UBICACIONES = 'LIMPIAR_UBICACIONES';
+
+export const LEER_PRESUPUESTO = 'LEER_PRESUPUESTO';
+
+
+export const CAMBIA_SELECCION = 'CAMBIA_SELECCION';
+export const SUB_SEL = 'SUB_SEL';
+
+
+export const MENSUAL_DETALLE = 'MENSUAL_DETALLE';
+export const APU_DETALLE = 'APU_DETALLE';
+
+export const METRADO_DETALLE = 'METRADO_DETALLE';
+export const UNIQUE_DETALLE = 'UNIQUE_DETALLE';
+
+export const ASOCIADO_DETALLE = 'ASOCIADO_DETALLE';
+export const ESTRUCTURA_DETALLE = 'ESTRUCTURA_DETALLE';
+export const CALCULO_DETALLE = 'CALCULO_DETALLE';
+export const CALCULODET_DETALLE = 'CALCULODET_DETALLE';
+
+export const NAVIGATION_TREE = 'NAVIGATION_TREE';
+export const NAVIGATION_TREE_PC = 'NAVIGATION_TREE_PC';
+export const ID_PC = 'ID_PC';
+
+export const URN_WEB = 'URN_WEB';
+
+export const PROJECT_LIST_DETAILS = 'PROJECT_LIST_DETAILS';
+export const TREE_SELECTEDS = 'TREE_SELECTEDS';
