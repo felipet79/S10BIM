@@ -27,6 +27,7 @@ import {
 	LISTAR_CLIENTES,
 	LISTAR_UBICACIONES,
 	LIMPIAR_UBICACIONES,
+	LISTAR_MODELOS,
 } from '../constants';
 
 const initialState = {
@@ -78,7 +79,7 @@ export default (state = initialState, { type, payload }) => {
 			};
 
 		case MENSUAL_DETALLE:
-			console.log('pasa a guardar');
+			console.log('pasa a guardar datos de items');
 			console.log(state);
 			console.log(payload);
 
@@ -118,7 +119,7 @@ export default (state = initialState, { type, payload }) => {
 		case LISTAR_UBICACIONES:
 			return {
 				...state,
-				DataUbicaciones:[...state.DataUbicaciones, ...payload]
+				DataUbicaciones: [...state.DataUbicaciones, ...payload]
 				//DataUbicaciones: payload
 			};
 
@@ -127,7 +128,14 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				DataUbicaciones: []
 			};
-			
+
+		case LISTAR_MODELOS:
+			return {
+				...state,
+				//DataUbicaciones:[...state.DataUbicaciones, ...payload]
+				DataModelos: payload
+			};
+
 		case METRADO_DETALLE:
 			return {
 				...state,

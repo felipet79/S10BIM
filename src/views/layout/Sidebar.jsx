@@ -103,7 +103,7 @@ const Sidebar = () => {
             </li>
             <ul style={{listStyle:'none'}}>
             <li className="nav-item">
-              <Link to="/inicio" className="nav-link font-12">
+              <Link to="/modelos" className="nav-link font-12">
                 <i className="nav-icon far fa-calendar-alt" style={{position:'absolute', fontSize: 15, marginLeft:'-30px'}}></i>
                 <p>
                   Modelos

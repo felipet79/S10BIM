@@ -210,27 +210,32 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 		// eslint-disable-next-line
 	}, [levelStart, proyects.treePartyControl])
 
+
+
+
+
 	const changeItem = (pc, newTitle) => {
-
-
 		if (Accion == "Generales") {
 			dispatch(cambiaSeleccion(1));
 			dispatch(navigationTreePC(newTitle))
 		}		
 		//console.log('')
-		if (itemSelected === pc.CodPresupuesto) return;
-		
-		
-
 		if (Accion == "Generales") {
 			//proyects.seleccion=1;
 			//selectSeleccion(1);
+			if (itemSelected === pc.CodPresupuesto) return;
 			DatosPresupuesto(pc.CodPresupuesto);
 			setItemSelected(pc.CodPresupuesto);
-			
-			
 			//dispatch(cleanDataChart());
 			SubPresupuestos(pc.CodPresupuesto);
+
+		}else{
+			DatosPresupuesto(pc.CodPresupuesto);
+			SubPresupuestos(pc.CodPresupuesto);
+			//alert(proyects.treeSubControl.length);
+			//dispatch(selectItems(idpadre, pc.CodSubpresupuesto, ''));
+			//dispatch(cleanDataChart());
+
 
 		}
 
@@ -261,15 +266,23 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 			//if (itemSelected === pc.CodPresupuesto) return;
 			dispatch(navigationTreePC(newTitle))			
 
+		}else
+		{
+			if (itemSelected1 === pc.CodSubpresupuesto && itemSelected === idpadre) return;
+			setItemSelected1(pc.CodSubpresupuesto);
+			dispatch(SeleccionaSub(pc.CodSubpresupuesto))			
+			//SubPresupuestos(idpadre);
+			setItemSelected(idpadre);
+			//dispatch(navigationTreePC(pc.CodSubpresupuesto))
+			dispatch(selectItems(idpadre, pc.CodSubpresupuesto, ''));
+			dispatch(cleanDataChart());
+	
+
 		}
 
 		
 
-		if (itemSelected1 === pc.CodSubpresupuesto) return;
-		setItemSelected1(pc.CodSubpresupuesto);
-		//dispatch(navigationTreePC(pc.CodSubpresupuesto))
-		dispatch(selectItems(itemSelected, pc.CodSubpresupuesto, ''));
-		dispatch(cleanDataChart());
+
 
 
 

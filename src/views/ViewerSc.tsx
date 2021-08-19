@@ -2587,7 +2587,7 @@ export const ViewerSc = (props) => {
         /*return ()=> {
            if (window.NOP_VIEWER) window.NOP_VIEWER.finish() //terminate Viewer when unmounting
         }*/
-    });
+    },[]);
 
 
 

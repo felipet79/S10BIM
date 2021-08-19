@@ -21,6 +21,7 @@ import {
 	LEER_PRESUPUESTO,
 	LISTAR_CLIENTES,
 	LISTAR_UBICACIONES,
+	LISTAR_MODELOS,
 } from "../constants";
 
 import $ from 'jquery';
@@ -95,6 +96,17 @@ export const connectSignalr = (token) => {
 					});
 					break;
 
+
+				case LISTAR_MODELOS:
+					//console.log('Modelos llegados:');
+					//console.log(JSON.parse(data.Data));
+
+					dispatch({
+						type: LISTAR_MODELOS,
+						payload: JSON.parse(data.Data),
+					});
+					break;
+
 				case LISTAR_UBICACIONES:
 					//console.log('ubicaciones llegadas:');
 					//console.log(JSON.parse(data.Data));
@@ -107,8 +119,8 @@ export const connectSignalr = (token) => {
 
 
 				case PARTY_CONTROL1:
-					console.log('datos llegados de Subprespuestos:');
-					console.log(JSON.parse(data.Data));
+					//console.log('datos llegados de Subprespuestos:');
+					//console.log(JSON.parse(data.Data));
 					dispatch({
 						type: PARTY_CONTROL1,
 						payload: JSON.parse(data.Data),
@@ -116,8 +128,8 @@ export const connectSignalr = (token) => {
 					break;
 
 				case LISTAR_SUBS:
-					console.log('datos llegados de Subprespuestos tODOS:');
-					console.log(JSON.parse(data.Data));
+					//console.log('datos llegados de Subprespuestos tODOS:');
+					//console.log(JSON.parse(data.Data));
 					dispatch({
 						type: LISTAR_SUBS,
 						payload: JSON.parse(data.Data),
@@ -136,8 +148,8 @@ export const connectSignalr = (token) => {
 					break;
 
 				case MENSUAL_DETALLE:
-					//console.log('datos llegados:');
-					//console.log(JSON.parse(data.Data));
+					console.log('datos llegados de items:');
+					console.log(JSON.parse(data.Data));
 					dispatch({
 						type: MENSUAL_DETALLE,
 						payload: JSON.parse(data.Data),

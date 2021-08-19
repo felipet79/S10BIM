@@ -16,6 +16,7 @@ import Proyects from "./views/Proyects";
 import 'devextreme/dist/css/dx.light.css';
 import Presupuestos from "./views/Presupuestos";
 
+import Models from "./views/Models";
 
 function App() {
 	const dispatch = useDispatch();
@@ -42,6 +43,8 @@ function App() {
           {/* <Route path="/proyects/:codProject" component={Proyects} /> */}
        
           <Route path="/presupuesto" component={Presupuestos} />
+
+          <Route path="/modelos" component={Models} />
         </Layout>
       </Switch>
     </Router>

@@ -10,9 +10,11 @@ import TreeList, {
 	FilterPanel,
 	FilterRow,
 	Scrolling,
-	Column } from 'devextreme-react/tree-list';
+	Column
+} from 'devextreme-react/tree-list';
+import { useEffect, useState } from "react";
 
-const BuscaUbicacion = ({ show, setShow }) => {
+const BuscaModelo = ({ show, setShow, item }) => {
 	const dispatch = useDispatch();
 	const handleClose = () => setShow(false);
 	const auth = useSelector(state => state.auth);
@@ -20,22 +22,68 @@ const BuscaUbicacion = ({ show, setShow }) => {
 	const proyects = useSelector((state) => state.proyects);
 	//dispatch(selectAPUS(codP, codSub, codItem, ''));
 
+	const [modeloSel, setmodeloSel] = useState({
+		codigo: '',
+		nombre: '',
+	});
 
+
+
+	const Selecciona = () => {
+
+		proyects.AuxModelo=modeloSel.nombre;
+		setShow(false);
+	}
+
+
+	function onSelectionChanged(e) {
+		//console.log(e);
+
+		//alert(e.row.data.Descripcion);
+		const Item = e.row.data;
+		const codP = Item.CodPlano;
+		//alert(Item.CodPlano + ' ' + Item.NombreArchivoRvt);
+
+		setmodeloSel({
+			codigo: Item.CodPlano,
+			nombre: Item.NombreArchivoRvt,
+		});
+
+		//const codSub = Item.CodSubpresupuesto;
+		//const codItem = Item.Item;
+		//alert(codP + "-" + codSub + "-" + codItem);
+
+
+		//const selectedData = e.component.getSelectedRowsData(state.selectionMode);
+		/*setState({
+		  selectedRowKeys: e.selectedRowKeys,
+
+		  //selectedEmployeeNames: this.getEmployeeNames(selectedData)
+		});*/
+	}
+
+	useEffect(() => {
+		setmodeloSel({
+			codigo: '',
+			nombre: '',
+		});
+	}, []);
 
 	return (
 		<>
 
-			<Modal size="lg" centered show={show} onHide={handleClose} >
+			<Modal centered show={show} onHide={handleClose}>
 				<Modal.Header closeButton>
-					<Modal.Title>Selecciona una Ubicación</Modal.Title>
+					<Modal.Title>Selecciona un Modelo</Modal.Title>
 				</Modal.Header>
 
-
+				
 				<Modal.Body>
 
 					<TreeList
-						dataSource={proyects.DataUbicaciones}
-						keyExpr="CodLugar"
+						dataSource={proyects.DataModelos}
+						keyExpr="CodPlano"
+
 						//parentIdExpr="PhantomParentId"
 						showBorders={true}
 						focusedRowEnabled={true}
@@ -46,7 +94,7 @@ const BuscaUbicacion = ({ show, setShow }) => {
 
 						//onSelectionChanged={() => {alert('hola')}}
 						//onRowClick={() => {alert(this)}}
-						onFocusedRowChanged={()=>{}/*onSelectionChanged*/}
+						onFocusedRowChanged={onSelectionChanged}
 						wordWrapEnabled={true}
 					>
 						<Editing
@@ -69,21 +117,21 @@ const BuscaUbicacion = ({ show, setShow }) => {
 						/>
 
 						<Column
-							width={'33%'}
-							dataField="Departamento" />
-						<Column
-							width={'33%'}
-							dataField="Descripcion"
+							width={'100%'}
+							dataField="NombreArchivoRvt" />
+						{/*<Column
+							width={'10%'}
+							dataField="Cantidad"
 							alignment={'right'}
 						/>
 						<Column
-							width={'33%'}
-							dataField="Provincia"
-							caption="Provincia"
+							width={'10%'}
+							dataField="Longitud"
+							caption="Longitud"
 							alignment={'right'}
 						/>
 
-						{/*<Column
+						<Column
 							width={'10%'}
 							dataField="Ancho"
 							alignment={'right'}
@@ -106,8 +154,8 @@ const BuscaUbicacion = ({ show, setShow }) => {
 							dataField="Detalle" 
 							alignment={'center'}
 						/>*/}
-							
-						
+
+
 
 						<Pager
 							//allowedPageSizes={allowedPageSizes}
@@ -135,9 +183,10 @@ const BuscaUbicacion = ({ show, setShow }) => {
 				</Modal.Body>
 
 				<Modal.Footer>
+				<strong style={{ fontSize:'0.6rem', position:'absolute', left:'5px', marginLeft: '20px',  }}> Sel: {modeloSel.nombre}</strong>
 					<Button
 						variant="primary"
-						onClick={handleClose}
+						onClick={Selecciona}
 					>
 						Seleccionar
 					</Button>
@@ -147,11 +196,11 @@ const BuscaUbicacion = ({ show, setShow }) => {
 						onClick={handleClose}
 					>
 						Cancelar
-			</Button>
+					</Button>
 				</Modal.Footer>
 			</Modal>
 		</>
 	)
 }
 
-export default BuscaUbicacion
+export default BuscaModelo

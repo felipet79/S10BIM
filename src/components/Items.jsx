@@ -5,7 +5,7 @@ import { Col, Nav } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import $ from 'jquery';
-import { cleanDataChart22, cleanDataChartAPU, selectAPUS, selectAsociados, selectCalculo, selectCalculoDet, selectEstructura, selectMETRADOS } from "../actions/proyects.actions";
+import { cleanDataChart, cleanDataChart22, cleanDataChartAPU, selectAPUS, selectAsociados, selectCalculo, selectCalculoDet, selectEstructura, selectItems, selectMETRADOS } from "../actions/proyects.actions";
 import TreeList, {
 	Pager,
 	Paging,
@@ -82,36 +82,25 @@ const Items = ({ levelStart = 1, idProject }) => {
 
 
 	const orderTree = (tree) => {
-		//let orderedLevels = {};
-
-		/*for (let i = 0; i < tree.length; i++) {
-			const item = tree[i];
-			if (item.Nivel >= levelStart) {
-				if (!orderedLevels[item.Nivel])
-					orderedLevels[item.Nivel] = []
-				if (item.Nivel > lastLevel)
-					setLastLevel(item.Nivel)
-				orderedLevels[item.Nivel].push({...item, open: false})
-			}
-		}*/
-
-		/*for (let i = 0; i < tree.length; i++) {
-			const item = tree[i];
-			if (item.Nivel >= levelStart) {
-				if (!orderedLevels[item.Nivel])
-					orderedLevels[item.Nivel] = []
-				if (item.Nivel > lastLevel)
-					setLastLevel(item.Nivel)
-				orderedLevels[item.Nivel].push({...item, open: false})
-			}
-		}*/
-
-		//setAllLevels(orderedLevels);
-		//console.log('datos de items')
-		//console.log(orderedLevels)
+	
 		if (!tree) return;
 		for (let i = 0; i < tree.length; i++) {
 			const item = tree[i];
+
+			//if (item.Orden === "") item.Orden = null;
+		/*	if (item.PhantomParentId === null && item.Orden==="") {
+				item.Orden = "00";
+				//item.PhantomParentId = null;
+			}
+			if (item.PhantomParentId === "") {
+				item.PhantomParentId = "00";
+				//item.PhantomParentId = null;
+			}
+			
+			if (item.Orden === "") item.Orden = i+'01';
+			//else item.Metrado = roundN(item.Metrado, 2);*/
+
+
 			if (item.Metrado === null) item.Metrado = null;
 			else item.Metrado = roundN(item.Metrado, 2);
 
@@ -136,7 +125,7 @@ const Items = ({ levelStart = 1, idProject }) => {
 		//if (Item.UniqueId===""){
 		//proyects.DataMetrado
 		//const filtro = proyects.DataMetrado.filter( (filtro1) => filtro1.PhantomParentId === Item.CodMedicion );
-		/*
+		
 		const filtro = proyects.DataPc.filter((filtro1) => filtro1.PhantomParentId === null);
 		var Sumatoria = 0.00;
 		for (let i = 0; i < filtro.length; i++) {
@@ -150,7 +139,7 @@ const Items = ({ levelStart = 1, idProject }) => {
 			}
 
 		}
-		*/
+		
 
 
 	}
@@ -158,8 +147,8 @@ const Items = ({ levelStart = 1, idProject }) => {
 	function ObtenerSuma(Item) {
 		var Sumatoria = 0.00;
 		
-		//if (proyects.DataPc && Item.Orden!=""){
-			console.log(proyects.DataPc + ' ' + Item.Orden);
+		if (proyects.DataPc && Item.Orden!=""){
+			//console.log(proyects.DataPc + ' ' + Item.Orden);
 			const filtro = proyects.DataPc.filter((filtro1) => filtro1.PhantomParentId === Item.Orden);
 			for (let i = 0; i < filtro.length; i++) {
 				if (filtro[i].Metrado !== null) {
@@ -172,7 +161,7 @@ const Items = ({ levelStart = 1, idProject }) => {
 				}
 			}
 
-		//}
+		}
 		return parseFloat(Sumatoria);
 	}
 
@@ -218,7 +207,70 @@ const Items = ({ levelStart = 1, idProject }) => {
 		// eslint-disable-next-line
 	}, [levelStart, proyects.DataPc])
 
+	
 
+	const orderTree2 = (tree) => {
+	
+		if (!tree) return;
+		for (let i = 0; i < tree.length; i++) {
+			const item = tree[i];
+
+			
+			//if (item.Orden === "") item.Orden = null;
+		/*	if (item.PhantomParentId === null && item.Orden==="") {
+				item.Orden = "00";
+				//item.PhantomParentId = null;
+			}
+			if (item.PhantomParentId === "") {
+				item.PhantomParentId = "00";
+				//item.PhantomParentId = null;
+			}
+
+			if (item.Orden === "") item.Orden = i+'01';*/
+			
+			//item.Orden = i+item.Orden;
+
+
+			//else item.Metrado = roundN(item.Metrado, 2);
+
+
+			if (item.Metrado === null) item.Metrado = null;
+			else item.Metrado = roundN(item.Metrado, 2);
+
+			if (item.Precio1 === null) item.Precio1 = null;
+			else item.Precio1 = roundN(item.Precio1, 2);
+
+			if (item.Total === null) item.Total = 0.00;
+			else item.Total = roundN(item.Metrado * item.Precio1, 2);
+
+			//item.Metrado=dosDecimales(item.Metrado);
+
+			//orderedLevels[0].push({...item, open: false})
+		}
+	}
+	
+	useEffect(() => {
+		if (proyects.treeSubControl)
+		if (proyects.treeSubControl.length!==0){
+			//llamar a metrados de tosod los subs
+			//console.log('DATOS DE PROYECTOS');
+			//console.log(proyects.DatosPresupuesto);
+
+			for (let i=0;i<proyects.treeSubControl.length;i++){
+				if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0]){
+
+					//alert('se jecuta' + proyects.DatosPresupuesto[0].CodPresupuesto + ' - ' + proyects.treeSubControl[i].CodSubpresupuesto);
+					//alert(proyects.treeSubControl[i].CodSubpresupuesto);
+					dispatch(selectItems(proyects.DatosPresupuesto[0].CodPresupuesto, proyects.treeSubControl[i].CodSubpresupuesto, ''));
+					
+				}
+			}
+			orderTree2(proyects.DataPc);
+			//orderTree(proyects.DataPc);
+			dispatch(cleanDataChart());
+
+		}
+	}, [proyects.treeSubControl])
 
 	const Seleccion_Item = (Item) => {
 		//const codP= Item.ERPCode.substring(1, 7);
@@ -319,6 +371,11 @@ const Items = ({ levelStart = 1, idProject }) => {
 		  //selectedEmployeeNames: this.getEmployeeNames(selectedData)
 		});*/
 	}
+
+
+
+
+
 	const { selectedRowKeys, recursive, selectionMode, selectedEmployeeNames } = state;
 	return (
 		<>
@@ -384,7 +441,7 @@ const Items = ({ levelStart = 1, idProject }) => {
 
 
 										dataSource={proyects.DataPc}
-										keyExpr="Orden"
+										keyExpr="OrdenJerarquico"
 										parentIdExpr="PhantomParentId"
 										showBorders={true}
 										focusedRowEnabled={true}

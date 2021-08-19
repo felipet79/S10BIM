@@ -1,29 +1,30 @@
 // import {useState} from "react";
 import { Col, Nav, Collapse } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import Tree from "../components/TreeAll";
-import { Route } from "react-router-dom";
-import IdProyect from "./IdProyect";
+//import Tree from "../components/TreeAll";
+//import { Route } from "react-router-dom";
+//import IdProyect from "./IdProyect";
 import { Resizable } from "re-resizable";
 import "../styles/project.css";
 import { useDispatch, useSelector } from "react-redux";
-import TreeCP from "../components/TreeCP";
-import IdPc from "./IdPc";
+//import TreeCP from "../components/TreeCP";
+//import IdPc from "./IdPc";
 import $ from 'jquery';
-import { RefrescarV, ViewScreen1 } from "./ViewScreen1";
-import Items from "../components/Items";
+//import { RefrescarV, ViewScreen1 } from "./ViewScreen1";
+/*import Items from "../components/Items";
 import Apus from "../components/Apus";
 import Asociados from "../components/Asociados";
 import Estructura from "../components/Estructura";
 import Calculo from "../components/Calculo";
 import Metrados from "../components/Metrados";
-import DatosGenerales from "./DatosGenerales";
+import DatosGenerales from "./DatosGenerales";*/
 import axios from "axios";
 import { selectMODELOS } from "../actions/proyects.actions";
+import TreeMD from "../components/TreeMd";
+import VisorModelos from "./VisorModelos";
 
 
-
-const Proyects = ({ match }) => {
+const Models = ({ match }) => {
 	const codProject = match.params.codProject;
 	// console.log(codProject)
 	const auth = useSelector((state) => state.auth);
@@ -44,10 +45,7 @@ const Proyects = ({ match }) => {
 
 	const [textoB, setTextoB] = useState('');
 
-	//dbo.S10_01_Subpresupuesto_ListarTodos
-
-	//[{"P":"CodPresupuesto","O":0}]
-
+	
 	
 	useEffect(() => {
 		console.log('se dispara select modelos')
@@ -155,43 +153,7 @@ const Proyects = ({ match }) => {
 						<div className="p-2 h-100 w-100" style={{ overflow: 'scroll' }}>
 
 
-							{/* <Nav
-							variant="tabs"
-							defaultActiveKey="/home"
-							className="eyelashes"
-						
-						>
-							<Nav.Item
-								onClick={() => {
-									setLevel1(2);
-									setLevelPC1(1);
-								}}
-							>
-								<Nav.Link href="#" active={level1 === 2}>
-									PRESUPUESTOS
-								</Nav.Link>
-							</Nav.Item>
-
-							<Nav.Item
-								onClick={() => {
-									setLevel1(1);
-									setLevelPC1(2);
-								}}
-							>
-								<Nav.Link
-									href="#"
-									eventKey="link-1"
-									active={level1 === 1}
-								>
-									DETALLE
-								</Nav.Link>
-							</Nav.Item>
-
 							
-
-							
-						
-						</Nav> */}
 
 							{/* <!-- SidebarSearch Form --> */}
 							<div className="form mt-3">
@@ -211,9 +173,9 @@ const Proyects = ({ match }) => {
 									</div>
 								</div>
 							</div>
-							{/* <div id="DetalleItem" className="mt-0 p-2 h-20 overflow-scroll" style={{ height:'100%', overflow:'scroll' }}> */}
+							
 							{levelPC1 === 1 ? (
-								<TreeCP
+								<TreeMD
 									Accion="Generales"
 									filtrado={textoB}
 									levelStart={1}
@@ -225,16 +187,13 @@ const Proyects = ({ match }) => {
 
 
 							) : ( ''
-								// levelPC1 === 2 ? (
-								// 	<Items />
-								// ) : <Tree levelStart={level} nodeSelected={codProject} />
 							)}
 
 
 
 
 
-							{/* </div>  */}
+							
 
 
 
@@ -269,183 +228,15 @@ const Proyects = ({ match }) => {
 				</Resizable>
 
 				<Col className="bigs-data w-100" style={{height:'100%'}}>
-					{/* <Route
-						path="/projects/project/:codProject"
-						component={IdProyect}
-					/> */}
-					{/* <ViewScreen1 /> */}
-
-							
-					<DatosGenerales/>
-
-
-					{/* <Route path="/projects/id-pc/:codPc" component={IdPc} /> */}
+					<VisorModelos/>
 				</Col>
 
 			</div>
 
-			{/*<div id="ContDet" className="bara-cerrar d-flex align-items-center" style={{ height: '300px' }}>
-
-				<Collapse in={open}>
-					<div className="p-2 h-100 w-100">
-						<Nav
-							variant="tabs"
-							defaultActiveKey="/home"
-							className="eyelashes"
-
-						>
-							<Nav.Item
-								onClick={() => {
-									setLevel(2);
-									setLevelPC(1);
-								}}
-							>
-								<Nav.Link href="#" active={level === 2}>
-									APU PARTIDA
-								</Nav.Link>
-							</Nav.Item>
-
-							<Nav.Item
-								onClick={() => {
-									setLevel(1);
-									setLevelPC(2);
-								}}
-							>
-								<Nav.Link
-									href="#"
-									eventKey="link-1"
-									active={level === 1}
-								>
-									METRADO
-								</Nav.Link>
-							</Nav.Item>
-
-							<Nav.Item
-								onClick={() => {
-									setLevel(3);
-									setLevelPC(3);
-								}}
-							>
-								<Nav.Link
-									href="#"
-									eventKey="link-2"
-									active={level === 3}
-								>
-									ELEMENTOS ASOCIADOS
-								</Nav.Link>
-							</Nav.Item>
-
-							<Nav.Item
-								onClick={() => {
-									setLevel(4);
-									setLevelPC(4);
-								}}
-							>
-								<Nav.Link
-									href="#"
-									eventKey="link-3"
-									active={level === 4}
-								>
-									ESTRUCTURA DE METRADO
-								</Nav.Link>
-							</Nav.Item>
-
-							<Nav.Item
-								onClick={() => {
-									setLevel(5);
-									setLevelPC(5);
-								}}
-							>
-								<Nav.Link
-									href="#"
-									eventKey="link-4"
-									active={level === 5}
-								>
-									DETALLE DE CALCULO
-								</Nav.Link>
-							</Nav.Item>
-
-							{proyects.idCard && (
-								<Nav.Item
-									onClick={() => {
-										setLevelPC(1);
-										setLevel(null);
-									}}
-								>
-									<Nav.Link
-										href="#"
-										eventKey="link-1"
-										active={levelPC === 4}
-									>
-										PC
-									</Nav.Link>
-								</Nav.Item>
-							)}
-							<button style={{ position: 'absolute', right: '35px', marginTop: '7px' }} onClick={reducir}>
-								<i id="IcnBt" className="fas fa-chevron-down" ></i>
-							</button>
-						</Nav>
-
-
-						<div id="DetalleItem" className="mt-0 p-2 h-20 overflow-scroll" style={{ height: '200px', overflow: 'scroll' }}>
-							{levelPC === 1 ? (
-								<Apus
-									levelStart={1}
-									idProject={proyects.idCard}
-								/>
-							) : (
-								levelPC === 3 ? (
-									<Asociados
-										levelStart={1}
-										idProject={proyects.idCard}
-									/>
-								) : (
-									levelPC === 4 ? (
-										<Estructura
-											levelStart={1}
-											idProject={proyects.idCard}
-										/>
-									) : (
-										levelPC === 5 ? (
-											<Calculo
-												levelStart={1}
-												idProject={proyects.idCard}
-											/>
-										) : (
-											levelPC === 2 ? (
-												<Metrados
-													levelStart={1}
-													idProject={proyects.idCard}
-												/>
-											) : (
-												<Tree levelStart={level} nodeSelected={codProject} />
-
-											))))
-							)}
-
-
-
-
-
-						</div>
-
-						{/* <div className="mt-2 p-2 h-100 overflow-scroll">
-							{levelPC ? (
-								<TreeCP
-									levelStart={1}
-									idProject={proyects.idCard}
-								/>
-							) : (
-								<Tree levelStart={level} nodeSelected={codProject} />
-							)}
-						</div> }
-					</div>
-							</Collapse>
-
-							</div>*/}
+			
 
 		</>
 	);
 };
 
-export default Proyects;
+export default Models;

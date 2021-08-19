@@ -10,7 +10,8 @@ import TreeList, {
 	FilterPanel,
 	FilterRow,
 	Scrolling,
-	Column } from 'devextreme-react/tree-list';
+	Column
+} from 'devextreme-react/tree-list';
 
 const BuscaCliente = ({ show, setShow }) => {
 	const dispatch = useDispatch();
@@ -46,7 +47,7 @@ const BuscaCliente = ({ show, setShow }) => {
 
 						//onSelectionChanged={() => {alert('hola')}}
 						//onRowClick={() => {alert(this)}}
-						onFocusedRowChanged={()=>{}/*onSelectionChanged*/}
+						onFocusedRowChanged={() => { }/*onSelectionChanged*/}
 						wordWrapEnabled={true}
 					>
 						<Editing
@@ -106,8 +107,8 @@ const BuscaCliente = ({ show, setShow }) => {
 							dataField="Detalle" 
 							alignment={'center'}
 						/>*/}
-							
-						
+
+
 
 						<Pager
 							//allowedPageSizes={allowedPageSizes}
@@ -136,11 +137,18 @@ const BuscaCliente = ({ show, setShow }) => {
 
 				<Modal.Footer>
 					<Button
+						variant="primary"
+						onClick={handleClose}
+					>
+						Seleccionar
+					</Button>
+
+					<Button
 						variant="secondary"
 						onClick={handleClose}
 					>
 						Cancelar
-			</Button>
+					</Button>
 				</Modal.Footer>
 			</Modal>
 		</>

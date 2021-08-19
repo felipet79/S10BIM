@@ -210,8 +210,8 @@ export const selectItems = (CodPres, CodSubP, userId) =>{
 				},
 			}
 		);
-		console.log(data);
-
+		//console.log(data);
+		//alert('paso por aca');
 		/*dispatch({
 			type: ID_PC,
 			payload: CodPres
@@ -240,7 +240,38 @@ export const selectCLIENTES = (Descripcion, userId) =>{
 				},
 			}
 		);
-		console.log(data);
+		//console.log(data);
+
+		/*dispatch({
+			type: ID_PC,
+			payload: CodPres
+		})*/
+	}
+}
+
+
+export const selectMODELOS = (userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		//console.log(idCod, idPc);
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: true,
+				// dbo.s10_06_Proyecto_General
+				ObjectName: `dbo.S10_01_SubpresupuestoDetallePlano_Listar`,
+				RequestId: "LISTAR_MODELOS",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: userId, // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		//console.log(data);
 
 		/*dispatch({
 			type: ID_PC,
@@ -270,7 +301,7 @@ export const selectUBICACIONES = (Descripcion, userId) =>{
 				},
 			}
 		);
-		console.log(data);
+		//console.log(data);
 
 		/*dispatch({
 			type: ID_PC,
@@ -300,7 +331,7 @@ export const selectAPUS = (CodPres, CodSubP, CodItem, userId) =>{
 				},
 			}
 		);
-		console.log(data);
+		//console.log(data);
 
 		/*dispatch({
 			type: ID_PC,
@@ -330,7 +361,7 @@ export const selectMETRADOS = (CodPres, CodSubP, CodItem, userId) =>{
 				},
 			}
 		);
-		console.log(data);
+		//console.log(data);
 
 		/*dispatch({
 			type: ID_PC,
@@ -364,7 +395,7 @@ export const selectParidas = ( Unique, userId) =>{
 				},
 			}
 		);
-		console.log(data);
+		//console.log(data);
 
 		/*dispatch({
 			type: ID_PC,
@@ -395,7 +426,7 @@ export const selectAsociados = (CodPres, CodSubP, CodItem, userId) =>{
 				},
 			}
 		);
-		console.log(data);
+		//console.log(data);
 
 		/*dispatch({
 			type: ID_PC,
@@ -426,7 +457,7 @@ export const selectEstructura = (CodPres, CodSubP, CodItem, userId) =>{
 				},
 			}
 		);
-		console.log(data);
+		//console.log(data);
 
 		/*dispatch({
 			type: ID_PC,
@@ -458,7 +489,7 @@ export const selectCalculo = (CodPres, CodSubP, CodItem, userId) =>{
 				},
 			}
 		);
-		console.log(data);
+		//console.log(data);
 
 		/*dispatch({
 			type: ID_PC,
@@ -488,7 +519,7 @@ export const selectCalculoDet = (CodPres, CodSubP, CodItem, userId) =>{
 				},
 			}
 		);
-		console.log(data);
+		//console.log(data);
 
 		/*dispatch({
 			type: ID_PC,
