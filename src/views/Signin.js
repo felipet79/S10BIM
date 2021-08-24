@@ -20,7 +20,7 @@ export default function SignIn() {
   // Formulario y validación con formik y Yup
   const formik = useFormik({
     initialValues: {
-      UserName: ''/*"ctorres@s10peru.com"*/,
+      UserName: ' '/*"ctorres@s10peru.com"*/,
       Password: ''/*"uT9pLH4V"*/,
     },
     validationSchema: Yup.object({
