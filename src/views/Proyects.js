@@ -1,22 +1,22 @@
 // import {useState} from "react";
 import { Col, Nav, Collapse } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import Tree from "../components/TreeAll";
+/*import Tree from "../components/TreeAll";
 import { Route } from "react-router-dom";
-import IdProyect from "./IdProyect";
+import IdProyect from "./IdProyect";*/
 import { Resizable } from "re-resizable";
 import "../styles/project.css";
 import { useDispatch, useSelector } from "react-redux";
 import TreeCP from "../components/TreeCP";
-import IdPc from "./IdPc";
-import $ from 'jquery';
-import { RefrescarV, ViewScreen1 } from "./ViewScreen1";
-import Items from "../components/Items";
+//import IdPc from "./IdPc";
+//import $ from 'jquery';
+//import { RefrescarV, ViewScreen1 } from "./ViewScreen1";
+/*import Items from "../components/Items";
 import Apus from "../components/Apus";
 import Asociados from "../components/Asociados";
 import Estructura from "../components/Estructura";
 import Calculo from "../components/Calculo";
-import Metrados from "../components/Metrados";
+import Metrados from "../components/Metrados";*/
 import DatosGenerales from "./DatosGenerales";
 import axios from "axios";
 import { selectMODELOS } from "../actions/proyects.actions";
@@ -123,7 +123,7 @@ const Proyects = ({ match }) => {
 					className="tree-fixed p-0 d-flex justify-content-between"
 					size={{ width: width, height: height }}
 					//maxHeight="60vh"
-					maxWidth={open ? 800 : 0}
+					maxWidth={open ? 700 : 0}
 					//minHeight="67.5vh"
 
 					minWidth="20px"
@@ -268,7 +268,7 @@ const Proyects = ({ match }) => {
 					</div>
 				</Resizable>
 
-				<Col className="bigs-data w-100" style={{height:'100%'}}>
+				<Col className="w-100" style={{ height:'100%'}}>
 					{/* <Route
 						path="/projects/project/:codProject"
 						component={IdProyect}

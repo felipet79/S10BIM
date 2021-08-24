@@ -22,6 +22,7 @@ import {
 	LISTAR_CLIENTES,
 	LISTAR_UBICACIONES,
 	LISTAR_MODELOS,
+	LISTAR_MONEDAS,
 } from "../constants";
 
 import $ from 'jquery';
@@ -107,6 +108,17 @@ export const connectSignalr = (token) => {
 					});
 					break;
 
+				case LISTAR_MONEDAS:
+					console.log('MoNEDAS llegadAs:');
+					console.log(JSON.parse(data.Data));
+
+					dispatch({
+						type: LISTAR_MONEDAS,
+						payload: JSON.parse(data.Data),
+					});
+					break;
+
+
 				case LISTAR_UBICACIONES:
 					//console.log('ubicaciones llegadas:');
 					//console.log(JSON.parse(data.Data));
@@ -157,6 +169,9 @@ export const connectSignalr = (token) => {
 					break;
 
 				case APU_DETALLE:
+					//console.log('APUS llegados:');
+					//console.log(JSON.parse(data.Data));		
+					
 					dispatch({
 						type: APU_DETALLE,
 						payload: JSON.parse(data.Data),
@@ -164,8 +179,8 @@ export const connectSignalr = (token) => {
 					break;
 
 				case METRADO_DETALLE:
-					//console.log('metrados llegados:');
-					//console.log(JSON.parse(data.Data));		
+					console.log('metrados llegados:');
+					console.log(JSON.parse(data.Data));		
 					dispatch({
 						type: METRADO_DETALLE,
 						payload: JSON.parse(data.Data),

@@ -1,5 +1,5 @@
 import axios from '../config/axios';
-import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB, CAMBIA_SELECCION, SUB_SEL, LIMPIAR_UBICACIONES} from '../constants';
+import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB,URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES} from '../constants';
 
 export const selectProyect = (idCod, userName, userId) =>{
 	return async (dispatch) =>{
@@ -280,6 +280,38 @@ export const selectMODELOS = (userId) =>{
 	}
 }
 
+
+export const selectMONEDAS = (userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		//console.log(idCod, idPc);
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: true,
+				// dbo.s10_06_Proyecto_General
+				ObjectName: `dbo.S10_00_Moneda_ListarPorDescripcion ''`,
+				RequestId: "LISTAR_MONEDAS",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: userId, // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		//console.log(data);
+
+		/*dispatch({
+			type: ID_PC,
+			payload: CodPres
+		})*/
+	}
+}
+
+
 export const selectUBICACIONES = (Descripcion, userId) =>{
 	return async (dispatch) =>{
 		let company = JSON.parse(localStorage.getItem("company-s10"));
@@ -550,6 +582,17 @@ export const SelectUrn = (Urn) =>{
 		})
 }
 
+export const SelectUrnB = (Urn) =>{
+	// console.log('reiniciando desde actions')
+	//alert(Urn);
+	return (dispatch) =>
+		dispatch({
+			type: URN_WEB1,
+			payload: Urn
+		})
+}
+
+
 export const cleanDataChartAPU = () =>{
 	// console.log('reiniciando desde actions')
 	return (dispatch) =>
@@ -576,7 +619,7 @@ export const cleanDataChart22 = () =>{
 	// console.log('reiniciando desde actions')
 	return (dispatch) =>
 		dispatch({
-			type: NAVIGATION_TREE_PC,
+			type: METRADO_LIMPIAR,
 			payload: []
 		})
 }

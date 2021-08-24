@@ -1,19 +1,34 @@
 //import React from 'react'
-import {Table} from "react-bootstrap";
+import { Table } from "react-bootstrap";
 //import Bar from "./Charts/Bar";
-import {useEffect, useState} from "react";
-import {useSelector, useDispatch} from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { cleanDataChartAPU, selectAPUS } from "../actions/proyects.actions";
 
-const Apus = ({levelStart=1, idProject}) => {
-	
-	
-	
+import TreeList, {
+	Pager,
+	Paging,
+	Editing,
+	HeaderFilter,
+	FilterPanel,
+	FilterRow,
+	Scrolling,
+	Column
+} from 'devextreme-react/tree-list';
+
+
+const allowedPageSizes = [5, 10, 15, 20, 50, 100, 500];
+
+
+const Apus = ({ levelStart = 1, idProject }) => {
+
+
+
 	const dispatch = useDispatch();
 	// const [loading, setLoading] = useState(true);
-	const [ allLevels, setAllLevels ] = useState(null)
-	const [ itemSelected, setItemSelected ] = useState('')
-	const [ lastLevel, setLastLevel ] = useState(0);
+	const [allLevels, setAllLevels] = useState(null)
+	const [itemSelected, setItemSelected] = useState('')
+	const [lastLevel, setLastLevel] = useState(0);
 
 
 	/*const [ allLevels1, setAllLevels1 ] = useState(null)
@@ -22,7 +37,7 @@ const Apus = ({levelStart=1, idProject}) => {
 
 
 	const [loading, setLoading] = useState(true);
-	
+
 	const auth = useSelector((state) => state.auth);
 	const proyects = useSelector((state) => state.proyects);
 
@@ -31,7 +46,7 @@ const Apus = ({levelStart=1, idProject}) => {
 
 	const orderTree = (tree) => {
 		//let orderedLevels = {};
-		
+
 		/*for (let i = 0; i < tree.length; i++) {
 			const item = tree[i];
 			if (item.Nivel >= levelStart) {
@@ -47,12 +62,12 @@ const Apus = ({levelStart=1, idProject}) => {
 		orderedLevels[0] = [];
 		for (let i = 0; i < tree.length; i++) {
 			const item = tree[i];
-			orderedLevels[0].push({...item, open: false})
+			orderedLevels[0].push({ ...item, open: false })
 		}
 		setAllLevels(orderedLevels);
 
 
-		
+
 		//setAllLevels(orderedLevels);
 		//console.log('datos de apus')
 		//console.log(orderedLevels)
@@ -62,14 +77,14 @@ const Apus = ({levelStart=1, idProject}) => {
 	useEffect(() => {
 		//console.log('datos de apus 1')
 		//console.log(proyects.DataApu)
-		if (proyects.DataApu==undefined) return;
+		if (proyects.DataApu == undefined) return;
 		orderTree(proyects.DataApu);
 		//alert('ejecutó la primera carga');
-			// console.log(result);
+		// console.log(result);
 		// }
-		 // eslint-disable-next-line
+		// eslint-disable-next-line
 	}, [levelStart, proyects.DataApu])
-	
+
 
 
 	const Seleccion_Item = (Item) => {
@@ -89,13 +104,13 @@ const Apus = ({levelStart=1, idProject}) => {
 	}
 
 
-	
+
 	const drawerItems1 = (nivelact) => {
-		
+
 		if (allLevels == null || allLevels == undefined) return;
 		if (allLevels[nivelact] == null || allLevels[nivelact] == undefined) return;
 		//alert('ejecutó la carga');
-		
+
 		/*console.log('datos de subProyectos actualizados')
 		console.log(allLevels1[0])
 		
@@ -110,37 +125,126 @@ const Apus = ({levelStart=1, idProject}) => {
 				>
 				</StyledTreeItem>
 			)})*/
-			return (
-				allLevels && allLevels[nivelact] ?
+		return (
+			allLevels && allLevels[nivelact] ?
 				allLevels[nivelact].map(filter => {
-					 return (<tr onClick={() => Seleccion_Item(filter)}>
-					<td>{filter.TipoDetalle}</td>
-					<td>{filter.Descripcion}</td>
-					<td>{filter.Unidad}</td>
-					<td>{filter.CuadrillaInsumo}</td>
-					<td>{filter.CantidadInsumo}</td>								
-					<td>{filter.PrecioInsumo1}</td>					
-					<td>{filter.Parcial1}</td>																
+					return (<tr onClick={() => Seleccion_Item(filter)}>
+						<td>{filter.TipoDetalle}</td>
+						<td>{filter.Descripcion}</td>
+						<td>{filter.Unidad}</td>
+						<td>{filter.CuadrillaInsumo}</td>
+						<td>{filter.CantidadInsumo}</td>
+						<td>{filter.PrecioInsumo1}</td>
+						<td>{filter.Parcial1}</td>
 					</tr>
-				)}):''			
-			)
+					)
+				}) : ''
+		)
 
-			
+
 	}
 
 
-	
+
 	return (
 		<>
+
+
+			<TreeList
+				dataSource={proyects.DataApu}
+				keyExpr="Descripcion"
+				//parentIdExpr="PhantomParentId"
+				showBorders={true}
+				focusedRowEnabled={true}
+				defaultExpandedRowKeys={[1, 2, 3, 5]}
+				columnAutoWidth={false}
+				rootValue={-1}
+				//selectedRowKeys={selectedRowKeys}
+
+				//onSelectionChanged={() => {alert('hola')}}
+				//onRowClick={() => {alert(this)}}
+
+
+				//onFocusedRowChanged={onSelectionChanged}
+
+				wordWrapEnabled={true}
+			>
+				<Editing
+					allowUpdating={false}
+					allowDeleting={false}
+					selectTextOnEditStart={true}
+					useIcons={true}
+				/>
+				<HeaderFilter
+					visible={false}
+				/>
+				<FilterPanel
+					visible={false}
+				/>
+				<FilterRow
+					visible={false}
+				/>
+				<Scrolling
+					mode="standard"
+				/>
+
+				<Column
+					width={'10%'}
+					dataField="TipoDetalle" />
+
+				<Column
+					width={'45%'}
+					dataField="Descripcion" />
+				<Column
+					width={'7%'}
+					dataField="Unidad"
+					alignment={'center'}
+				/>
+				<Column
+					width={'10%'}
+					dataField="CuadrillaInsumo"
+					caption="Cuadrilla"
+					alignment={'right'}
+				/>
+
+				<Column
+					width={'10%'}
+					dataField="CantidadInsumo"
+					alignment={'right'}
+				/>
+
+				<Column
+					width={'10%'}
+					dataField="PrecioInsumo1"
+					alignment={'right'}
+				/>
+
+				<Column
+					width={'10%'}
+					dataField="Parcial1"
+					alignment={'right'}
+				/>
+
+				<Pager
+					allowedPageSizes={allowedPageSizes}
+					showPageSizeSelector={true}
+					showNavigationButtons={true}
+				/>
+				<Paging
+					enabled={true}
+					defaultPageSize={15}
+				/>
+			</TreeList>
 			{/*<Bar />*/}
-			<Table
+			{/* <Table
 				striped
 				bordered
 				hover
 				size="sm"
 				className="mt-0 bg-white"
+				style={{width:'100%'}}
 			>
-				<thead>
+				<thead >
 					<tr>
 						<th>Tipo</th>
 						<th>Descripcion</th>
@@ -160,7 +264,7 @@ const Apus = ({levelStart=1, idProject}) => {
 
 									
 				</tbody>
-			</Table>
+			</Table> */}
 
 		</>
 	)

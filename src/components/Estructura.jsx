@@ -4,6 +4,19 @@ import {Table} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import { cleanDataChartAPU, selectAPUS } from "../actions/proyects.actions";
+import TreeList, {
+	Pager,
+	Paging,
+	Editing,
+	HeaderFilter,
+	FilterPanel,
+	FilterRow,
+	Scrolling,
+	Column } from 'devextreme-react/tree-list';
+
+
+const allowedPageSizes = [5, 10, 15, 20, 50, 100, 500];
+
 
 const Estructura = ({levelStart=1, idProject}) => {
 	
@@ -128,8 +141,72 @@ const Estructura = ({levelStart=1, idProject}) => {
 	
 	return (
 		<>
-			{/*<Bar />*/}
-			<Table
+			<TreeList
+				dataSource={proyects.Dataestructura}
+				keyExpr="Nivel"
+				//parentIdExpr="PhantomParentId"
+				//orderedLevels="Nivel ASC"
+				showBorders={true}
+				focusedRowEnabled={true}
+				defaultExpandedRowKeys={[1, 2, 3, 5]}
+				columnAutoWidth={false}
+				rootValue={-1}
+				//selectedRowKeys={selectedRowKeys}
+
+				//onSelectionChanged={() => {alert('hola')}}
+				//onRowClick={() => {alert(this)}}
+
+
+				//onFocusedRowChanged={onSelectionChanged}
+
+				wordWrapEnabled={true}
+			>
+				<Editing
+					allowUpdating={false}
+					allowDeleting={false}
+					selectTextOnEditStart={true}
+					useIcons={true}
+				/>
+				<HeaderFilter
+					visible={false}
+				/>
+				<FilterPanel
+					visible={false}
+				/>
+				<FilterRow
+					visible={false}
+				/>
+				<Scrolling
+					mode="standard"
+				/>
+
+				<Column
+					width={'30%'}
+					dataField="Nivel" 
+					
+				/>
+					
+				<Column
+					width={'40%'}
+					dataField="Campo" />
+				<Column
+					width={'7%'}
+					dataField="Mostrar"
+					alignment={'center'}
+				/>
+				
+				<Pager
+					allowedPageSizes={allowedPageSizes}
+					showPageSizeSelector={true}
+					showNavigationButtons={true}
+				/>
+				<Paging
+					enabled={true}
+					defaultPageSize={15}
+				/>
+			</TreeList>
+
+			{/* <Table
 				striped
 				bordered
 				hover
@@ -152,7 +229,7 @@ const Estructura = ({levelStart=1, idProject}) => {
 
 									
 				</tbody>
-			</Table>
+			</Table> */}
 
 		</>
 	)

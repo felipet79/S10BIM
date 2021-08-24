@@ -1,6 +1,7 @@
-//import { Modal, Button, ListGroup } from "react-bootstrap";
+//import { Modal, Button, ListGroup, Form, Col, Card } from "react-bootstrap";
 import { Modal, Card, Form, Row, Button, Col, InputGroup, FormControl, Dropdown, DropdownButton, Table } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux';
+import 'devextreme/dist/css/dx.light.css';
 import { selectCompany } from '../actions/auth.action';
 import { useHistory } from 'react-router-dom';
 import TreeList, {
@@ -14,7 +15,7 @@ import TreeList, {
 	Column
 } from 'devextreme-react/tree-list';
 
-const BuscaUbicacion = ({ show, setShow }) => {
+const BuscaMoneda = ({ show, setShow }) => {
 	const dispatch = useDispatch();
 	const handleClose = () => setShow(false);
 	const auth = useSelector(state => state.auth);
@@ -22,71 +23,81 @@ const BuscaUbicacion = ({ show, setShow }) => {
 	const proyects = useSelector((state) => state.proyects);
 	//dispatch(selectAPUS(codP, codSub, codItem, ''));
 
-
+	
 
 	return (
 		<>
 
-			<Modal size="lg" centered show={show} onHide={handleClose} >
+			<Modal centered show={show} onHide={handleClose}>
 				<Modal.Header closeButton style={{ background: '#3c8dbc', color: 'white', height: '50px' }}>
-					<Modal.Title style={{ fontSize: '0.95rem' }}>Selecciona una Ubicación</Modal.Title>
+					<Modal.Title closeButton style={{ fontSize: '0.95rem' }}>Selecciona una Moneda</Modal.Title>
 				</Modal.Header>
-
-
-				<Card style={{ height: '100%', width: '100%', marginTop: '5px'/*, background: '#e8f7fe'*/ }}>
-					{/* <Card.Header style={{ height: '38px' }}> <div style={{ marginTop: '-5px' }}>Moneda Principal ({proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].SimboloMoneda : ''}) </div> </Card.Header> */}
-					<Card.Body>
-
-						<Form.Group as={Row} className="mb-0" controlId="formHorizontalPassword">
-							<Form.Label column sm={6}>
-							</Form.Label>
-
-
-							<Col sm={6}>
-								<div className="form mt-0">
-									<div className="input-group" data-widget="">
-										<input
-											className="form-control form-control"
-											type="search"
-											placeholder="Buscar"
-											aria-label="Buscar"
-											value={''}
-											onChange={''}
-										/>
-										<div className="input-group-append">
-											<button className="btn btn-sidebar">
-												<i className="fas fa-search fa-fw"></i>
-											</button>
-										</div>
-									</div>
-								</div>
-
-							</Col>
-
-
-						</Form.Group>
-
-
-					</Card.Body>
-				</Card>
 
 
 				<Modal.Body>
 
 
-					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '4px' }}>
+
+					<Card style={{ height: '100%', width: '100%', marginTop: '5px'/*, background: '#e8f7fe'*/ }}>
+						{/* <Card.Header style={{ height: '38px' }}> <div style={{ marginTop: '-5px' }}>Moneda Principal ({proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].SimboloMoneda : ''}) </div> </Card.Header> */}
+						<Card.Body>
+
+							<Form.Group as={Row} className="mb-0" controlId="formHorizontalPassword">
+								<Form.Label column sm={2}>
+								</Form.Label>
+
+
+								<Col sm={10}>
+									<div className="form mt-0">
+										<div className="input-group" data-widget="">
+											<input
+												className="form-control form-control"
+												type="search"
+												placeholder="Buscar"
+												aria-label="Buscar"
+												value={''}
+												onChange={''}
+											/>
+											<div className="input-group-append">
+												<button className="btn btn-sidebar">
+													<i className="fas fa-search fa-fw"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+
+								</Col>
+
+
+							</Form.Group>
+
+
+						</Card.Body>
+					</Card>
+
+
+
+
+					<div className="" style={{background:'#3c8dbc', width:'100%', height:'2px' }}>
 					</div>
 
 
+
+
 					<TreeList
-						dataSource={proyects.DataUbicaciones}
-						keyExpr="CodLugar"
+
+						dataSource={proyects.DataMonedas}
+						keyExpr="CodMoneda"
 						//parentIdExpr="PhantomParentId"
+						//background='#e8f7fe'
+						//customizeColumns={true}
+						//showRowLines={true}
 						showBorders={true}
 						focusedRowEnabled={true}
 						defaultExpandedRowKeys={[1, 2, 3, 5]}
 						columnAutoWidth={false}
 						rootValue={-1}
+
 						//selectedRowKeys={selectedRowKeys}
 
 						//onSelectionChanged={() => {alert('hola')}}
@@ -113,46 +124,19 @@ const BuscaUbicacion = ({ show, setShow }) => {
 							mode="standard"
 						/>
 
+
 						<Column
-							width={'33%'}
-							dataField="Departamento" />
-						<Column
-							width={'33%'}
+							//style={{ background: '#e8f7fe' }}
+							
+							width={'35%'}
 							dataField="Descripcion"
-							alignment={'right'}
-						/>
-						<Column
-							width={'33%'}
-							dataField="Provincia"
-							caption="Provincia"
-							alignment={'right'}
+							//cellRender={renderCell}
+						//background={#e8f7fe}
 						/>
 
-						{/*<Column
-							width={'10%'}
-							dataField="Ancho"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'10%'}
-							dataField="Alto"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'10%'}
-							dataField="Total"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'20%'}
-							dataField="Detalle" 
-							alignment={'center'}
-						/>*/}
 
 
+						
 
 						<Pager
 							//allowedPageSizes={allowedPageSizes}
@@ -165,10 +149,8 @@ const BuscaUbicacion = ({ show, setShow }) => {
 						/>
 					</TreeList>
 
-
-					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '4px' }}>
-					</div>
-
+					<div className="" style={{background:'#3c8dbc', width:'100%', height:'2px' }}>
+						</div>
 					{/* <ListGroup>
 						{
 							proyects.DataClientes ? proyects.DataClientes.map(cliente => (
@@ -195,11 +177,11 @@ const BuscaUbicacion = ({ show, setShow }) => {
 						onClick={handleClose}
 					>
 						Cancelar
-			</Button>
+					</Button>
 				</Modal.Footer>
 			</Modal>
 		</>
 	)
 }
 
-export default BuscaUbicacion
+export default BuscaMoneda

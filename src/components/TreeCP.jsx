@@ -13,12 +13,27 @@ import projectIcon from '../assets/img/icons/project.png';
 
 import { useSelector, useDispatch } from "react-redux";
 import { red } from "@material-ui/core/colors";
+import { ContextMenu } from "devextreme-react";
+import notify from 'devextreme/ui/notify';
+
+
+const opcMenuInicio = [
+	{
+	  text: 'Nuevo',
+	  items: [
+		{ text: 'Presupuesto' },
+		{ text: 'SubPresupuesto' }]
+	},
+	{ text: 'Datos Generales' },
+	{ text: 'Asinar Modelo' }
+  ];	  
+
 
 function MinusSquare(props) {
 	return (
 		<div className="d-flex">
 			<ion-icon name="chevron-down-outline"></ion-icon>
-			<img src={projectIcon} alt="icons" width="28" style={{ marginRight: 20 }} {...props} />
+			<img src={projectIcon} alt="icons" width="20" style={{ marginRight: 20 }} {...props} />
 		</div>
 	);
 }
@@ -27,7 +42,7 @@ function PlusSquare(props) {
 	return (
 		<div className="d-flex">
 			<ion-icon name="chevron-forward-outline"></ion-icon>
-			<img src={projectIcon} alt="icons" width="28" style={{ marginRight: 20 }} {...props} />
+			<img src={projectIcon} alt="icons" width="20" style={{ marginRight: 20 }} {...props} />
 
 		</div>
 	);
@@ -35,7 +50,7 @@ function PlusSquare(props) {
 
 function CloseSquare(props) {
 	return (
-		<img src={subprojectIcon} width="28" alt="icons" style={{ marginRight: 20 }} {...props} />
+		<img src={subprojectIcon} width="20" alt="icons" style={{ marginRight: 20 }} {...props} />
 	);
 }
 
@@ -70,7 +85,14 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 	const dispatch = useDispatch();
 	// const [loading, setLoading] = useState(true);
 	const [allLevels, setAllLevels] = useState(null)
+	
+	const [opcMenu, setOpcMenu] = useState(opcMenuInicio)
+
+	
 	const [itemSelected, setItemSelected] = useState('')
+	const [tipoSeleccion, setTipoSeleccion] = useState('')
+
+
 	const [lastLevel, setLastLevel] = useState(0);
 
 
@@ -81,10 +103,17 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 
 	const [loading, setLoading] = useState(true);
 
+
+
+
+
+
 	const auth = useSelector((state) => state.auth);
 	const proyects = useSelector((state) => state.proyects);
 	//alert(' inicializando treeeee' );
 	const subproyects = useSelector((state) => state.subproyects);
+
+
 
 	useEffect(() => {
 		async function init() {
@@ -196,7 +225,7 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 		// console.log(result);
 		// }
 		// eslint-disable-next-line
-	}, [proyects.treeSubControl])
+	}, [proyects.treeSubControl],[])
 
 
 
@@ -208,26 +237,84 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 		// console.log(result);
 		// }
 		// eslint-disable-next-line
-	}, [levelStart, proyects.treePartyControl])
+	}, [levelStart, proyects.treePartyControl],[])
 
 
 
 
 
 	const changeItem = (pc, newTitle) => {
-		if (Accion == "Generales") {
-			dispatch(cambiaSeleccion(1));
-			dispatch(navigationTreePC(newTitle))
-		}		
+		
+		
+		//alert(pc.CodPresupuesto + " " + newTitle + ' ' + pc.Nivel);
+		
+		if (pc.Nivel===1){
+			setOpcMenu([
+				{
+				  text: 'Nuevo',
+				  items: [
+					{ text: 'Item de Presupuesto' },
+					{ text: 'Item de ' + pc.Descripcion },	
+				]
+				},
+				/*{ text: 'Datos Generales' },
+				{ text: 'Asinar Modelo' }*/
+			  ])
+
+		}
+		
+		if (pc.Nivel===2){
+			setOpcMenu([
+				{
+				  text: 'Nuevo',
+				  items: [
+					{ text: 'Presupuesto' },
+					]
+				},
+				/*{ text: 'Datos Generales' },
+				{ text: 'Asinar Modelo' }*/
+			  ])
+
+		}
+
+
+		if (pc.Nivel===3){
+
+			setOpcMenu([
+				{
+					text: 'Nuevo',
+					items: [					  
+					  { text: 'SubPresupuesto' }]
+				  },
+  
+				{ text: 'Datos Generales' },
+				
+			  ])
+
+
+		}
+
+
+		dispatch(cambiaSeleccion(1));
+		dispatch(navigationTreePC(newTitle))
+		
+		setItemSelected(pc.CodPresupuesto);
+		setTipoSeleccion('Presupuesto');
+
+		DatosPresupuesto(pc.CodPresupuesto);
+		SubPresupuestos(pc.CodPresupuesto);
+
 		//console.log('')
-		if (Accion == "Generales") {
+		/*if (Accion == "Generales") {
 			//proyects.seleccion=1;
 			//selectSeleccion(1);
-			if (itemSelected === pc.CodPresupuesto) return;
-			DatosPresupuesto(pc.CodPresupuesto);
-			setItemSelected(pc.CodPresupuesto);
+			
+			
+			//if (itemSelected === pc.CodPresupuesto) return;
+			
+			//setItemSelected(pc.CodPresupuesto);
 			//dispatch(cleanDataChart());
-			SubPresupuestos(pc.CodPresupuesto);
+			
 
 		}else{
 			DatosPresupuesto(pc.CodPresupuesto);
@@ -237,7 +324,7 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 			//dispatch(cleanDataChart());
 
 
-		}
+		}*/
 
 
 		//alert(pc.CodPresupuesto + " " + newTitle);
@@ -254,28 +341,46 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 	const changeItem1 = (pc, newTitle, idpadre) => {
 		//alert(itemSelected + " : " + pc.CodSubpresupuesto + " ");
 
+			setOpcMenu([
+				{ text: 'Datos Generales' },
+				{ text: 'Asinar Modelo' }
+			  ])
+
+
+
+
+		dispatch(navigationTreePC(newTitle))			
+
+		//setItemSelected(pc.CodPresupuesto);
+		setItemSelected(idpadre);
+		setTipoSeleccion('SubPresupuesto');
+		setItemSelected1(pc.CodSubpresupuesto);
+
+
+		dispatch(cambiaSeleccion(2));
+		dispatch(SeleccionaSub(pc.CodSubpresupuesto))			
+		DatosPresupuesto(idpadre);
+		//SubPresupuestos(idpadre);
+
+		//dispatch(SeleccionaSub(pc.CodSubpresupuesto))			
+		dispatch(selectItems(idpadre, pc.CodSubpresupuesto, ''));
+		dispatch(cleanDataChart());
+
 		if (Accion == "Generales") {
 
 			
-			dispatch(cambiaSeleccion(2));
-			dispatch(SeleccionaSub(pc.CodSubpresupuesto))			
-			DatosPresupuesto(idpadre);
-			setItemSelected(idpadre);
-			SubPresupuestos(idpadre);
 			
 			//if (itemSelected === pc.CodPresupuesto) return;
-			dispatch(navigationTreePC(newTitle))			
+			
 
 		}else
 		{
-			if (itemSelected1 === pc.CodSubpresupuesto && itemSelected === idpadre) return;
-			setItemSelected1(pc.CodSubpresupuesto);
-			dispatch(SeleccionaSub(pc.CodSubpresupuesto))			
+			//if (itemSelected1 === pc.CodSubpresupuesto && itemSelected === idpadre) return;
+			
+
 			//SubPresupuestos(idpadre);
-			setItemSelected(idpadre);
+			//setItemSelected(idpadre);
 			//dispatch(navigationTreePC(pc.CodSubpresupuesto))
-			dispatch(selectItems(idpadre, pc.CodSubpresupuesto, ''));
-			dispatch(cleanDataChart());
 	
 
 		}
@@ -461,7 +566,17 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 
 
 
+	function itemClick(e) {
+		if (!e.itemData.items) {
+		  //notify(`The "${ e.itemData.text }" item was clicked`, 'success', 1500);
+			if (e.itemData.text==='Datos Generales')
+			{
 
+				alert('Datos generales : Pres ' + itemSelected + ' Sub ' + itemSelected1 + ' tipo '+ tipoSeleccion);
+			}
+
+		}
+	  }
 
 
 
@@ -474,7 +589,7 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 			<h1>{filtrado}</h1>
 			{/* <div className="" style={{fontSize: 15, color:'black', overflow:'scroll', height:'40vh', top:'0px', left:'0px', width:'100%'}}> */}
 			<TreeView
-
+				id='Tree'
 				className={classes.root}
 				defaultExpanded={['1']}
 				defaultCollapseIcon={<MinusSquare />}
@@ -490,7 +605,12 @@ const TreeCP = ({ levelStart, idProject, filtrado, Accion }) => {
 			</TreeView>
 			{/* </div> */}
 
-
+			<ContextMenu
+				dataSource={opcMenu}
+				width={160}
+				target="#Tree"
+				onItemClick={itemClick} 
+			/>
 
 			{/* <div className="" style={{position: 'relative',fontSize: 15, color:'black', overflow:'scroll', height:'25vh', marginTop:'-50px', top:'-80px', left:'0px', width:'100%' }}>
 			<h1>SubPresupuestos </h1>

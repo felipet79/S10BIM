@@ -28,6 +28,9 @@ import {
 	LISTAR_UBICACIONES,
 	LIMPIAR_UBICACIONES,
 	LISTAR_MODELOS,
+	LISTAR_MONEDAS,
+	URN_WEB1,
+	METRADO_LIMPIAR,
 } from '../constants';
 
 const initialState = {
@@ -136,11 +139,20 @@ export default (state = initialState, { type, payload }) => {
 				DataModelos: payload
 			};
 
+
+		case LISTAR_MONEDAS:
+			return {
+				...state,
+				//DataUbicaciones:[...state.DataUbicaciones, ...payload]
+				DataMonedas: payload
+			};
+
+
 		case METRADO_DETALLE:
 			return {
 				...state,
-				//DataMetrado: [...state.DataMetrado, ...payload]
-				DataMetrado: [...payload]
+				DataMetrado: [...state.DataMetrado, ...payload]
+				//DataMetrado: [...payload]
 			};
 
 		case UNIQUE_DETALLE:
@@ -154,7 +166,7 @@ export default (state = initialState, { type, payload }) => {
 			};
 
 
-		/*case NAVIGATION_TREE_PC:
+		case METRADO_LIMPIAR:
 				console.log('pasa a borrar');
 				console.log(state);
 				console.log(payload);
@@ -163,7 +175,7 @@ export default (state = initialState, { type, payload }) => {
 					DataMetrado: []
 		
 					//DataPc: payload
-			};		*/
+			};		
 
 		case LEER_PRESUPUESTO:
 			return {
@@ -212,7 +224,12 @@ export default (state = initialState, { type, payload }) => {
 				Urn: payload
 			};
 
-
+		case URN_WEB1:
+			return {
+				...state,
+				UrnS1: payload
+			};
+	
 		/*	case LISTAR_POR_PERIODO:
 				return { 
 					...state,

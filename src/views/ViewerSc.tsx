@@ -130,6 +130,8 @@ export const MostarModelo = (idelem) => {
 function highlightRevit(idsRevit) {
     // Every Forge Viewer model has an ‘ExternalId Mapping’
     // this mapping is an object that has as keys the
+    if (viewer)
+        if (viewer.model)
     viewer.model.getExternalIdMapping((mapping) => {
         configureElementByUniqueIdAndMapping(idsRevit, mapping);
     });
@@ -150,7 +152,8 @@ function configureElementByUniqueIdAndMapping(idsRevit, mapping) {
 
     export const RefrescarV = async() => {
         //alert("refresca");
-       viewer.resize();
+       if (viewer)
+        viewer.resize();
        //viewer.showAll();
        //viewer.refresh(false);
        //viewer.refresh(true);
@@ -769,7 +772,7 @@ export const ViewerSc = (props) => {
         //if (!Autodesk) return;
             Autodesk.Viewing.Initializer(options, () => {
             const config = {
-                extensions: ['Autodesk.VisualClusters', 'Autodesk.DocumentBrowser', 'Autodesk.BIM360.Minimap', 'Autodesk.ViewCubeUi', 'Autodesk.AEC.Minimap3DExtension', 'Autodesk.AEC.Minimap3DExtension', 'NestedViewerExtension', 'MenuContextual', 'Botones', 'Autodesk.DataVisualization']
+                extensions: ['Autodesk.VisualClusters', 'Autodesk.DocumentBrowser', 'Autodesk.BIM360.Minimap', 'Autodesk.ViewCubeUi', 'Autodesk.AEC.Minimap3DExtension', 'Autodesk.AEC.Minimap3DExtension', 'MenuContextual', 'Botones', 'Autodesk.DataVisualization']
             };
 
             viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), config);
@@ -820,7 +823,7 @@ export const ViewerSc = (props) => {
 
             viewer.loadDocumentNode(doc, viewables).then(i => {
                 // any additional action here?
-                viewer.loadExtension("NestedViewerExtension", { filter: ["2d", "3d"], crossSelection: true });
+                //viewer.loadExtension("NestedViewerExtension", { filter: ["2d", "3d"], crossSelection: true });
                 viewer.loadExtension("Autodesk.BIM360.Minimap");
                 viewer.loadExtension("Autodesk.AEC.Minimap3DExtension");
                 viewer.loadExtension("Autodesk.AEC.LevelsExtension");
@@ -2486,6 +2489,10 @@ export const ViewerSc = (props) => {
 
 
     const cargar = async () => {
+            if (viewer){
+                //viewer.uninitialize();
+                viewer.finish();
+            }
      
             launchViewer(proyects.Urn);
             //alert(urn);
@@ -2576,8 +2583,8 @@ export const ViewerSc = (props) => {
         async function loadServiceWorker() {
             //await new Promise(r=>{serviceWorker.register({onSuccess:()=>r()})});
             setLoadViewerLibrary(true);
-            setLoadViewerLibrary1(true);
-            await loadStyleSheet(viewerStylesheetURL1);
+            //setLoadViewerLibrary1(true);
+            //await loadStyleSheet(viewerStylesheetURL1);
             await loadStyleSheet(viewerStylesheetURL);
 
             //alert('init');
@@ -2656,7 +2663,7 @@ export const ViewerSc = (props) => {
  
             {/* </div> */}
 
-            {loadViewerLibrary1 ? <Script url={viewerLibaryURL1} onLoad={handleScriptLoad1}></Script> : null}
+            {/* {loadViewerLibrary1 ? <Script url={viewerLibaryURL1} onLoad={handleScriptLoad1}></Script> : null} */}
             {loadViewerLibrary ? <Script url={viewerLibaryURL} onLoad={handleScriptLoad}></Script> : null}
 
             {/* {<Script url={viewerLibaryURL} onLoad={handleScriptLoad}></Script>} 

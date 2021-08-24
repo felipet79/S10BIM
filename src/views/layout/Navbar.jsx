@@ -6,6 +6,7 @@ import {logOut} from '../../actions/auth.action';
 
 import avatar from '../../assets/img/avatar5.png'
 import {useHistory} from 'react-router-dom';
+import { RefrescarV } from "../ViewerSc";
 
 const Navbar = () => {
 	const history = useHistory();
@@ -17,7 +18,15 @@ const Navbar = () => {
     <nav className="main-header navbar navbar-expand navbar-white navbar-light" style={{background:'#3c8dbc', color:'white', height:'40px'}}>
       {/* <!-- Left navbar links --> */}
       <ul className="navbar-nav">
-        <li className="nav-item">
+        <li className="nav-item"  onClick={()=>{
+            
+
+            setTimeout(() => {
+							RefrescarV();
+						}, 150);
+
+
+            }}>
           <Link className="nav-link" data-widget="pushmenu" to="#" role="button" style={{color:'white'}}>
             <i className="fas fa-bars"></i>
           </Link>

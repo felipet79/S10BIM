@@ -227,7 +227,7 @@ const Models = ({ match }) => {
 					</div>
 				</Resizable>
 
-				<Col className="bigs-data w-100" style={{height:'100%'}}>
+				<Col className="w-100" style={{height:'100%'}}>
 					<VisorModelos/>
 				</Col>
 

@@ -10,7 +10,7 @@ import TreeCP from "../../components/TreeCP";
 
 const Sidebar = () => {
   return (
-    <aside className="main-sidebar sidebar-dark-primary elevation-3" style={{opacity: 1.0}}>
+    <aside id="ContenedorSide" className="main-sidebar sidebar-dark-primary elevation-3" style={{opacity: 1.0}}>
       {/* <!-- Brand Logo --> */}
       <Link to="/inicio" className="brand-link"  style={{ background:'#3c8dbc', height:'40px' }}>
         <img

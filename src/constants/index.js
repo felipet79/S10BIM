@@ -32,6 +32,8 @@ export const LIMPIAR_UBICACIONES = 'LIMPIAR_UBICACIONES';
 
 export const LISTAR_MODELOS = 'LISTAR_MODELOS';
 
+export const LISTAR_MONEDAS = 'LISTAR_MONEDAS';
+
 
 export const LEER_PRESUPUESTO = 'LEER_PRESUPUESTO';
 
@@ -44,6 +46,8 @@ export const MENSUAL_DETALLE = 'MENSUAL_DETALLE';
 export const APU_DETALLE = 'APU_DETALLE';
 
 export const METRADO_DETALLE = 'METRADO_DETALLE';
+export const METRADO_LIMPIAR = 'METRADO_LIMPIAR';
+
 export const UNIQUE_DETALLE = 'UNIQUE_DETALLE';
 
 export const ASOCIADO_DETALLE = 'ASOCIADO_DETALLE';
@@ -56,6 +60,7 @@ export const NAVIGATION_TREE_PC = 'NAVIGATION_TREE_PC';
 export const ID_PC = 'ID_PC';
 
 export const URN_WEB = 'URN_WEB';
+export const URN_WEB1 = 'URN_WEB1';
 
 export const PROJECT_LIST_DETAILS = 'PROJECT_LIST_DETAILS';
 export const TREE_SELECTEDS = 'TREE_SELECTEDS';

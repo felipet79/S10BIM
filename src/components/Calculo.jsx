@@ -5,6 +5,19 @@ import {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import { cleanDataChartAPU, selectAPUS } from "../actions/proyects.actions";
 import { Widgets } from "@material-ui/icons";
+import TreeList, {
+	Pager,
+	Paging,
+	Editing,
+	HeaderFilter,
+	FilterPanel,
+	FilterRow,
+	Scrolling,
+	Column } from 'devextreme-react/tree-list';
+
+
+const allowedPageSizes = [5, 10, 15, 20, 50, 100, 500];
+
 
 const Calculo = ({levelStart=1, idProject}) => {
 	
@@ -280,7 +293,148 @@ const Calculo = ({levelStart=1, idProject}) => {
 	return (
 		<>
 			{/*<Bar />*/}
-			<div id="ContC1" className="mt-0 p-2 h-20 overflow-scroll" style={{ position:'absolute', height:'200px', width:'65%' }}>
+
+			<TreeList
+				style={{width:'75%'}}
+				dataSource={proyects.Datacalculo}
+				keyExpr="Descripcion"
+				//parentIdExpr="PhantomParentId"
+				//orderedLevels="Nivel ASC"
+				showBorders={true}
+				focusedRowEnabled={true}
+				defaultExpandedRowKeys={[1, 2, 3, 5]}
+				columnAutoWidth={false}
+				rootValue={-1}
+				//selectedRowKeys={selectedRowKeys}
+
+				//onSelectionChanged={() => {alert('hola')}}
+				//onRowClick={() => {alert(this)}}
+
+
+				//onFocusedRowChanged={onSelectionChanged}
+
+				wordWrapEnabled={true}
+			>
+				<Editing
+					allowUpdating={false}
+					allowDeleting={false}
+					selectTextOnEditStart={true}
+					useIcons={true}
+				/>
+				<HeaderFilter
+					visible={false}
+				/>
+				<FilterPanel
+					visible={false}
+				/>
+				<FilterRow
+					visible={false}
+				/>
+				<Scrolling
+					mode="standard"
+				/>
+
+				<Column
+					width={'15%'}
+					dataField="Descripcion" 
+					
+				/>
+					
+				<Column
+					width={'20%'}
+					dataField="Cantidad" />
+				<Column
+					width={'25%'}
+					dataField="Longitud"
+					alignment={'center'}
+				/>
+				<Column
+					width={'25%'}
+					dataField="Ancho"
+					alignment={'center'}
+				/>
+				<Column
+					width={'25%'}
+					dataField="Alto"
+					alignment={'center'}
+				/>
+				
+				<Pager
+					allowedPageSizes={allowedPageSizes}
+					showPageSizeSelector={true}
+					showNavigationButtons={true}
+				/>
+				<Paging
+					enabled={true}
+					defaultPageSize={15}
+				/>
+			</TreeList>
+
+
+
+			<TreeList
+				style={{position:'absolute', width:'25%', left:'75%', top:'10px'}}
+				dataSource={proyects.Datacalculodet}
+				keyExpr="Campo"
+				//parentIdExpr="PhantomParentId"
+				//orderedLevels="Nivel ASC"
+				showBorders={true}
+				focusedRowEnabled={true}
+				defaultExpandedRowKeys={[1, 2, 3, 5]}
+				columnAutoWidth={false}
+				rootValue={-1}
+				//selectedRowKeys={selectedRowKeys}
+
+				//onSelectionChanged={() => {alert('hola')}}
+				//onRowClick={() => {alert(this)}}
+
+
+				//onFocusedRowChanged={onSelectionChanged}
+
+				wordWrapEnabled={true}
+			>
+				<Editing
+					allowUpdating={false}
+					allowDeleting={false}
+					selectTextOnEditStart={true}
+					useIcons={true}
+				/>
+				<HeaderFilter
+					visible={false}
+				/>
+				<FilterPanel
+					visible={false}
+				/>
+				<FilterRow
+					visible={false}
+				/>
+				<Scrolling
+					mode="standard"
+				/>
+
+				<Column
+					width={'80%'}
+					dataField="Campo" 
+					
+				/>
+					
+				<Column
+					width={'20%'}
+					dataField="Operacion" />
+				
+				
+				<Pager
+					allowedPageSizes={allowedPageSizes}
+					showPageSizeSelector={true}
+					showNavigationButtons={true}
+				/>
+				<Paging
+					enabled={true}
+					defaultPageSize={15}
+				/>
+			</TreeList>
+
+			{/* <div id="ContC1" className="mt-0 p-2 h-20 col overflow-scroll" style={{ height:'100%', width:'65%' }}>
 			<Table
 				striped
 				bordered
@@ -307,9 +461,9 @@ const Calculo = ({levelStart=1, idProject}) => {
 									
 				</tbody>
 			</Table>
-			</div>
-			<div id="ContC2" className="mt-0 p-2 h-20 overflow-scroll" style={{ position:'absolute',height:'200px', overflow:'scroll', width:'25%', left:'72%' }}>
-			<Table
+			</div> */}
+			{/* <div id="ContC2" className="mt-0 p-2 h-20 col overflow-scroll" style={{ /*position:'absolute',height:'100%', overflow:'scroll', width:'25%', left:'72%' }}>
+			{/*<Table
 				striped
 				bordered
 				hover
@@ -332,7 +486,7 @@ const Calculo = ({levelStart=1, idProject}) => {
 									
 				</tbody>
 			</Table>
-			</div>
+			</div> */}
 
 		</>
 	)

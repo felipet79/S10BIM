@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import TreeCP from "../components/TreeCP";
 import IdPc from "./IdPc";
 import $ from 'jquery';
-import { RefrescarV, ViewScreen1 } from "./ViewScreen1";
+import { RefrescarV } from "./ViewerSc";
 import Items from "../components/Items";
 
 
@@ -110,9 +110,9 @@ const Presupuestos = ({ match }) => {
 
 						//alert('');
 
-						/*setTimeout(() => {
+						setTimeout(() => {
 							RefrescarV();
-						}, 500);*/
+						}, 100);
 					}}
 				//onResize={()=>{alert('hola')}}
 				//onResizeStop={()=>{}}
@@ -125,7 +125,7 @@ const Presupuestos = ({ match }) => {
 					<Collapse in={open}>
 
 
-						<div className="p-2 h-100 w-100" style={{ overflow: 'scroll' }}>
+						<div id="Conte1" className="p-2 h-100 w-100" style={{ overflow: 'scroll' }}>
 
 
 							{/* <Nav
@@ -226,7 +226,31 @@ const Presupuestos = ({ match }) => {
 							style={{ cursor: "pointer" }}
 							className="h-25 w-100 bg-primary d-flex justify-contentcenter align-items-center"
 							onClick={() => {
+								//alert('se activa');
+								
+
 								setOpen(!open);
+								
+
+								if (!open){
+									document.getElementById("Conte1").style.width = 0;
+								}else{
+									document.getElementById("Conte1").style.width = '300px';
+								}
+								//alert('');
+								//$("#forgeViewer").animate({ height: height + d.height }, 100);
+		
+								//$("#DetalleItem").animate({ height: window.innerHeight - (height + d.height) - 130 }, 100);
+		
+								//alert('');
+		
+								setTimeout(() => {
+									RefrescarV();
+								}, 100);								
+								
+
+
+
 							}}
 							aria-controls="example-collapse-text"
 							aria-expanded={open}
@@ -240,16 +264,18 @@ const Presupuestos = ({ match }) => {
 					</div>
 				</Resizable>
 
-				<Col className="bigs-data w-100">
-					<Route
+				<Col className="w-100">
+					{/* <Route
 						path="/projects/project/:codProject"
 						component={IdProyect}
-					/>
+					/> */}
 					{/* <ViewScreen1 /> */}
 
 
 					{/* <DatosGenerales/> */}
-					<Items></Items>
+					<Items 
+						widthItems={width}
+					/>
 
 
 					
@@ -257,7 +283,7 @@ const Presupuestos = ({ match }) => {
 					
 
 
-					<Route path="/projects/id-pc/:codPc" component={IdPc} />
+					{/* <Route path="/projects/id-pc/:codPc" component={IdPc} /> */}
 				</Col>
 
 

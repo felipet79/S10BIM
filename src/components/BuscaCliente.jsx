@@ -1,5 +1,7 @@
-import { Modal, Button, ListGroup } from "react-bootstrap";
+//import { Modal, Button, ListGroup, Form, Col, Card } from "react-bootstrap";
+import { Modal, Card, Form, Row, Button, Col, InputGroup, FormControl, Dropdown, DropdownButton, Table } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux';
+import 'devextreme/dist/css/dx.light.css';
 import { selectCompany } from '../actions/auth.action';
 import { useHistory } from 'react-router-dom';
 import TreeList, {
@@ -10,7 +12,8 @@ import TreeList, {
 	FilterPanel,
 	FilterRow,
 	Scrolling,
-	Column
+	Column,
+	SearchPanel
 } from 'devextreme-react/tree-list';
 
 const BuscaCliente = ({ show, setShow }) => {
@@ -21,35 +24,90 @@ const BuscaCliente = ({ show, setShow }) => {
 	const proyects = useSelector((state) => state.proyects);
 	//dispatch(selectAPUS(codP, codSub, codItem, ''));
 
-
+	
 
 	return (
 		<>
 
-			<Modal show={show} onHide={handleClose}>
-				<Modal.Header closeButton>
-					<Modal.Title>Selecciona un cliente</Modal.Title>
+			<Modal centered show={show} onHide={handleClose}>
+				<Modal.Header closeButton style={{ background: '#3c8dbc', color: 'white', height: '50px' }}>
+					<Modal.Title closeButton style={{ fontSize: '0.95rem' }}>Selecciona un cliente</Modal.Title>
 				</Modal.Header>
 
 
 				<Modal.Body>
 
+
+
+					{/* <Card style={{ height: '100%', width: '100%', marginTop: '5px'/*, background: '#e8f7fe'}}>
+						{/* <Card.Header style={{ height: '38px' }}> <div style={{ marginTop: '-5px' }}>Moneda Principal ({proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].SimboloMoneda : ''}) </div> </Card.Header> }
+						<Card.Body>
+
+							<Form.Group as={Row} className="mb-0" controlId="formHorizontalPassword">
+								<Form.Label column sm={2}>
+								</Form.Label>
+
+
+								<Col sm={10}>
+									<div className="form mt-0">
+										<div className="input-group" data-widget="">
+											<input
+												className="form-control form-control"
+												type="search"
+												placeholder="Buscar"
+												aria-label="Buscar"
+												value={''}
+												onChange={''}
+											/>
+											<div className="input-group-append">
+												<button className="btn btn-sidebar">
+													<i className="fas fa-search fa-fw"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+
+								</Col>
+
+
+							</Form.Group>
+
+
+						</Card.Body>
+					</Card> */}
+
+
+
+
+					<div className="" style={{background:'#3c8dbc', width:'100%', height:'2px' }}>
+					</div>
+
+
+
+
 					<TreeList
+
 						dataSource={proyects.DataClientes}
 						keyExpr="CodIdentificador"
 						//parentIdExpr="PhantomParentId"
+						//background='#e8f7fe'
+						//customizeColumns={true}
+						//showRowLines={true}
 						showBorders={true}
 						focusedRowEnabled={true}
 						defaultExpandedRowKeys={[1, 2, 3, 5]}
 						columnAutoWidth={false}
 						rootValue={-1}
+
 						//selectedRowKeys={selectedRowKeys}
 
 						//onSelectionChanged={() => {alert('hola')}}
 						//onRowClick={() => {alert(this)}}
 						onFocusedRowChanged={() => { }/*onSelectionChanged*/}
 						wordWrapEnabled={true}
+						
 					>
+						<SearchPanel visible={true} />
 						<Editing
 							allowUpdating={false}
 							allowDeleting={false}
@@ -63,15 +121,22 @@ const BuscaCliente = ({ show, setShow }) => {
 							visible={false}
 						/>
 						<FilterRow
-							visible={true}
+							visible={false}
 						/>
 						<Scrolling
 							mode="standard"
 						/>
 
+
 						<Column
+							//style={{ background: '#e8f7fe' }}
+							
 							width={'35%'}
-							dataField="Descripcion" />
+							dataField="Descripcion"
+							//cellRender={renderCell}
+						//background={#e8f7fe}
+						/>
+
 						{/*<Column
 							width={'10%'}
 							dataField="Cantidad"
@@ -108,7 +173,7 @@ const BuscaCliente = ({ show, setShow }) => {
 							alignment={'center'}
 						/>*/}
 
-
+						
 
 						<Pager
 							//allowedPageSizes={allowedPageSizes}
@@ -121,7 +186,8 @@ const BuscaCliente = ({ show, setShow }) => {
 						/>
 					</TreeList>
 
-
+					<div className="" style={{background:'#3c8dbc', width:'100%', height:'2px' }}>
+						</div>
 					{/* <ListGroup>
 						{
 							proyects.DataClientes ? proyects.DataClientes.map(cliente => (

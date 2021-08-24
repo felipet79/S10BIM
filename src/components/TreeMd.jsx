@@ -235,7 +235,7 @@ const TreeMD = ({ levelStart, idProject, filtrado, Accion }) => {
 	let urnfolder = '';
 
 	const ObtenerTokenAdsk = async () => {
-		console.log('Se dispara solicitar Token ');
+		//console.log('Se dispara solicitar Token ');
 		//if (auth.User) {
 		const { data } = await axiosmdl.post(
 			"/authentication/v1/authenticate",
@@ -465,7 +465,7 @@ const TreeMD = ({ levelStart, idProject, filtrado, Accion }) => {
 							arreglo1.push(
 								{
 									Id:data.included[j].id,
-									Descripcion:'Version '+ data.included[j].attributes.versionNumber + ' ' + data.included[j].attributes.lastModifiedTime,
+									Descripcion:'Version '+ data.included[j].attributes.versionNumber + ' ' + data.included[j].attributes.lastModifiedTime.substring(0,10),
 									PhantomParentId:data.data[i].id
 								},
 								)
@@ -533,7 +533,7 @@ const TreeMD = ({ levelStart, idProject, filtrado, Accion }) => {
 							arreglo1.push(
 								{
 									Id:data.included[j].id,
-									Descripcion:'Version '+ data.included[j].attributes.versionNumber + ' ' + data.included[j].attributes.lastModifiedTime,
+									Descripcion:'Version '+ data.included[j].attributes.versionNumber + ' ' + data.included[j].attributes.lastModifiedTime.substring(0,10),
 									PhantomParentId:data.data[i].id
 								},
 								)

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Card, Form, Row, Button, Col, InputGroup, FormControl, Dropdown, DropdownButton, Table } from 'react-bootstrap'
 import Moment from 'react-moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { limpiaUbicaciones, selectCLIENTES, selectUBICACIONES } from '../actions/proyects.actions';
+import { limpiaUbicaciones, selectCLIENTES, selectMONEDAS, selectUBICACIONES } from '../actions/proyects.actions';
 import BuscaCliente from '../components/BuscaCliente';
 import BuscaUbicacion from '../components/BuscaUbicacion';
 import { ViewerSc } from './ViewerSc';
 import Swal from 'sweetalert2'
 import BuscaModelo from '../components/BuscaModelo';
+import BuscaMoneda from '../components/BuscaMoneda';
 //import { ViewScreen1 } from './ViewScreen1'
 
 const DatosGenerales = () => {
@@ -20,9 +21,19 @@ const DatosGenerales = () => {
     const [show, setShow] = useState(false);
     const [showUb, setShowUb] = useState(false);
     const [showMdl, setShowMdl] = useState(false);
+    const [showMnd, setShowMnd] = useState(false);
 
     const [historicoSel, setHistoricoSel] = useState("");
     const [historicos, setHistoricos] = useState([]);
+
+
+
+
+
+
+    //VARIABLES PARA TAMAÑO DE PANTALLA
+    const [titulos, setTitulos] = useState('80%');
+
 
 
 
@@ -177,6 +188,31 @@ const DatosGenerales = () => {
         //alert(proyects.AuxModelo);
     }, [proyects.AuxModelo])
 
+    
+    //establecer tamaños y posiciones
+    useEffect(() => {  
+        if (window.innerWidth >= 2000){
+            //alert('es de' + window.innerWidth)
+            setTitulos('85%');
+        }else if (window.innerWidth >= 1640){
+            //alert('2do caso es de' + window.innerWidth)
+            setTitulos('65%');
+        }else if (window.innerWidth >= 1440){
+            //alert('2do caso es de' + window.innerWidth)
+            setTitulos('52%');
+        }else if (window.innerWidth >= 1024){
+            //alert('3er caso es de' + window.innerWidth)
+            setTitulos('40%');
+        }else if (window.innerWidth >= 768){
+            //alert('4to caso es de' + window.innerWidth)        
+            setTitulos('35%');
+        }else if (window.innerWidth >= 425){
+            setTitulos('30%');
+            //alert('5to caso es de' + window.innerWidth)        
+        }
+
+
+    }, [])
 
 
 
@@ -210,12 +246,13 @@ const DatosGenerales = () => {
     }
 
     return (
-        <div className="animate__animated animate__fadeIn" style={{ overflow: 'hidden', marginTop: '10px', height: '96%', width: '100%' }}>
+        <div className="animate__animated animate__fadeIn" style={{ marginTop: '10px', height: '96%', width: '100%' }}>
             <BuscaCliente setShow={setShow} show={show} />
             <BuscaUbicacion setShow={setShowUb} show={showUb} />
             <BuscaModelo setShow={setShowMdl} show={showMdl} />
+            <BuscaMoneda setShow={setShowMnd} show={showMnd} />
             {selecOP === 1 ?
-                (<Card className="animate__animated animate__fadeIn">
+                (<Card className="animate__animated animate__fadeIn" style={{overflow:'scroll', height: '93vh'}}>
                     <Card.Header>Datos Generales
                                     <Button variant="outline-info" style={{position:'absolute', right:'30px', top:'3px'}} onClick={() => {
                                         if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
@@ -233,8 +270,8 @@ const DatosGenerales = () => {
                     <Card.Body>
 
                         <Form>
-                            <Form.Group as={Row} className="mb-1" controlId="formHorizontalEmail">
-                                <Form.Label column sm={1}>
+                            <Form.Group as={Row} className="mb-1" controlId="formCodigo">
+                            <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Codigo
                             </Form.Label>
                                 <Col sm={2}>
@@ -243,8 +280,8 @@ const DatosGenerales = () => {
 
                             </Form.Group>
 
-                            <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
-                                <Form.Label column sm={1}>
+                            <Form.Group as={Row} className="mb-1" controlId="formAlterno">
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Alterno
                             </Form.Label>
                                 <Col sm={2}>
@@ -253,8 +290,8 @@ const DatosGenerales = () => {
                             </Form.Group>
 
 
-                            <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
-                                <Form.Label column sm={1}>
+                            <Form.Group as={Row} className="mb-1" controlId="formDescripcion">
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Descripcion
                             </Form.Label>
                                 <Col sm={10}>
@@ -263,8 +300,8 @@ const DatosGenerales = () => {
                             </Form.Group>
 
 
-                            <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
-                                <Form.Label column sm={1}>
+                            <Form.Group as={Row} className="mb-1" controlId="formCliente">
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Cliente
                             </Form.Label>
                                 <Col sm={2}>
@@ -288,13 +325,13 @@ const DatosGenerales = () => {
                                             })
                                         }
                                     }}>...</Button>
-                                    <Button variant="outline-info"><i class="fas fa-binoculars"></i></Button>
+                                    {/* <Button variant="outline-info"><i class="fas fa-binoculars"></i></Button> */}
                                 </Col>
 
                             </Form.Group>
 
-                            <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
-                                <Form.Label column sm={1}>
+                            <Form.Group as={Row} className="mb-1" controlId="formGeograqfica">
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Ubicación Geográfica
                             </Form.Label>
                                 <Col sm={2}>
@@ -318,13 +355,13 @@ const DatosGenerales = () => {
                                         }
                                         
                                     }}>...</Button>
-                                    <Button variant="outline-info"><i class="fas fa-binoculars"></i></Button>
+                                    {/* <Button variant="outline-info"><i class="fas fa-binoculars"></i></Button> */}
                                 </Col>
 
                             </Form.Group>
 
 
-                            <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
+                            <Form.Group as={Row} className="mb-1" controlId="formDF">
                                 <Form.Label column sm={10}>
 
                                 </Form.Label>
@@ -332,14 +369,14 @@ const DatosGenerales = () => {
                             </Form.Group>
 
 
-                            <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
-                                <Form.Label column sm={1}>
+                            <Form.Group as={Row} className="mb-1" controlId="formFecha">
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Fecha
                             </Form.Label>
                                 <Col sm={2}>
                                     <Form.Control type="Date" placeholder="Fecha" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? (proyects.DatosPresupuesto[0].Fecha).substring(0, 10) : ''} onChange={handlerOnChange} />
                                 </Col>
-                                <Form.Label column sm={1}>
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Histórico
                             </Form.Label>
 
@@ -367,62 +404,62 @@ const DatosGenerales = () => {
                                     </InputGroup>
                                 </Col>
 
-                                <Form.Label column sm={1}>
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Plazo
                             </Form.Label>
 
-                                <Col sm={2}>
+                                <Col sm={2} style={{fontSize:{titulos} }}>
                                     <Form.Control type="Text" placeholder="Plazo" style={{ textAlign: 'right' }} value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Plazo) : ''} onChange={handlerOnChange} />
                                 </Col>
 
-                                <Form.Label column sm={1}>
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     días
                             </Form.Label>
 
                             </Form.Group>
 
 
-                            <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
-                                <Form.Label column sm={1}>
+                            <Form.Group as={Row} className="mb-1" controlId="formJornada">
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Jornada diaria
                             </Form.Label>
                                 <Col sm={1}>
                                     <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Jornada) : ''} onChange={handlerOnChange} />
                                 </Col>
-                                <Form.Label column sm={1}>
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     días
                             </Form.Label>
 
 
 
-                                <Form.Label column sm={1}>
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Semanal
                             </Form.Label>
                                 <Col sm={1}>
                                     <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaSemana) : ''} onChange={handlerOnChange} />
                                 </Col>
-                                <Form.Label column sm={1}>
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     horas
                             </Form.Label>
 
 
-                                <Form.Label column sm={1}>
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Mensual
                             </Form.Label>
                                 <Col sm={1}>
                                     <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaMes) : ''} onChange={handlerOnChange} />
                                 </Col>
-                                <Form.Label column sm={1}>
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     horas
                             </Form.Label>
 
-                                <Form.Label column sm={1}>
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Año
                             </Form.Label>
                                 <Col sm={1}>
                                     <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaAno) : ''} onChange={handlerOnChange} />
                                 </Col>
-                                <Form.Label column sm={1}>
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     horas
                             </Form.Label>
 
@@ -430,8 +467,8 @@ const DatosGenerales = () => {
                             </Form.Group>
 
 
-                            <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
-                                <Form.Label column sm={1} style={{ fontSize:'0.8rem'}}>
+                            <Form.Group as={Row} className="mb-1" controlId="formMoneda">
+                                <Form.Label column sm={1} style={{fontSize:titulos }}>
                                     Moneda Principal
                             </Form.Label>
                                 <Col sm={1}>
@@ -442,8 +479,20 @@ const DatosGenerales = () => {
                                 </Col>
 
                                 <Col sm={1}>
-                                    <Button variant="outline-info">...</Button>
-                                    <Button variant="outline-info"><i class="fas fa-binoculars"></i></Button>
+                                    <Button variant="outline-info" onClick={() => {
+                                        if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
+                                            setShowMnd(true);
+                                            dispatch(selectMONEDAS(''));
+                                        } else {
+                                            Swal.fire({
+                                                title: 'Error!',
+                                                text: 'No tiene un Presupuesto seleccionado',
+                                                icon: 'error',
+                                                confirmButtonText: 'Ok'
+                                            })
+                                        }
+                                    }}>...</Button>
+                                    {/* <Button variant="outline-info"><i class="fas fa-binoculars"></i></Button> */}
                                 </Col>
 
                             </Form.Group>
@@ -454,24 +503,24 @@ const DatosGenerales = () => {
                                 <Card.Header style={{ height: '38px' }}> <div style={{marginTop:'-5px' }}>Moneda Principal ({proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].SimboloMoneda : ''}) </div> </Card.Header>
                                 <Card.Body>
 
-                                    <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
+                                    <Form.Group as={Row} className="mb-1" controlId="formPrt2">
 
 
                                         <Col sm={5}>
                                             <Card style={{ height: '100%' }}>
                                                 <Card.Header style={{ height: '30px' }}> <p style={{ marginTop: '-5px' }}>Presupuesto Base </p></Card.Header>
                                                 <Card.Body column sm={5} >
-                                                    <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
+                                                    <Form.Group as={Row} className="mb-1" controlId="formCD1">
                                                         <Form.Label column sm={1}>
                                                         </Form.Label>
 
-                                                        <Form.Label column sm={2}>
+                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
                                                             C.D.
                                                 </Form.Label>
                                                         <Col sm={3}>
                                                             <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoDirectoBase1) : ''} onChange={handlerOnChange} />
                                                         </Col>
-                                                        <Form.Label column sm={2}>
+                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
                                                             C.I.
                                                 </Form.Label>
 
@@ -480,14 +529,14 @@ const DatosGenerales = () => {
                                                         </Col>
                                                     </Form.Group>
 
-                                                    <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
+                                                    <Form.Group as={Row} className="mb-1" controlId="formTot">
                                                         <Form.Label column sm={3}>
 
                                                         </Form.Label>
                                                         <Col sm={3}>
 
                                                         </Col>
-                                                        <Form.Label column sm={2}>
+                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
                                                             Total
                                                 </Form.Label>
 
@@ -504,17 +553,17 @@ const DatosGenerales = () => {
                                             <Card style={{ height: '100%' }}>
                                                 <Card.Header style={{ height: '30px' }}> <p style={{ marginTop: '-5px' }}>Presupuesto Oferta </p></Card.Header>
                                                 <Card.Body column sm={5} >
-                                                    <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
+                                                    <Form.Group as={Row} className="mb-1" controlId="formOferta">
                                                         <Form.Label column sm={1}>
                                                         </Form.Label>
 
-                                                        <Form.Label column sm={2}>
+                                                        <Form.Label column sm={2} style={{fontSize:{titulos} }}>
                                                             C.D.
                                                 </Form.Label>
                                                         <Col sm={3}>
                                                             <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoDirectoOferta1) : ''} onChange={handlerOnChange} />
                                                         </Col>
-                                                        <Form.Label column sm={2}>
+                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
                                                             C.I.
                                                 </Form.Label>
 
@@ -523,14 +572,14 @@ const DatosGenerales = () => {
                                                         </Col>
                                                     </Form.Group>
 
-                                                    <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
+                                                    <Form.Group as={Row} className="mb-1" controlId="formVOferta">
                                                         <Form.Label column sm={3}>
 
                                                         </Form.Label>
                                                         <Col sm={3}>
 
                                                         </Col>
-                                                        <Form.Label column sm={2}>
+                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
                                                             Total
                                                 </Form.Label>
 
@@ -551,7 +600,7 @@ const DatosGenerales = () => {
                             <Card style={{ height: '100%', width: '90%' }}>
                                 {/* <Card.Header style={{ height: '35px' }}>Sub Presupuestos</Card.Header> */}
                                 <Card.Body>
-                                    <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
+                                    <Form.Group as={Row} className="mb-1" controlId="formGridSub">
                                         <Col sm={1}></Col>
                                         <Col sm={10}>
                                             <Table
@@ -606,17 +655,17 @@ const DatosGenerales = () => {
                 </Card>)
                 :
                 (
-                    <Card className="animate__animated animate__fadeInUp">
+                    <Card className="animate__animated animate__fadeInUp" style={{overflow:'hidden', height: '90vh'}}>
                         <Card.Header className="">Datos de SubPresupuesto</Card.Header>
                         <Card.Body>
 
                             <Form>
-                                <Form.Group as={Row} className="mb-1" controlId="formHorizontalEmail">
+                                <Form.Group as={Row} className="mb-1" controlId="formPres">
                                     <Form.Label column sm={2}>
                                         
                                     </Form.Label>
 
-                                    <Form.Label column sm={1}>
+                                    <Form.Label column sm={1} style={{fontSize:{titulos} }}>
                                         Presupuesto
                                     </Form.Label>
                                     <Col sm={2}>
@@ -627,11 +676,11 @@ const DatosGenerales = () => {
 
 
 
-                                <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
+                                <Form.Group as={Row} className="mb-1" controlId="formV45">
                                     <Form.Label column sm={2}>
                                     </Form.Label>
 
-                                    <Form.Label column sm={1}>
+                                    <Form.Label column sm={1} style={{fontSize:{titulos} }}>
                                         Descripcion
                                     </Form.Label>
                                     <Col sm={7}>
@@ -644,7 +693,7 @@ const DatosGenerales = () => {
                                 <Card style={{ height: '100%', width: '100%' }}>
                                     {/* <Card.Header style={{ height: '35px' }}>Sub Presupuestos</Card.Header> */}
                                     <Card.Body>
-                                        <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
+                                        <Form.Group as={Row} className="mb-1" controlId="formGrid2">
                                             <Col sm={1}></Col>
                                             <Col sm={10} >
                                                 <Table
@@ -690,9 +739,9 @@ const DatosGenerales = () => {
                                 <Card style={{ height: '100%', width: '100%' }}>
                                     {/* <Card.Header style={{ height: '35px' }}>Sub Presupuestos</Card.Header> */}
                                     <Card.Body >
-                                        <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
+                                        <Form.Group as={Row} className="mb-1" controlId="formGrd3">
                                             <Col sm={1}></Col>
-                                            <Col sm={10} style={{ height: window.innerHeight - 600 }}>
+                                            <Col sm={10} style={{ height: window.innerHeight - 500 }}>
                                                 <ViewerSc />
 
 

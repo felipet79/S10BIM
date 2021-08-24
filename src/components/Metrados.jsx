@@ -4,7 +4,7 @@ import {Table} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import { cleanDataChartAPU, selectAPUS, SelectUrn } from "../actions/proyects.actions";
-import { MostarModelo } from "../views/ViewScreen1";
+import { MostarModelo } from "../views/ViewerSc";
 
 import TreeList, {
 	Pager,

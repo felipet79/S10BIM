@@ -52,3 +52,7 @@ a{
 .font-12{font-size: 8px;}
 
 .content-wrapper{ height: 90.8vh;}
+
+.dx-widget {
+    font-size: 12px;
+}
