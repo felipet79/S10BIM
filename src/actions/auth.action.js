@@ -39,7 +39,8 @@ export const selectCompany = (company, history) => {
 		type: SELECT_COMPANY,
 		payload: company,
 	  });
-	  history.push("/inicio");
+    history.push("/presupuesto");
+    window.location.reload(true);
   };
 };
 

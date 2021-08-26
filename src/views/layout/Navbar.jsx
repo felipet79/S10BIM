@@ -13,12 +13,21 @@ const Navbar = () => {
 	const proyects = useSelector(state => state.proyects);
 	const dispatch = useDispatch();
 	
+
 	let user = JSON.parse(localStorage.getItem("user-s10"));
   return (
     <nav className="main-header navbar navbar-expand navbar-white navbar-light" style={{background:'#3c8dbc', color:'white', height:'40px'}}>
       {/* <!-- Left navbar links --> */}
       <ul className="navbar-nav">
         <li className="nav-item"  onClick={()=>{
+            
+          
+            
+          if (proyects.Avisa===0)proyects.Avisa=1;
+          else
+            proyects.Avisa=0;
+
+
             
 
             setTimeout(() => {

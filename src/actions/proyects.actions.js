@@ -250,6 +250,48 @@ export const selectCLIENTES = (Descripcion, userId) =>{
 }
 
 
+export const guardarModelo = (CodPlano, NombreArchivoRvt, RutaArchivoRvt,  UrnAddIn,  UrnWeb, userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		//console.log(idCod, idPc);
+		
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				// dbo.s10_06_Proyecto_General
+				ObjectName: `dbo.S10_01_SubpresupuestoDetallePlano_Actualizar '${CodPlano}','${NombreArchivoRvt}','${RutaArchivoRvt}','${UrnAddIn}','${UrnWeb}','${email}'`,
+				//ObjectName: `dbo.S10_01_SubpresupuestoDetallePlano_Actualizar '${CodPlano}','${NombreArchivoRvt}','${UrnAddIn}','${UrnWeb}','${email}'`,
+				RequestId: "ActPlano",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log("estado del guardar modelo" + `dbo.S10_01_SubpresupuestoDetallePlano_Actualizar '${CodPlano}','${NombreArchivoRvt}','${RutaArchivoRvt}','${UrnAddIn}','${UrnWeb}','${email}'` );
+		console.log(data);
+
+
+		/*request.AddParameter("RequestId", "ActPlano");
+		request.AddParameter("SignalRConnectionID", SignalToken);
+		request.AddParameter("SecurityUserId", "1148");
+		request.AddHeader("Token", Token);
+		request.AddHeader("ModuleID", "11");
+		request.AddHeader("Content-Type", "application/x-www-form-urlencoded");*/
+
+		/*dispatch({
+			type: ID_PC,
+			payload: CodPres
+		})*/
+	}
+}
+
 export const selectMODELOS = (userId) =>{
 	return async (dispatch) =>{
 		let company = JSON.parse(localStorage.getItem("company-s10"));

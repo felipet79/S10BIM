@@ -19,7 +19,11 @@ import { ViewerScP } from '../views/ViewerScP';
 import axiosmdl from "../config/axiosmdl";
 import qs from "querystring";
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
-import { SelectUrn, SelectUrnB } from '../actions/proyects.actions';
+import { selectMODELOS, SelectUrn, SelectUrnB, guardarModelo } from '../actions/proyects.actions';
+import Swal from 'sweetalert2'
+import axios from 'axios';
+
+
 const BuscaModelo = ({ show, setShow, item }) => {
 	const dispatch = useDispatch();
 	const handleClose = () => setShow(false);
@@ -31,6 +35,9 @@ const BuscaModelo = ({ show, setShow, item }) => {
 	const [modeloSel, setmodeloSel] = useState({
 		codigo: '',
 		nombre: '',
+		version: '',
+		urnaddin: '',
+		urnweb: '',
 	});
 
 
@@ -422,29 +429,96 @@ const BuscaModelo = ({ show, setShow, item }) => {
 
 
 
+	
+
+	
 
 
-
-
-
-
-
-
+	
+	 
+	function getRandomString(length) {
+		var s = '';
+		do { s += Math.random().toString(36).substr(2); } while (s.length < length);
+		s = s.substr(0, length);
+		
+		return s;
+	  }
+	  
+	  
 
 	const Selecciona = () => {
+		
+		if (!proyects.DataModelos) {
 
-		proyects.AuxModelo = modeloSel.nombre;
-		setShow(false);
+
+
+		}
+		if (modeloSel.nombre && modeloSel.nombre!==''){
+
+		console.log('Este va a guardar');
+		console.log(modeloSel);
+
+        //console.log("LOS SUBPRESUPUESTOS AHORA SON");
+        //console.log(proyects.treeSubControl);
+        console.log("ACTUALMENTE LOS MODELOS");
+        console.log(proyects.DataModelos);
+
+		let buscado = proyects.DataModelos.find(item => item.UrnWeb === modeloSel.urnweb);
+
+		if (buscado){
+
+			//SI EXISTE EN MI TABLA DEBO COGER LOS DATOS DE ID NOMBRE Y MODIFICAR EL REGISTRO DE SUBPRESUPUESTO	
+
+
+		}else{
+			
+			//NO EXISTE DEBO INGRESAR PRIMERO EN LA TABLA DE MODELOS GENERANDO UN NUEVO ID
+			//let guid = createGuid(); 
+			//let encoded = base64_encode(guid);
+			//let encoded = btoa(guid);
+			//let encoded =b64EncodeUnicode(guid); 
+			var uid = getRandomString(24);
+			console.log("llamando a guardar modelos");
+			//alert(uid + );
+
+			const resp = dispatch(guardarModelo(uid, modeloSel.nombre, '',  modeloSel.urnaddin,  modeloSel.urnweb, ''));
+
+
+
+		}
+
+
+
+		}else{
+			Swal.fire({
+				title: 'Error!',
+				text: 'No ha seleccionado un Modelo',
+				icon: 'error',
+				confirmButtonText: 'Ok'
+			})
+
+		}
+
+		//proyects.AuxModelo = modeloSel.nombre;
+		//setShow(false);
 	}
 
 
 	function onSelectionChanged(e) {
 		//console.log(e);
 
-
+		setmodeloSel({
+			codigo: '',
+			nombre: '',
+			version: '',
+			urnaddin: '',
+			urnweb: '',
+		});
 
 		//alert(e.row.data.Descripcion);
 		const Item = e.row.data;
+		//console.log('El item es ACTUAL :');
+		//console.log(Item);
 		const Id = Item.Id;
 		let Descripcion = Item.Descripcion;
 		//alert(Item.CodPlano + ' ' + Item.NombreArchivoRvt);
@@ -454,14 +528,16 @@ const BuscaModelo = ({ show, setShow, item }) => {
 				let encoded = base64_encode(Id);
 				//alert(encoded);
 				dispatch(SelectUrnB(encoded));
-				console.log('Estoss son los nivelessss');
-				console.log(allLevels);
+				//console.log('Estoss son los nivelessss');
+				//console.log(allLevels);
 				//proyects.Urn=encoded;
 				let arrresp = allLevels.find(item => item.Id === Item.PhantomParentId)
 				console.log('este es el filtro');
 				console.log(arrresp);
-				
-				Descripcion= arrresp.Descripcion + ' -> ' + Descripcion;
+				let Version = arrresp.Descripcion;
+				//Descripcion= arrresp.Descripcion + ' -> ' + Descripcion;
+				//Descripcion= arrresp.Descripcion;
+
 				/*.map(filtro => {
 					alert(filtro.Descripcion)
 					
@@ -469,7 +545,10 @@ const BuscaModelo = ({ show, setShow, item }) => {
 				});*/
 				setmodeloSel({
 					codigo: Id,
-					nombre: Descripcion,
+					nombre: Version,
+					version: Descripcion,
+					urnaddin: Id,
+					urnweb: encoded,					
 				});
 		
 			}
@@ -489,12 +568,12 @@ const BuscaModelo = ({ show, setShow, item }) => {
 		});*/
 	}
 
-	useEffect(() => {
+	/*useEffect(() => {
 		setmodeloSel({
 			codigo: '',
 			nombre: '',
 		});
-	}, []);
+	}, []);*/
 
 	return (
 		<>
@@ -545,13 +624,13 @@ const BuscaModelo = ({ show, setShow, item }) => {
 				<Modal.Body style={{ width: '100%', height: '650px', overflow: 'hidden' }}>
 
 
-					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '4px' }}>
+					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '1px' }}>
 					</div>
 
 
-					<Form.Group as={Row} className="mt-3 mb-3" controlId="formModelos" >
+					<Form.Group as={Row} className="mt-0 mb-0" controlId="formModelos" >
 
-						<Col sm={6} style={{ /*background: '#3c8dbc',*/ width: '100%', height: '550px', overflow: 'scroll' }}>
+						<Col sm={5} style={{ /*background: '#3c8dbc',*/ width: '100%', height: '550px', overflow: 'scroll' }}>
 
 							<TreeList
 								dataSource={allLevels}
@@ -583,7 +662,7 @@ const BuscaModelo = ({ show, setShow, item }) => {
 									visible={false}
 								/>
 								<FilterRow
-									visible={true}
+									visible={false}
 								/>
 								<Scrolling
 									mode="standard"
@@ -643,11 +722,11 @@ const BuscaModelo = ({ show, setShow, item }) => {
 
 
 						</Col>
-						<Col sm={6}>
+						<Col sm={7}>
 
 
 
-							<Form.Group as={Row} className="mt-1 mb-1" controlId="formModel2" style={{ width: '100%', height: '100%' }}>
+							<Form.Group as={Row} className="mt-0 mb-0" controlId="formModel2" style={{ width: '100%', height: '100%' }}>
 
 
 								<Col sm={12}>
@@ -674,7 +753,7 @@ const BuscaModelo = ({ show, setShow, item }) => {
 
 
 
-					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '4px' }}>
+					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '1px' }}>
 					</div>
 					{/* <ListGroup>
 						{
@@ -689,7 +768,7 @@ const BuscaModelo = ({ show, setShow, item }) => {
 					</ListGroup> */}
 
 
-					<Form.Group as={Row} className="mt-3 mb-3" controlId="formModel2" style={{ width: '100%', height: '20px' }}>
+					<Form.Group as={Row} className="mt-1 mb-1" controlId="formModel2" style={{ width: '100%', height: '20px' }}>
 
 						<Col sm={1}></Col>
 						<Col sm={10}>
@@ -704,13 +783,13 @@ const BuscaModelo = ({ show, setShow, item }) => {
 
 
 
-					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '4px' }}>
+					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '1px' }}>
 					</div>
 
 				</Modal.Body>
 
 				<Modal.Footer>
-					<strong style={{ fontSize: '0.8rem', position: 'absolute', left: '5px', marginLeft: '20px', }}> {modeloSel.nombre}</strong>
+					<strong style={{ fontSize: '0.8rem', position: 'absolute', left: '5px', marginLeft: '20px', }}> {modeloSel.nombre + '->' + modeloSel.version}</strong>
 					<Button
 						variant="primary"
 						onClick={Selecciona}

@@ -31,6 +31,7 @@ import Tree from "./TreeAll";
 import { ViewerSc, RefrescarV } from "../views/ViewerSc";
 import { ContextMenu, DropDownButton } from "devextreme-react";
 import notify from 'devextreme/ui/notify';
+import { Width } from "devextreme-react/chart";
 
 
 
@@ -47,7 +48,7 @@ const menuModo = [
 
 
 
-const Items = ({ widthItems, levelStart = 1, idProject }) => {
+const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 
 
@@ -57,9 +58,9 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 	const [itemSelected, setItemSelected] = useState('')
 	const [lastLevel, setLastLevel] = useState(0);
 
+	const [minimoW, setMinimoW] = useState(1200);
 
-
-	const [modo, setModo] = useState('Detalle y Modelo');
+	const [modo, setModo] = useState('Detalle y modelo');
 
 	const [minimop, setMinimoP] = useState(600);
 	const [width, setWidth] = useState(600);
@@ -70,6 +71,12 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 	const [open, setOpen] = useState(true);
 	const [open1, setOpen1] = useState(true);
 	const [open2, setOpen2] = useState(true);
+
+
+
+
+	
+
 
 	const [levelPC, setLevelPC] = useState(1);
 	const [level, setLevel] = useState(2);
@@ -233,7 +240,65 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 		// eslint-disable-next-line
 	}, [levelStart, proyects.DataPc])
 
+	useEffect(() => {
+		//alert('mODO=' + modo );
+		if (!open2){
+			if (modo==='Solo hoja' || modo==='Detalle')
+			{
+				setMinimoW(3000);
+				if (proyects.Avisa!==undefined) 
+				if (proyects.Avisa===1) //abierto
+				{
+					
+					setWidth(window.innerWidth-260 - widthItems - 50);
+				}else{
+					setWidth(window.innerWidth- 70 - widthItems - 50);
 
+				}
+				if (proyects.Avisa===undefined) 
+				setWidth(window.innerWidth-widthNav - widthItems - 50);
+				//setOpen1(false);
+				//setOpen2(false);
+				//setHeight(window.innerHeight-60);
+				$("#barra1").animate({ height: height  }, 0);
+				//alert('cambiaron tamaños Nav=' + widthNav + ' Items=' + widthItems );
+				//alert('Avisa=' + proyects.Avisa );
+			}
+
+		}else{
+			if (modo==='Modelo' || modo==='Detalle y modelo'){
+				setMinimoW(1200);
+				//alert(width);
+
+
+				if (proyects.Avisa!==undefined) 
+				if (proyects.Avisa===1) //abierto
+				{
+					//setWidth(window.innerWidth- 260 - widthItems - 50);
+					$("#ab").animate({ width: window.innerWidth - width - 260 - widthItems - 20}, 0);	
+				}else{
+					//setWidth(window.innerWidth-  70 - widthItems - 50);
+					$("#ab").animate({ width: window.innerWidth - width - 70 -  widthItems - 20}, 0);	
+				}
+				if (proyects.Avisa===undefined) 
+				{
+					//setWidth(window.innerWidth-widthNav - widthItems - 50);
+					$("#ab").animate({ width: window.innerWidth - width - widthItems - widthNav - 20}, 0);
+				}
+				//setWidth(window.innerWidth-widthNav - widthItems - 50);				
+				//$("#ab").animate({ width: window.innerWidth - Width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
+
+
+				setTimeout(() => {
+					RefrescarV();
+				}, 150);
+
+
+			}
+
+		}
+		//
+	}, [widthItems, widthNav, proyects.Avisa])
 
 	const orderTree2 = (tree) => {
 
@@ -379,6 +444,9 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 
 	}*/
 
+
+
+
 	function onSelectionChanged(e) {
 		//console.log(e);
 
@@ -448,7 +516,7 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 		  //selectedEmployeeNames: this.getEmployeeNames(selectedData)
 		});*/
 	}
-	//console.log('Renderizando Items');
+	console.log('Renderizando Items');
 
 	
 
@@ -481,16 +549,19 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 
 			<div id="ContenedorTotal1" className="d-flex flex-wrap justify-content-between overflow-hidden h-100" style={{ height: height - 20, fontSize:'0.8rem !important' }}>
 				<Resizable
-					className="tree-fixed p-0 d-flex justify-content-between"
+					id="RPrincipal"
+					//className="tree-fixed p-0 d-flex justify-content-between"
+					className="p-0 d-flex justify-content-between"
 					size={{ width: width, height: height }}
+					enable={{ top:false, right:open2, bottom:true, left:false, topRight:open2, bottomRight:open2, bottomLeft:false, topLeft:false }}
 					//maxHeight="60vh"
-					maxWidth={open ? 1200 : 20}
+					maxWidth={open ? minimoW : 20}
 					//minHeight="67.5vh"
 					maxHeight={window.innerHeight - 200}
 					minWidth={minimop}
 					minHeight="320px"
 					onResizeStop={(e, direction, ref, d) => {
-
+					
 						setWidth(width + d.width);
 						
 						if (open1)
@@ -509,6 +580,8 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 						//alert('');
 						/*if ($("#FormLista").innerWidth()<=600)
 							document.getElementById("FormLista").style.width = '600px';*/
+							//$("#ab").animate({ display: 'block'}, 0);
+							//$("#forgeViewer").animate({ display: 'block'}, 0);
 						setTimeout(() => {
 							RefrescarV();
 						}, 150);
@@ -522,18 +595,27 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 							$("#ContenedorTotal").animate({ height: height + d.height }, 0);
 							$("#Card1").animate({ height: height + d.height }, 0);
 							$("#ContDet").animate({ top: height + d.height + 10 }, 0);
-							$("#ContDet2").animate({ top: height + d.height + 10 }, 0);
-							$("#ab").animate({ height: height + d.height -20}, 0);
-							$("#forgeViewer").animate({ height: '100%'}, 100);
+							$("#ContDet2").animate({ top: height + d.height + 3 }, 0);
+							$("#ab").animate({ height: height + d.height -22}, 0);
+							$("#forgeViewer").animate({ height: '100%'}, 0);
+							
+							
 						}
-						
+						//$("#ab").animate({ display: 'none'}, 0);
+						//$("#forgeViewer").animate({ display: 'none'}, 0);
+						//alert(width + d.width +50);
+						//$("#ab").animate({ left: width + d.width + 10 }, 0);
+						//$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
+						//$("#forgeViewer").animate({ left: 0 }, 0);
+						//$("#ab").animate({ width: window.innerWidth - width - widthItems - widthNav - 20}, 0);
+						//$("#forgeViewer").animate({ width: window.innerWidth - width - widthItems - widthNav - 20}, 0);
 						//console.log($("#FormLista").innerWidth());
 						
 						//$("#Conten1").animate({ height: height + d.height -20}, 0);
 						//$("#ab").animate({ height: height + d.height -20}, 0);
 						//$("#forgeViewer").animate({ height: '100%'}, 100);
 						//$("#ab").animate({ width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }, 0);
-						//$("#ab").animate({ left: width + 10 }, 0);
+						
 						
 						/*setTimeout(() => {
 							RefrescarV();
@@ -572,6 +654,8 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 
 									if (e.itemData.name==='Solo hoja')
 									{
+										setMinimoW(3000);
+										setWidth(window.innerWidth-$("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80);
 										setOpen1(false);
 										setOpen2(false);
 										setHeight(window.innerHeight-60);
@@ -580,6 +664,8 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 
 									if (e.itemData.name==='Detalle')
 									{
+										setMinimoW(3000);
+										setWidth(window.innerWidth-$("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80);
 										setOpen1(true);
 										setOpen2(false);
 										setHeight(window.innerHeight-500);
@@ -588,18 +674,36 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 
 									if (e.itemData.name==='Detalle y modelo')
 									{
+										setMinimoW(1200);
 										setOpen1(true);
 										setOpen2(true);
 										setHeight(window.innerHeight-500);
 										$("#barra1").animate({ height: window.innerHeight-500  }, 0);
+
+										setWidth(600);
+										$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
+										//let tam=window.innerWidth - width;
+										//alert(width);
+										//$("#ab").animate({ width: 800}, 0);
+										//$("#forgeViewer").animate({ height: '100%'}, 100);
+										//$("#forgeViewer").animate({ width: '100%'}, 0);
 									}
 
 									if (e.itemData.name==='Modelo')
 									{
+										setMinimoW(1200);
 										setOpen1(false);
 										setOpen2(true);
 										setHeight(window.innerHeight-60);
 										$("#barra1").animate({ height: height  }, 0);
+										setWidth(600);
+
+										$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
+										
+										//$("#ab").animate({ width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
+										//$("#ab").animate({ width: 800}, 0);
+										//$("#forgeViewer").animate({ width: '100%'}, 0);
+
 									}
 									
 									//if (open1){
@@ -744,7 +848,9 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 							//onItemClick={itemClick} 
 							/>
 
-					<div
+					{open2 ? (
+
+						<div
 						id="barra1"
 						className="bara-cerrar d-flex align-items-center"
 						style={{
@@ -755,7 +861,7 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 						}}
 					>
 						<div
-							style={{ cursor: "pointer" }}
+							style={{ cursor: "pointer", width:'14px' }}
 							className="h-25 w-100 bg-primary d-flex justify-contentcenter align-items-center"
 							onClick={() => {
 								if (open){
@@ -789,6 +895,13 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 						</div>
 					</div>
 
+					):''
+					
+					
+					
+					}
+					
+
 
 
 
@@ -807,17 +920,34 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 						}}
 					>
 						<div
-							style={{ cursor: "pointer", marginLeft: $("#ContDet2").innerWidth()/2-70  , width: '140px', height: '12px' }}
+							style={{ cursor: "pointer", marginLeft: $("#ContDet2").innerWidth()/2-70  , width: '140px', height: '14px', zIndex:'1' }}
 							className="bg-primary d-flex justify-contentcenter align-items-center"
 							onClick={() => {
 								setOpen1(!open1);
 								if (open1){
 									setHeight(window.innerHeight-60);
+									
+									if (open2)
+									setModo('Modelo');
+									else
+									setModo('Solo hoja');									
+
+
 								}else{
 									setHeight(window.innerHeight-500);
-									$("#barra1").animate({ height: window.innerHeight-500  }, 0);
+									$("#barra1").animate({ height: window.innerHeight-500  }, 0);									
+
+									if (open2)
+									setModo('Detalle y modelo');
+									else
+									setModo('Detalle');									
+
+									
+									//setModo('Solo hoja');									
 								}
-								
+
+						
+
 								setTimeout(() => {
 									RefrescarV();
 								}, 120);	
@@ -853,9 +983,9 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 					id="Conten1"
 					//style={{ position: 'absolute', left: width + 10, top: '5px', height: height - 30, width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }}
 					style={{ position: 'absolute', left: width + 10, top: '5px' }}
-					size={{ width:  window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80, height: height-20 }}
+					size={{ width:  window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50, height: height-22 }}
 					//maxWidth={open ? 1200 : 0}
-					maxHeight={window.innerHeight}
+					maxHeight={window.innerHeight-200}
 					enable={{ top:false, right:false, bottom:true, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
 					//minWidth="20px"
 					minHeight="320px"
@@ -893,8 +1023,8 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 							
 							
 
-							$("#ContDet2").animate({ top: height + d.height + 10 }, 0);
-							$("#ab").animate({ height: height + d.height -20}, 0);
+							$("#ContDet2").animate({ top: height + d.height +3 }, 0);
+							$("#ab").animate({ height: height + d.height -22}, 0);
 							$("#forgeViewer").animate({ height: '100%'}, 100);
 
 
@@ -952,7 +1082,7 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 			
 			
 			
-			{open2 ? <div id="ab" /*style={{width:'100%'}}*/ style={{ left: width + 10, top: '5px', height: height - 30, width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }}>
+			{open2 ? <div id="ab" /*style={{width:'100%'}}*/ style={{ left: width + 10, top: '5px', height: height - 22, width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50 }}>
 				<ViewerSc />
 			</div>:''}
 			
@@ -961,16 +1091,16 @@ const Items = ({ widthItems, levelStart = 1, idProject }) => {
 
 
 
-			<div id="ContDet2" className="" style={{ position: 'absolute', top: height + 10, height: window.innerHeight - height - 60, width: '98%'/*, zIndex: '9', background: 'red'*/ }}>
+			<div id="ContDet2" className="" style={{ position: 'absolute', top: height+3 , height: window.innerHeight - height - 60, width: '100%', background:'white'/*, zIndex: '9', background: 'red'*/ }}>
 
-				<Collapse in={open1} style={{ height: '100%' }}>
-					<div className="p-2 w-100" style={{ height: '100%' }}>
+				<Collapse in={open1} style={{ height: '90%', background:'white' }}>
+					<div className="p-2 w-100" style={{ height: '90%',  background:'white' }}>
 						<Nav
 							variant="tabs"
 							defaultActiveKey="/home"
 							className="eyelashes"
 
-							/*style={{background:'#5ca7d8'}}*/
+							
 							style={{ height: '100%' }}
 						>
 							<Nav.Item

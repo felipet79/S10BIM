@@ -842,7 +842,12 @@ export const ViewerSc = (props) => {
 
             init22();
 
-
+            viewer.hideModel(doc);
+            viewer.showModel(doc);
+            if (viewer.areAllVisible())
+            alert('se cargo bien')
+            else
+            alert('no se cargo')
         }
 
 
@@ -2658,7 +2663,7 @@ export const ViewerSc = (props) => {
     return (
         <>
             <div className="card" id="forgeViewer" style={{ height: "100%", width: '100%', background: 'rgba(107, 97, 103, 0.466)' }}></div>
-            <div style={{ top:'10px', position:'absolute', zIndex:999 }}>Items seleccionados: <span id="MySelectionValue">0</span></div>
+            <div style={{ fontSize:'0.7rem', top:'10px', position:'absolute', zIndex:1 }}>Items seleccionados: <span id="MySelectionValue">0</span></div>
 
  
             {/* </div> */}

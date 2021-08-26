@@ -39,12 +39,13 @@ function App() {
 
         <Layout>
           {/* <Route path="/inicio" component={Home} /> */}
-          <Route path="/inicio" component={Proyects} />
+          {/* <Route path="/inicio" component={Proyects} /> */}
           {/* <Route path="/proyects/:codProject" component={Proyects} /> */}
-       
           <Route path="/presupuesto" component={Presupuestos} />
 
           <Route path="/modelos" component={Models} />
+
+          
         </Layout>
       </Switch>
     </Router>

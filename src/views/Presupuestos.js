@@ -12,11 +12,16 @@ import IdPc from "./IdPc";
 import $ from 'jquery';
 import { RefrescarV } from "./ViewerSc";
 import Items from "../components/Items";
-
+import axios from "../config/axios";
 
 
 const Presupuestos = ({ match }) => {
+
+	const auth = useSelector((state) => state.auth);
+	
+	
 	const codProject = match.params.codProject;
+
 	// console.log(codProject)
 	const proyects = useSelector((state) => state.proyects);
 	const [width, setWidth] = useState(400);
@@ -35,7 +40,7 @@ const Presupuestos = ({ match }) => {
 	const [textoB, setTextoB] = useState('');
 
 
-	const reducir = () => {
+	/*const reducir = () => {
 
 		setReducido(!reducido);
 		if (reducido) {
@@ -76,9 +81,80 @@ const Presupuestos = ({ match }) => {
 
 
 
-	}
+	}*/
+
+	
+	useEffect(() => {
+		async function init() {
+			let company = JSON.parse(localStorage.getItem("company-s10"));
+			let connectId = await localStorage.getItem("connectionId");
+			//console.log('connectId desde tree: ' + connectId + company + idProject)  ;
+			if (company && auth.User) {
+				//alert(data);
+				const { data } = await axios.post(
+					"",
+					{
+						HasOutputParam: false,
+						ObjectName: `dbo.S10_01_Presupuesto_ListarArbol 'ncortez@s10peru.com'`,
+						RequestId: "PARTY_CONTROL",
+						SignalRConnectionID: connectId,
+						SecurityUserId: auth.User.UserId, // SecurityUserId obtenido al logear
+					},
+					{
+						headers: {
+							Token: company.Token,
+							ModuleId: 21,
+						},
+					}
+				);
+
+			}
+			//setLoading(false)
+		}
+		init()
+		// eslint-disable-next-line
+	}, []);
 
 
+	useEffect(() => {
+		async function init() {
+			//alert('se ejcuta llamado');
+			let company = JSON.parse(localStorage.getItem("company-s10"));
+			let connectId = await localStorage.getItem("connectionId");
+			//console.log('connectId desde tree: ' + connectId + company + idProject)  ;
+			console.log(' LLAMANDO A LISTAR TODOS');
+			//request.AddParameter("Data", jsonString );			
+			if (company && auth.User) {
+				//alert(data);
+				const { data } = await axios.post(
+					"",
+					{
+						HasOutputParam: false,
+						ObjectName: `dbo.S10_01_Subpresupuesto_ListarTodos '001'`,
+						RequestId: "LISTAR_SUBS",
+						SignalRConnectionID: connectId,
+						SecurityUserId: auth.User.UserId, // SecurityUserId obtenido al logear
+						//Data:"[{'P':'001','O':0}]",
+					},
+					{
+						headers: {
+							Token: company.Token,
+							ModuleId: 21,
+						},
+					}
+				);
+
+				//console.log(idProject);
+			}
+			//setLoading(false)
+		}
+		init()
+		// eslint-disable-next-line
+	}, []);	
+	//setLevelPC(1);
+	
+	
+	
 	const buscarPres = (e) => {
 
 		setTextoB((state) => {
@@ -94,7 +170,9 @@ const Presupuestos = ({ match }) => {
 
 				<Resizable
 					className="tree-fixed p-0 d-flex justify-content-between"
+					enable={{ top:false, right:true, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
 					size={{ width: width, height: height }}
+					marginLeft="-20px"
 					//maxHeight="60vh"
 					maxWidth={open ? 800 : 0}
 					//minHeight="67.5vh"
@@ -125,7 +203,7 @@ const Presupuestos = ({ match }) => {
 					<Collapse in={open}>
 
 
-						<div id="Conte1" className="p-2 h-100 w-100" style={{ overflow: 'scroll' }}>
+						<div id="Conte1" className="p-0 h-100 w-100" style={{ overflow: 'scroll' }}>
 
 
 							{/* <Nav
@@ -192,7 +270,7 @@ const Presupuestos = ({ match }) => {
 									levelStart={1}
 									idProject=""
 									marginTop="60"
-									marginLeft='50'
+									marginLeft='0px'
 								/>
 
 
@@ -204,7 +282,7 @@ const Presupuestos = ({ match }) => {
 							)}
 
 
-
+							
 
 
 							{/* </div>  */}
@@ -234,8 +312,10 @@ const Presupuestos = ({ match }) => {
 
 								if (!open){
 									document.getElementById("Conte1").style.width = 0;
+									setWidth(300);
 								}else{
 									document.getElementById("Conte1").style.width = '300px';
+									setWidth(20);
 								}
 								//alert('');
 								//$("#forgeViewer").animate({ height: height + d.height }, 100);
@@ -243,7 +323,9 @@ const Presupuestos = ({ match }) => {
 								//$("#DetalleItem").animate({ height: window.innerHeight - (height + d.height) - 130 }, 100);
 		
 								//alert('');
-		
+								
+
+
 								setTimeout(() => {
 									RefrescarV();
 								}, 100);								
@@ -275,6 +357,7 @@ const Presupuestos = ({ match }) => {
 					{/* <DatosGenerales/> */}
 					<Items 
 						widthItems={width}
+						widthNav={$("#ContenedorSide").innerWidth()}
 					/>
 
 

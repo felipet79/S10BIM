@@ -55,4 +55,10 @@ a{
 
 .dx-widget {
     font-size: 12px;
+    font-family: "Arial","Segoe UI";
+}
+
+.card-body {
+    padding: 1.5px;
+    
 }

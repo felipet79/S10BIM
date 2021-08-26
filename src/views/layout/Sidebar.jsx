@@ -64,7 +64,7 @@ const Sidebar = () => {
             {/* with font-awesome or any other icon font library --> */}
            
             <li className="nav-item">
-              <Link to="/inicio" className="nav-link font-12">
+              <Link to="/presupuesto" className="nav-link font-12">
                 <i className="nav-icon fas fa-th" style={{fontSize: 15}}></i>
                 <p>
                   Presupuesto
@@ -72,14 +72,14 @@ const Sidebar = () => {
               </Link>
             </li>
             <ul style={{listStyle:'none'}}>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link to="/inicio" className="nav-link font-12">
                 <i className="nav-icon far fa-calendar-alt" style={{position:'absolute',fontSize: 15, marginLeft:'-30px'}}></i>
                 <p>
                   Datos Generales
                 </p>
               </Link>
-            </li>
+            </li> */}
 
             <li className="nav-item">
               <Link to="/presupuesto" className="nav-link font-12">
@@ -94,7 +94,7 @@ const Sidebar = () => {
 
 
             <li className="nav-item">
-              <Link to="/inicio" className="nav-link font-12">
+              <Link to="/modelos" className="nav-link font-12">
                 <i className="nav-icon fas fa-th" style={{fontSize: 15}}></i>
                 <p>
                   General

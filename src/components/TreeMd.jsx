@@ -22,7 +22,7 @@ function MinusSquare(props) {
 	return (
 		<div className="d-flex">
 			<ion-icon name="chevron-down-outline"></ion-icon>
-			<img src={projectIcon} alt="icons" width="28" style={{ marginRight: 20 }} {...props} />
+			<img src={projectIcon} alt="icons" width="10" style={{ marginRight: 20 }} {...props} />
 		</div>
 	);
 }
@@ -31,7 +31,7 @@ function PlusSquare(props) {
 	return (
 		<div className="d-flex">
 			<ion-icon name="chevron-forward-outline"></ion-icon>
-			<img src={projectIcon} alt="icons" width="28" style={{ marginRight: 20 }} {...props} />
+			<img src={projectIcon} alt="icons" width="20" style={{ marginRight: 20 }} {...props} />
 
 		</div>
 	);
@@ -39,13 +39,13 @@ function PlusSquare(props) {
 
 function CloseSquare(props) {
 	return (
-		<img src={subprojectIcon} width="28" alt="icons" style={{ marginRight: 20 }} {...props} />
+		<img src={subprojectIcon} width="20" alt="icons" style={{ marginRight: 20 }} {...props} />
 	);
 }
 
 function CloseSquare1(props) {
 	return (
-		<img src={managerIcon} width="28" alt="icons" style={{ marginRight: 20 }} {...props} />
+		<img src={managerIcon} width="20" alt="icons" style={{ marginRight: 20 }} {...props} />
 	);
 }
 
@@ -60,8 +60,8 @@ const StyledTreeItem = withStyles((theme) => ({
 	},
 	group: {
 		font: "22px Arial, sans-serif",
-		marginLeft: 30,
-		paddingLeft: 25,
+		marginLeft: 15,
+		paddingLeft: 5,
 		borderLeft: `2px dashed ${alpha(theme.palette.text.primary, 0.3)}`,
 	},
 }))((props) => <TreeItem {...props} />);
@@ -70,7 +70,7 @@ const useStyles = makeStyles({
 	root: {
 		font: "26px Arial, sans-serif",
 		marginTop: 10,
-		marginLeft: 35,
+		marginLeft: 15,
 		height: 264,
 		flexGrow: 1,
 		maxWidth: 700,

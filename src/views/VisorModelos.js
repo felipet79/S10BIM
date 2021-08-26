@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { limpiaUbicaciones, selectCLIENTES, selectUBICACIONES } from '../actions/proyects.actions';
 import BuscaCliente from '../components/BuscaCliente';
 import BuscaUbicacion from '../components/BuscaUbicacion';
-import { ViewerSc } from './ViewerSc';
+
 import Swal from 'sweetalert2'
 import BuscaModelo from '../components/BuscaModelo';
+import { ViewerScM } from './ViewerScM';
 //import { ViewScreen1 } from './ViewScreen1'
 
 const VisorModelos = () => {
@@ -216,39 +217,32 @@ const VisorModelos = () => {
             <BuscaModelo setShow={setShowMdl} show={showMdl} />
             
                     <Card className="animate__animated animate__fadeInUp">
-                        <Card.Header className="">Datos de Modelos</Card.Header>
+                        <Card.Header className="">Modelos (NUBE BIM360)
+                 
+                        
+                        
+                                    <Form.Control type="File" placeholder="Subir Archivo"  style={{position:'absolute', right:'220px', top:'3px', width:'660px'}}/>
+                                    <Button variant="outline-info" style={{position:'absolute', right:'80px', top:'3px'}} onClick={() => {
+                                        
+                                            Swal.fire({
+                                                title: 'Error!',
+                                                text: 'No ha seleccionado archivo',
+                                                icon: 'error',
+                                                confirmButtonText: 'Ok'
+                                            })
+                                        
+                                    }}><i class="far fa-save"></i>   Subir Modelo
+                                    
+                                    
+                                    </Button>                       
+                        </Card.Header>
                         <Card.Body>
 
                             <Form>
-                                <Form.Group as={Row} className="mb-1" controlId="formHorizontalEmail">
-                                    <Form.Label column sm={2}>
-                                        
-                                    </Form.Label>
-
-                                    <Form.Label column sm={1}>
-                                        Modelos
-                                    </Form.Label>
-                                    <Col sm={2}>
-                                        <Form.Control type="Input" placeholder="Codigo" value={''} onChange={handlerOnChange} />
-                                    </Col>
-
-                                </Form.Group>
+                                
 
 
-
-                                <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
-                                    <Form.Label column sm={2}>
-                                    </Form.Label>
-
-                                    <Form.Label column sm={1}>
-                                        Descripcion
-                                    </Form.Label>
-                                    <Col sm={7}>
-                                        <Form.Control type="Input" placeholder="Descripcion" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Descripcion : ''} onChange={handlerOnChange} />
-                                    </Col>
-                                </Form.Group>
-
-
+                            
 
                                 
 
@@ -257,8 +251,8 @@ const VisorModelos = () => {
                                     <Card.Body >
                                         <Form.Group as={Row} className="mb-1" controlId="formHorizontalPassword">
                                             
-                                            <Col sm={12} style={{ height: window.innerHeight - 405 }}>
-                                                <ViewerSc />
+                                            <Col sm={12} style={{ height: window.innerHeight - 150 }}>
+                                                <ViewerScM />
 
 
 

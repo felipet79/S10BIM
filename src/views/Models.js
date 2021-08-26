@@ -22,6 +22,7 @@ import axios from "axios";
 import { selectMODELOS } from "../actions/proyects.actions";
 import TreeMD from "../components/TreeMd";
 import VisorModelos from "./VisorModelos";
+import { RefrescarV } from "./ViewerScM";
 
 
 const Models = ({ match }) => {
@@ -59,6 +60,14 @@ const Models = ({ match }) => {
 	}, [])
 
 
+	useEffect(() => {
+		//alert('');
+		setTimeout(() => {
+			RefrescarV();
+		}, 550);
+	}, [proyects.Avisa,])
+
+	
 
 	const reducir = () => {
 
@@ -119,6 +128,7 @@ const Models = ({ match }) => {
 
 				<Resizable
 					className="tree-fixed p-0 d-flex justify-content-between"
+					enable={{ top:false, right:true, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
 					size={{ width: width, height: height }}
 					//maxHeight="60vh"
 					maxWidth={open ? 800 : 0}
@@ -135,9 +145,9 @@ const Models = ({ match }) => {
 
 						//alert('');
 
-						/*setTimeout(() => {
+						setTimeout(() => {
 							RefrescarV();
-						}, 500);*/
+						}, 50);
 					}}
 				//onResize={()=>{alert('hola')}}
 				//onResizeStop={()=>{}}
@@ -150,7 +160,7 @@ const Models = ({ match }) => {
 					<Collapse in={open}>
 
 
-						<div className="p-2 h-100 w-100" style={{ overflow: 'scroll' }}>
+						<div className="p-0 h-100 w-100" style={{ overflow: 'scroll' }}>
 
 
 							
@@ -181,21 +191,13 @@ const Models = ({ match }) => {
 									levelStart={1}
 									idProject=""
 									marginTop="60"
-									marginLeft='50'
+									marginLeft='0'
 								/>
 
 
 
 							) : ( ''
 							)}
-
-
-
-
-
-							
-
-
 
 
 						</div>
@@ -214,6 +216,12 @@ const Models = ({ match }) => {
 							className="h-25 w-100 bg-primary d-flex justify-contentcenter align-items-center"
 							onClick={() => {
 								setOpen(!open);
+								setTimeout(() => {
+									RefrescarV();
+								}, 50);
+		
+
+
 							}}
 							aria-controls="example-collapse-text"
 							aria-expanded={open}

@@ -12,8 +12,65 @@ import * as THREE from 'three';
 import { useDispatch, useSelector } from 'react-redux';
 import { relativeTimeRounding } from 'moment';
 import { selectParidas } from '../actions/proyects.actions';
+/*import { Timeline } from 'react-svg-timeline'
+import { now } from 'moment';
+import Tooltip from "@material-ui/core/Tooltip";*/
 
 
+//import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from 'gantt-task-react';
+//import "gantt-task-react/dist/index.css";
+
+//import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from '../../gantt-task-react-main/index';
+//import "gantt-task-react/dist/index.css";
+//import "gantt-task-react/dist/index.css";
+
+//import { CustomToolTip } from "forge-dataviz-iot-react-components";
+//import Cronos from 'chronos-etu';
+//import { Font, TextGeometry } from 'threejs-full-es6'
+//import FontJson from './helvetiker_bold.typeface.json'
+//import { Theme as MaterialTheme } from '@material-ui/core';
+//import zIndex from '@material-ui/core/styles/zIndex';
+//import { TimelineTheme } from './Proyectos/theme/model';
+
+const devices = [
+    {
+        position: {
+            x: 2.590268290876452,
+            y: 1.20446526068116,
+            z: 2.355262787057484,
+        },
+        type: "temperature",
+        sensorTypes: ["co2", "temperature"],
+    },
+    {
+        position: {
+            x: -97.94954550038506,
+            y: -50.21776820050724,
+            z: 12.444056161946492,
+        },
+        type: "temperature",
+        sensorTypes: ["temperature"],
+    },
+    {
+        position: {
+            x: 162.61,
+            y: 75.54,
+            z: -0.61,
+        },
+        type: "temperature",
+        sensorTypes: ["temperature"],
+    },
+    {
+        position: {
+            x: 48.53,
+            y: -48.27,
+            z: -19.24,
+        },
+        type: "temperature",
+        sensorTypes: ["temperature"],
+    },
+
+];
 
 var ponerdato=true;
 const viewerLibaryURL1 = '//cdn.jsdelivr.net/gh/autodesk-forge/forge-extensions/public/extensions/NestedViewerExtension/contents/main.js';
@@ -30,7 +87,12 @@ var T_TipoT = [];
 var T_cantidad_elementos=0;
 
 
-
+//URN=dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLi02VW9rWXRDUVZXVDdiWDFZeXRZUHc/dmVyc2lvbj0x
+//const modelURL = 'https://dukedhx.github.io/Forge-Workshop/shaver/0.svf';
+//const modelURL = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmhxbTRIV0ZmUm82VGtzand2MjZQSlE_dmVyc2lvbj0x';
+//const modelURL = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmktWmdsQkg4UnRXRWI1Zi1CWnZnQ0E/dmVyc2lvbj0x';
+//const modelURL = 'https:\/\/developer.api.autodesk.com\/derivativeservice\/v2\/derivatives\/dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmhxbTRIV0ZmUm82VGtzand2MjZQSlE_dmVyc2lvbj0x'
+//const viewerLibaryURL = 'https://developer.api.autodesk.com/modelderivative/v2/viewers/viewer3D.min.js?v=v7.*';
 const viewerStylesheetURL = 'https://developer.api.autodesk.com/modelderivative/v2/viewers/style.min.css?v=v7.*';
 const viewerLibaryURL = 'https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js';
 let viewerLibraryLoaded = false;
@@ -41,7 +103,7 @@ let viewerLoading = false;
 //const viewerLibaryURL1 = 'js/ForgeViewer.js';
 
 
-var viewer1 ;
+var viewerM ;
 //export const Viewer1=null;
 
 
@@ -68,7 +130,9 @@ export const MostarModelo = (idelem) => {
 function highlightRevit(idsRevit) {
     // Every Forge Viewer model has an ‘ExternalId Mapping’
     // this mapping is an object that has as keys the
-    viewer1.model.getExternalIdMapping((mapping) => {
+    if (viewerM)
+        if (viewerM.model)
+    viewerM.model.getExternalIdMapping((mapping) => {
         configureElementByUniqueIdAndMapping(idsRevit, mapping);
     });
 }
@@ -81,14 +145,15 @@ function configureElementByUniqueIdAndMapping(idsRevit, mapping) {
             elementsDbId.push(elementDbId);
         }
     }
-    viewer1.isolate(elementsDbId);
-    viewer1.fitToView(elementsDbId);
+    viewerM.isolate(elementsDbId);
+    viewerM.fitToView(elementsDbId);
 }
 
 
     export const RefrescarV = async() => {
         //alert("refresca");
-       viewer1.resize();
+       if (viewerM)
+        viewerM.resize();
        //viewer.showAll();
        //viewer.refresh(false);
        //viewer.refresh(true);
@@ -101,7 +166,7 @@ function configureElementByUniqueIdAndMapping(idsRevit, mapping) {
 var UniquesSel=null;
 
   
-export const ViewerScP = (props) => {
+export const ViewerScM = (props) => {
 
 
 	const dispatch = useDispatch();
@@ -115,10 +180,8 @@ export const ViewerScP = (props) => {
 
 
     useEffect(() => {
-	
-
-
-
+		//console.log('datos de items en Forge')
+		//console.log(proyects.DataUnique)
         UniquesSel=proyects.DataUnique;
 		//orderTree(proyects.DataPc);
 		//alert('ejecutó la primera carga');
@@ -131,6 +194,206 @@ export const ViewerScP = (props) => {
     const [ modelURL, setModelURL ] = useState('dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmktWmdsQkg4UnRXRWI1Zi1CWnZnQ0E/dmVyc2lvbj0x');
     //'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmktWmdsQkg4UnRXRWI1Zi1CWnZnQ0E/dmVyc2lvbj0x'
     //const [Viewer1, setViewer1] = useState(null);
+
+    /*function initTasks() {
+        const currentDate = new Date();
+        const tasks: Task[] = [
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 25),
+            name: "Proyecto Edificio Colinas",
+            id: "ProjectSample",
+            progress: 25,
+            type: "project",
+            padre: true,
+            nivel:0,
+            visible:true,
+          },
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+            end: new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth(),
+              2,
+              12,
+              28
+            ),
+            name: "Desbroce y desbosque de terreno",
+            id: "Task 0",
+            progress: 45,
+            type: "task",
+            project: "ProjectSample",    
+            nivel:1,        
+            visible:true,
+          },
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4, 0, 0),
+            name: "Research",
+            id: "Task 1",
+            progress: 25,
+            dependencies: ["Task 0"],
+            type: "task",
+            project: "ProjectSample",
+            nivel:1,
+            visible:true,
+          },
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
+            name: "Excavacion sin clasificar",
+            id: "Task 2",
+            progress: 10,
+            dependencies: ["Task 1"],
+            type: "task",
+            project: "ProjectSample",
+            nivel:1,
+            visible:true,
+          },
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
+            name: "Excavacion sin clasificar",
+            id: "Task 8",
+            progress: 10,
+            dependencies: ["Task 1"],
+            type: "task",
+            project: "ProjectSample",
+            nivel:1,
+            visible:true,
+          },
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10, 0, 0),
+            name: "Relleno compactado",
+            id: "Task 3",
+            progress: 2,
+            dependencies: ["Task 2"],
+            type: "project",
+            project: "ProjectSample",
+            padre:true,
+            nivel:1,
+            visible:true,
+          },
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
+            name: "Review",
+            id: "Task 4",
+            type: "task",
+            progress: 70,
+            dependencies: ["Task 2"],
+            project: "Task 3",
+            nivel:2,
+            visible:true,
+          },
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
+            name: "Excavacion sin clasificar",
+            id: "Task 5",
+            progress: 10,
+            dependencies: ["Task 1"],
+            type: "task",
+            project: "ProjectSample",
+            nivel:1,
+            visible:true,
+          },          
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+            name: "Release",
+            id: "Task 6",
+            progress: currentDate.getMonth(),
+            type: "milestone",
+            dependencies: ["Task 4"],
+            project: "Task 3",
+            nivel:2,
+            visible:true,
+          },
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
+            name: "Excavacion sin clasificar",
+            id: "Task 7",
+            progress: 10,
+            dependencies: ["Task 1"],
+            type: "task",
+            project: "ProjectSample",
+            nivel:1,
+            visible:true,
+          },          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
+            name: "Excavacion sin clasificar",
+            id: "Task 8",
+            progress: 10,
+            dependencies: ["Task 1"],
+            type: "task",
+            project: "ProjectSample",
+            nivel:1,
+            visible:true,
+          },          
+          {
+            start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
+            end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 19),
+            name: "Party Time",
+            id: "Task 9",
+            progress: 0,
+            isDisabled: true,
+            type: "task",
+            nivel:1,
+            visible:true,
+          },
+        ];
+        return tasks;
+      }
+
+    
+    const [tasks, setTasks] = React.useState<Task[]>(initTasks());
+    const currentDate = new Date();*/
+
+
+
+    
+    //return tasks;
+  
+    
+
+    //const { env, docUrn, adapterType, api } = props.appData;
+    /*if (props.appData.dataStart && props.appData.dataEnd) {
+        let dataStart = new Date(props.appData.dataStart);
+        let dataEnd = new Date(props.appData.dataEnd);
+        startRange.setTime(dataStart.getTime());
+        endRange.setTime(dataEnd.getTime());
+
+        if (startDate.getTime() < startRange.getTime() || startDate.getTime() >= endRange.getTime()) {
+            startDate.setTime(startRange.getTime());
+        }
+
+        if (endDate.getTime() <= startRange.getTime() || endDate.getTime() >= endRange.getTime()) {
+            endDate.setTime(endRange.getTime());
+        }
+
+        if (currDate.getTime() <= startRange.getTime() || currDate.getTime() >= endRange.getTime()) {
+            currDate.setTime(endRange.getTime());
+        }
+
+        // give it a little bit buffer to make the range selection visible
+        startRange.setTime(dataStart.getTime() - 2 * 60 * 60 * 24 * 1000);
+        endRange.setTime(dataEnd.getTime() + 2 * 60 * 60 * 24 * 1000);
+    }*/
+
+
+    /*timeOptionRef.current = timeOptions;
+    appStateRef.current = appState;
+    hoveredDeviceInfoRef.current = hoveredDeviceInfo;*/
+
+
+
+
+
+
 
     var urn;
     //const container: any = useRef();
@@ -173,11 +436,58 @@ export const ViewerScP = (props) => {
 
         
 
-        
+        /*viewerLibraryLoaded1 = true;
+        setTimeout(() => {
+            if (viewer) {
+                //viewer.loadExtension('MenuContextual');
+                //viewer.loadExtension("NestedViewerExtension", { filter: ["2d", "3d"], crossSelection: true });
+
+                //alert('carga extension');
+                //viewer.loadExtension('MenuContextual');
+                //viewer.activateExtension("NestedViewerExtension");
+
+                //alert(viewer.loadExtension("NestedViewerExtension", { filter: ["2d", "3d"], crossSelection: true }));
+
+
+
+                //viewer.loadExtension("NestedViewerExtension", { filter: ["2d", "3d"], crossSelection: true });
+                //viewer.loadExtension("NestedViewerExtension", { filter: ["2d", "3d"], crossSelection: true });
+                //alert(viewer.isExtensionLoaded("NestedViewerExtension"));
+                //viewer.refresh(true);
+            }
+        }, 5000);*/
     }
 
 
-    
+    const handleScriptLoad2 = () => {
+
+        /*var geom = new THREE.SphereGeometry(10, 8, 8);
+        var material8 = new THREE.MeshBasicMaterial({ color: 0x00FF00 });
+        var sphereMesh = new THREE.Mesh(geom, material8);
+        //var Cam = new THREE.Camera();
+        //Cam.position.set(1,1,1);
+
+        //var sphereMesh = new THREE.(geom, material8);
+        sphereMesh.position.set(1, 2, 3);
+        //sphereMesh.position.set(1, 2, 3);
+        //sphereMesh.matrixWorld.setPosition(new THREE.Vector3(-59, 2, 3));
+        //sphereMesh
+        //sphereMesh.geometry.attributes.position.set([-59, 2, 3], 1);
+
+        //sphereMesh.position.set(  1, 2, 3);
+        //sphereMesh.
+        if (!viewer.overlays.hasScene('custom-scene1')) {
+            viewer.overlays.addScene('custom-scene1');
+        }
+
+        viewer.overlays.addMesh(sphereMesh, 'custom-scene1');
+        /*sphereMesh.translateX(1);
+        sphereMesh.translateY(20);
+        sphereMesh.translateZ(3);*/
+
+        //alert(sphereMesh.geometry.attributes);*/
+
+    }
 
     const handleScriptLoad = async () => {
         viewerLibraryLoaded = true;
@@ -192,7 +502,17 @@ export const ViewerScP = (props) => {
 
         setTimeout(() => {
 
-     
+            /*if (viewer) {
+                viewer.refresh(true);
+                viewer.loadExtension("NestedViewerExtension", { filter: ["2d", "3d"], crossSelection: true });
+                viewer.loadExtension('MenuContextual');
+                viewer.refresh();
+                //launchViewer(urn);
+            }
+            //viewer.loadExtension('MenuContextual');
+
+            //alert('se carga');
+            //launchViewer(urn);*/
 
         }, 4000);
         setTimeout(() => {
@@ -212,7 +532,7 @@ export const ViewerScP = (props) => {
         //seleccionados='c884ae1b-61e7-4f9d-0001-719e20b22d0b-006f9464';
         //var cadena = '5c069bcb-62a6-44a8-a199-48eb6d184f17-000546cc';
         //var cadena = '5c069bcb-62a6-44a8-a199-48eb6d184f17-000546cc';
-        if (viewer1)
+        if (viewerM)
             highlightRevit(seleccionados);
 
 
@@ -224,8 +544,8 @@ export const ViewerScP = (props) => {
         //var sphereMesh = new THREE.(geom, material);
         var scene = new THREE.Scene();
         //viewer.impl.scene.add(scene);
-        if (!viewer1.overlays.hasScene(scene)) {
-            viewer1.overlays.addScene(scene);
+        if (!viewerM.overlays.hasScene(scene)) {
+            viewerM.overlays.addScene(scene);
             //viewer.impl.scene.add('custom-scene');
         }
 
@@ -238,10 +558,14 @@ export const ViewerScP = (props) => {
         
         scene.background = new THREE.Color(0x2a3b4c);
         alert('carga2');
-        viewer1.overlays.addMesh( sphereMesh, scene);
+        viewerM.overlays.addMesh( sphereMesh, scene);
         sphereMesh.position.set(1, 2, 3);
-        viewer1.refresh();
-        
+        viewerM.refresh();
+        //alert('mostrado');
+        //handleScriptLoad2();
+        ///onModelLoaded(viewer);
+        //var geom1 = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
+
 
     }
 
@@ -249,7 +573,7 @@ export const ViewerScP = (props) => {
     function highlightRevit(idsRevit) {
         // Every Forge Viewer model has an ‘ExternalId Mapping’
         // this mapping is an object that has as keys the
-        viewer1.model.getExternalIdMapping((mapping) => {
+        viewerM.model.getExternalIdMapping((mapping) => {
             configureElementByUniqueIdAndMapping(idsRevit, mapping);
         });
     }
@@ -262,8 +586,8 @@ export const ViewerScP = (props) => {
                 elementsDbId.push(elementDbId);
             }
         }
-        viewer1.isolate(elementsDbId);
-        viewer1.fitToView(elementsDbId);
+        viewerM.isolate(elementsDbId);
+        viewerM.fitToView(elementsDbId);
     }
 
 
@@ -283,24 +607,22 @@ export const ViewerScP = (props) => {
         //if (!Autodesk) return;
             Autodesk.Viewing.Initializer(options, () => {
             const config = {
-                extensions: []
+                extensions: ['Autodesk.VisualClusters', 'Autodesk.DocumentBrowser', 'Autodesk.BIM360.Minimap', 'Autodesk.ViewCubeUi', 'Autodesk.AEC.Minimap3DExtension', 'Autodesk.AEC.Minimap3DExtension', 'Autodesk.DataVisualization']
             };
 
-            viewer1 = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), config);
+            viewerM = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewerM'), config);
             //viewer = new Autodesk.Viewing.GuiViewer3D(container.current, config);
-            viewer1.start();
+            viewerM.start();
             var documentId = 'urn:' + urn;
             Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
-            
-            //alert('Estoy en la carga');
 
             //const Cronos = new Autodesk.DataVisualization.UI.ChronosTimeSlider('');
 
-            if (!viewer1) return;
-            if (!viewer1.autocam) return;
+            if (!viewerM) return;
+            if (!viewerM.autocam) return;
             // smooth navigation...
-            viewer1.autocam.shotParams.destinationPercent = 3;
-            viewer1.autocam.shotParams.duration = 3;
+            viewerM.autocam.shotParams.destinationPercent = 3;
+            viewerM.autocam.shotParams.duration = 3;
 
 
 
@@ -325,84 +647,182 @@ export const ViewerScP = (props) => {
             /*var viewables1 = doc.getRoot().search({'type':'geometry'});
             viewer.loadDocumentNode(doc, viewables1[6]);*/
 
-            
+
 
             var viewables = (viewableId ? doc.getRoot().findByGuid(viewableId) : doc.getRoot().getDefaultGeometry());
             /*var items = doc.getRoot().find({ role: '3d', type: 'geometry' });
             console.log('estas son las vistas',items);*/
-            
 
 
 
-            viewer1.loadDocumentNode(doc, viewables).then(i => {
-                
+
+            viewerM.loadDocumentNode(doc, viewables).then(i => {
                 // any additional action here?
                 //viewer.loadExtension("NestedViewerExtension", { filter: ["2d", "3d"], crossSelection: true });
-                
+                /*viewerM.loadExtension("Autodesk.BIM360.Minimap");
+                viewerM.loadExtension("Autodesk.AEC.Minimap3DExtension");
+                viewerM.loadExtension("Autodesk.AEC.LevelsExtension");*/
                 //alert("cargando extension "+viewer.isExtensionLoaded("NestedViewerExtension"));
             });
-            
-            //viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, onSelectionBinded);
-            viewer1.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, PonerProps);
 
-            
+            viewerM.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, onSelectionBinded);
+            viewerM.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, PonerProps);
+
+
             //viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, PonerProps);
 
 
 
-            onModelLoaded1(viewer1);
+            onModelLoaded1(viewerM);
 
-            
+            //init22();
+
 
         }
 
 
-        
+        function verseleccionado() {
+            let viewerImpl = viewerM.impl;
 
-        
+            /*this.activate = (name) => {
+                this.active = true;
+            };
+    
+            this.deactivate = (name) => {
+                this.clearMarkedObject(this.markedFragments);
+                this.active = false;
+            };*/
+
+            //this.handleSingleClick = (event, button) => {
+            //if (button === 0) {
+            //const res = [];
+            //const vpVec = viewerImpl.clientToViewport(event.canvasX, event.canvasY);
+            /* const dbId = viewerImpl
+                 .renderer()
+                 .idAtPixel(vpVec.x, vpVec.y, res, [viewerImpl.renderer().getOverlayIdTarget()]);
+ 
+             if (true) {
+                 let test = viewerImpl.hitTestViewport(vpVec, false);
+                 console.log(test);
+             }*/
+
+            // "dbId == -1" when nothing is clicked.
+
+            // }
+
+
+
+        }
+
+
+        function onSelectionBinded(event) {
+            //alert('hola');
+            var currSelection = viewerM.getSelection();
+            var domElem = document.getElementById('MySelectionValue');
+            //let vector = new THREE.Vector3();
+            //event.object.getWorldPosition(vector);
+            //console.log(vector);
+            domElem.innerText = currSelection.length /*+ " " + vector.x + "," + vector.y + "," + vector.z*/;
+            console.log('Este es el evento de cambiar ', event);
+            //verseleccionado();
+            //alert(event.clientX);
+
+            /*var uniqueIds = [];
+            var DBids = viewer.getSelection();
+            var n = 0;
+            for (var uniqueId of DBids) {
+                var objSelected = viewer.getSelection()[n];
+                n = n + 1;
+                console.log('Este es el objeto seleccionado',objSelected);
+            }*/
+
+            //console.log('Estas son las props');
+            var uniqueIds = [];
+            var DBids = viewerM.getSelection();
+            var n = 0;
+            for (var uniqueId of DBids) {
+                var objSelected = viewerM.getSelection()[n];
+                n = n + 1;
+                viewerM.getProperties(objSelected, (props) => {
+                    uniqueIds.push(props.externalId);
+                    if (n == DBids.length) {
+                        //callbackObj.showMessage(uniqueIds);
+                        //callbackObj.returnex(uniqueIds);
+                        //alert(uniqueIds);
+                        console.log(props);
+                        //9c9538fd-af40-4b3d-bd89-f8e4acac1fd8-000525ae
+                    }
+                })
+            }
+
+            let viewerImpl = viewerM.impl;
+
+            /*this.activate = (name) => {
+                this.active = true;
+            };
+    
+            this.deactivate = (name) => {
+                this.clearMarkedObject(this.markedFragments);
+                this.active = false;
+            };*/
+
+            //this.handleSingleClick = (event, button) => {
+            //if (button === 0) {
+            //const res = [];
+            //const vpVec = viewerImpl.clientToViewport(event.canvasX, event.canvasY);
+            /* const dbId = viewerImpl
+                 .renderer()
+                 .idAtPixel(vpVec.x, vpVec.y, res, [viewerImpl.renderer().getOverlayIdTarget()]);
+ 
+             if (true) {
+                 let test = viewerImpl.hitTestViewport(vpVec, false);
+                 console.log(test);
+             }*/
+
+            // "dbId == -1" when nothing is clicked.
+
+            // }
+
+
+
+        }
 
         function PonerProps(event) {
 
 
-            $('#forgeViewer1 #LateralToolbar.ControlGroup').css({
-                'background-color': 'black',
-                'border-radius': '10px',
-                'display': 'none'
+            $('#LateralToolbar.ControlGroup').css({
+                'background-color': '#fff',
+                'border-radius': '10px'
             });
 
-            $('#forgeViewer1 #guiviewer3d-toolbar').css({
+            $('#guiviewer3d-toolbar').css({
                 'background-color': 'rgba(255,255,255,0.10)',
-                'border-radius': '5px',
-                'display': 'none'
+                'border-radius': '5px'
             });
-            $('#forgeViewer1 #settingsTools').css({
+            $('#settingsTools').css({
                 'background-color': 'rgba(255,255,255,0.15)',
                 'border-radius': '15px',
-                'color': 'rgba(1,1,1,0.80)'           ,
-                'display': 'none'
+                'color': 'rgba(1,1,1,0.80)'
             });
-            $('#forgeViewer1 #modelTools').css({
+            $('#modelTools').css({
                 'background-color': 'rgba(255,255,255,0.15)',
                 'border-radius': '15px',
-                'color': 'rgba(1,1,1,0.80)',
-                'display': 'none'
+                'color': 'rgba(1,1,1,0.80)'
             });
-            $('#forgeViewer1 #navTools').css({
+            $('#navTools').css({
                 'background-color': 'rgba(255,255,255,0.15)',
                 'border-radius': '15px',
-                'color': 'rgba(1,1,1,0.80)',
-                'display': 'none'
+                'color': 'rgba(1,1,1,0.80)'
             });
 
-            $('#forgeViewer1 #toolbar-documentModels').css({
+            $('#toolbar-documentModels').css({
                 'background-color': 'rgba(1,1,1,0.55)',
                 'border-radius': '15px',
-                'color': 'rgba(1,1,1,0.90)',
-                'display': 'none'
+                'color': 'rgba(1,1,1,0.90)'
             });
 
             //console.log('Este es el evento', event);
-            //onModelLoaded1(viewer);
+            onModelLoaded1(viewerM);
   
 
         }
@@ -410,8 +830,6 @@ export const ViewerScP = (props) => {
 
         function onDocumentLoadFailure(viewerErrorCode) {
             console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
-            //alert('Estoy en la carga');
-
         }
 
 
@@ -420,8 +838,8 @@ export const ViewerScP = (props) => {
         function addIds(DBids, uniqueIds, callback) {
             var n = 0;
             for (var uniqueId of DBids) {
-                var objSelected = viewer1.getSelection()[uniqueId];
-                this.viewer1.getProperties(objSelected, (props) => {
+                var objSelected = viewerM.getSelection()[uniqueId];
+                this.viewerM.getProperties(objSelected, (props) => {
                     uniqueIds.push(props.externalId);
                     n = n++;
                     if (n == DBids.length) {
@@ -459,8 +877,8 @@ export const ViewerScP = (props) => {
          *
          * @param {Autodesk.Viewing.GuiViewer3D} viewer The viewer in which the model is loaded.
          */
-        async function onModelLoaded1(viewer) {
-            const dataVizExt = viewer1.getExtension("Autodesk.DataVisualization");
+        async function onModelLoaded1(viewerM) {
+            const dataVizExt = viewerM.getExtension("Autodesk.DataVisualization");
             const DATAVIZEXTN = Autodesk.DataVisualization?.Core;
             if (!DATAVIZEXTN) { return; }
             var styleMap = {};
@@ -497,7 +915,12 @@ export const ViewerScP = (props) => {
             viewableData.spriteSize = 20;
             let startId = 1;
 
-            
+            devices.forEach((device) => {
+                let style = styleMap[device.type] || styleMap["default"];
+                const viewable = new DATAVIZEXTN.SpriteViewable(new THREE.Vector3(device.position.x, device.position.y, device.position.z), style, startId);
+                viewableData.addViewable(viewable);
+                startId++;
+            });
             await viewableData.finish();
             if (!dataVizExt) return;
             dataVizExt.addViewables(viewableData);
@@ -602,7 +1025,7 @@ export const ViewerScP = (props) => {
                     div.style.display = 'block';
                     //div.style.visibility = 'block';
                     app.insertAdjacentElement("beforebegin", div);
-
+                    
 
                 }
 
@@ -610,7 +1033,7 @@ export const ViewerScP = (props) => {
             }
 
             const DataVizCore = Autodesk.DataVisualization.Core;
-            viewer.addEventListener(DataVizCore.MOUSE_CLICK, onItemClick);
+            viewerM.addEventListener(DataVizCore.MOUSE_CLICK, onItemClick);
             //viewer.addEventListener(DataVizCore.MOUSE_HOVERING, onItemHovering);
 
 
@@ -619,14 +1042,17 @@ export const ViewerScP = (props) => {
 
 
 
-               
+
+        function seleccionar_btn(){
+            //btn.addClass();
+            alert('hola');
+
+        }
+
 
 
 
     }
-
-
-
 
 
 
@@ -643,43 +1069,30 @@ export const ViewerScP = (props) => {
 
 
     const cargar = async () => {
-            if (viewer1){
+            if (viewerM){
                 //viewer.uninitialize();
-                viewer1.finish();
+                viewerM.finish();
             }
-
-            launchViewer(proyects.UrnS1);
-                        
+     
+            launchViewer(proyects.Urn);
             //alert(urn);
 
     }
-
-
-    
-
- 
-
-    
-
-   
-
-
-    
 
 	useEffect(() => {
 		//console.log('datos de subProyectos actualizados')
 		//if (proyects.treeSubControl==undefined) return;
 		//console.log(proyects.treeSubControl)
-        if (proyects.UrnS1){
+        if (proyects.Urn){
 
-            setModelURL(proyects.UrnS1);
+            setModelURL(proyects.Urn);
             //alert(modelURL);
             //alert(proyects.Urn);
             cargar();
     
         }
   
-	}, [proyects.UrnS1])
+	}, [proyects.Urn])
 
 
 
@@ -824,9 +1237,10 @@ export const ViewerScP = (props) => {
 
     return (
         <>
-            <div className="card" id="forgeViewer1" style={{ height: "100%", width: '100%', background: 'rgba(107, 97, 103, 0.466)' }}></div>
-            
+            <div className="card" id="forgeViewerM" style={{ height: "100%", width: '100%', background: 'rgba(107, 97, 103, 0.466)' }}></div>
+            <div style={{ fontSize:'0.7rem', top:'10px', position:'absolute', zIndex:1 }}>Items seleccionados: <span id="MySelectionValue">0</span></div>
 
+ 
             {/* </div> */}
 
             {/* {loadViewerLibrary1 ? <Script url={viewerLibaryURL1} onLoad={handleScriptLoad1}></Script> : null} */}

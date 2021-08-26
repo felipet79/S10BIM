@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, Form, Row, Button, Col, InputGroup, FormControl, Dropdown, DropdownButton, Table } from 'react-bootstrap'
 import Moment from 'react-moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { limpiaUbicaciones, selectCLIENTES, selectMONEDAS, selectUBICACIONES } from '../actions/proyects.actions';
+import { limpiaUbicaciones, selectCLIENTES, selectMODELOS, selectMONEDAS, selectUBICACIONES } from '../actions/proyects.actions';
 import BuscaCliente from '../components/BuscaCliente';
 import BuscaUbicacion from '../components/BuscaUbicacion';
 import { ViewerSc } from './ViewerSc';
@@ -32,7 +32,7 @@ const DatosGenerales = () => {
 
 
     //VARIABLES PARA TAMAÑO DE PANTALLA
-    const [titulos, setTitulos] = useState('80%');
+    const [titulos, setTitulos] = useState('85%');
 
 
 
@@ -80,7 +80,7 @@ const DatosGenerales = () => {
                         <td>{filter.Descripcion}</td>
                         <td align="right">{formatNumber(filter.Cantidad)}</td>
                         <td align="right">{formatNumber(filter.CostoOferta1)}</td>
-                        <td align="left">{filter.CodModelo} <div className="btn btn-outline-info" style={{ position:'absolute', right:'20px', color: '#3c8dbc', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></div></td>
+                        <td align="left">{ filter.NombreModelo ? filter.NombreModelo : 'No asignado' } <div className="btn btn-outline-info" style={{ position:'absolute', right:'20px', color: '#3c8dbc', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></div></td>
                     </tr>
                     )
                 }) : ''
@@ -141,12 +141,37 @@ const DatosGenerales = () => {
                         <td>{filter.Descripcion}</td>
                         <td align="right">{formatNumber(filter.Cantidad)}</td>
                         <td align="right">{formatNumber(filter.CostoOferta1)}</td>
-                        <td align="left">{filter.CodModelo} <div className="btn btn-outline-info" style={{ position:'absolute', right:'20px', color: '#3c8dbc', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></div></td>
+                        <td align="left">{filter.NombreModelo ? filter.NombreModelo : 'No asignado'} <div className="btn btn-outline-info" style={{ position:'absolute', right:'20px', color: '#3c8dbc', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></div></td>
                     </tr>
                     )
                 }) : ''
         )
     }
+
+
+
+    useEffect(() => {
+        
+        if (!proyects.DataModelos) {
+            dispatch(selectMODELOS(''));
+            
+        }
+            
+        for (let i=0;i<proyects.treeSubControl.length;i++){
+
+            const reg = proyects.DataModelos.find((filtro1) => filtro1.CodPlano === proyects.treeSubControl[i].CodModelo);
+            if (reg){
+                proyects.treeSubControl[i].NombreModelo=reg.NombreArchivoRvt;
+            }else
+                proyects.treeSubControl[i].NombreModelo=null;
+        }
+        
+        
+        /*console.log("LOS SUBPRESUPUESTOS AHORA SON");
+        console.log(proyects.treeSubControl);
+        console.log("ACTUALMENTE LOS MODELOS");
+        console.log(proyects.DataModelos);*/
+    }, [proyects.treeSubControl])
 
     useEffect(() => {
         //console.log('datos de subProyectos actualizados')
@@ -193,21 +218,21 @@ const DatosGenerales = () => {
     useEffect(() => {  
         if (window.innerWidth >= 2000){
             //alert('es de' + window.innerWidth)
-            setTitulos('85%');
+            setTitulos('90%');
         }else if (window.innerWidth >= 1640){
             //alert('2do caso es de' + window.innerWidth)
-            setTitulos('65%');
+            setTitulos('80%');
         }else if (window.innerWidth >= 1440){
             //alert('2do caso es de' + window.innerWidth)
-            setTitulos('52%');
+            setTitulos('75%');
         }else if (window.innerWidth >= 1024){
             //alert('3er caso es de' + window.innerWidth)
-            setTitulos('40%');
+            setTitulos('70%');
         }else if (window.innerWidth >= 768){
             //alert('4to caso es de' + window.innerWidth)        
-            setTitulos('35%');
+            setTitulos('65%');
         }else if (window.innerWidth >= 425){
-            setTitulos('30%');
+            setTitulos('50%');
             //alert('5to caso es de' + window.innerWidth)        
         }
 
@@ -246,15 +271,15 @@ const DatosGenerales = () => {
     }
 
     return (
-        <div className="animate__animated animate__fadeIn" style={{ marginTop: '10px', height: '96%', width: '100%' }}>
+        <div className="animate__animated animate__fadeIn" style={{ marginLeft:'0px', marginTop: '10px', height: '96%', width: '100%' }}>
             <BuscaCliente setShow={setShow} show={show} />
             <BuscaUbicacion setShow={setShowUb} show={showUb} />
             <BuscaModelo setShow={setShowMdl} show={showMdl} />
             <BuscaMoneda setShow={setShowMnd} show={showMnd} />
             {selecOP === 1 ?
-                (<Card className="animate__animated animate__fadeIn" style={{overflow:'scroll', height: '93vh'}}>
+                (<Card className="animate__animated animate__fadeIn" style={{overflow:'scroll', marginLeft:'20px', height: '93vh', padding:'15px'}}>
                     <Card.Header>Datos Generales
-                                    <Button variant="outline-info" style={{position:'absolute', right:'30px', top:'3px'}} onClick={() => {
+                                    <Button variant="outline-info" style={{position:'absolute', right:'80px', top:'3px'}} onClick={() => {
                                         if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
                                            
                                         } else {
@@ -307,7 +332,7 @@ const DatosGenerales = () => {
                                 <Col sm={2}>
                                     <Form.Control type="Input" placeholder="ID Cliente" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodCliente : ''} onChange={handlerOnChange} />
                                 </Col>
-                                <Col sm={7}>
+                                <Col sm={8}>
                                     <Form.Control type="Input" placeholder="Cliente" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Cliente : ''} onChange={handlerOnChange} />
                                 </Col>
 
@@ -499,14 +524,14 @@ const DatosGenerales = () => {
 
 
 
-                            <Card style={{ height: '100%', width: '90%', marginTop:'25px' }}>
+                            <Card style={{ height: '100%', width: '100%', marginTop:'25px' }}>
                                 <Card.Header style={{ height: '38px' }}> <div style={{marginTop:'-5px' }}>Moneda Principal ({proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].SimboloMoneda : ''}) </div> </Card.Header>
                                 <Card.Body>
 
                                     <Form.Group as={Row} className="mb-1" controlId="formPrt2">
 
 
-                                        <Col sm={5}>
+                                        <Col sm={6}>
                                             <Card style={{ height: '100%' }}>
                                                 <Card.Header style={{ height: '30px' }}> <p style={{ marginTop: '-5px' }}>Presupuesto Base </p></Card.Header>
                                                 <Card.Body column sm={5} >
@@ -548,8 +573,8 @@ const DatosGenerales = () => {
                                             </Card>
                                         </Col>
 
-                                        <Col sm={1}></Col>
-                                        <Col sm={5}>
+                                        
+                                        <Col sm={6}>
                                             <Card style={{ height: '100%' }}>
                                                 <Card.Header style={{ height: '30px' }}> <p style={{ marginTop: '-5px' }}>Presupuesto Oferta </p></Card.Header>
                                                 <Card.Body column sm={5} >
@@ -557,7 +582,7 @@ const DatosGenerales = () => {
                                                         <Form.Label column sm={1}>
                                                         </Form.Label>
 
-                                                        <Form.Label column sm={2} style={{fontSize:{titulos} }}>
+                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
                                                             C.D.
                                                 </Form.Label>
                                                         <Col sm={3}>
@@ -597,12 +622,12 @@ const DatosGenerales = () => {
 
 
 
-                            <Card style={{ height: '100%', width: '90%' }}>
+                            <Card style={{ height: '100%', width: '100%' }}>
                                 {/* <Card.Header style={{ height: '35px' }}>Sub Presupuestos</Card.Header> */}
                                 <Card.Body>
                                     <Form.Group as={Row} className="mb-1" controlId="formGridSub">
-                                        <Col sm={1}></Col>
-                                        <Col sm={10}>
+                                        
+                                        <Col sm={12}>
                                             <Table
                                                 striped
                                                 bordered
@@ -655,7 +680,7 @@ const DatosGenerales = () => {
                 </Card>)
                 :
                 (
-                    <Card className="animate__animated animate__fadeInUp" style={{overflow:'hidden', height: '90vh'}}>
+                    <Card className="animate__animated animate__fadeInUp" style={{overflow:'hidden', height: '100%', padding:'15px'}}>
                         <Card.Header className="">Datos de SubPresupuesto</Card.Header>
                         <Card.Body>
 
@@ -665,7 +690,7 @@ const DatosGenerales = () => {
                                         
                                     </Form.Label>
 
-                                    <Form.Label column sm={1} style={{fontSize:{titulos} }}>
+                                    <Form.Label column sm={1} style={{fontSize:titulos }}>
                                         Presupuesto
                                     </Form.Label>
                                     <Col sm={2}>
@@ -680,7 +705,7 @@ const DatosGenerales = () => {
                                     <Form.Label column sm={2}>
                                     </Form.Label>
 
-                                    <Form.Label column sm={1} style={{fontSize:{titulos} }}>
+                                    <Form.Label column sm={1} style={{fontSize:titulos }}>
                                         Descripcion
                                     </Form.Label>
                                     <Col sm={7}>
@@ -694,8 +719,8 @@ const DatosGenerales = () => {
                                     {/* <Card.Header style={{ height: '35px' }}>Sub Presupuestos</Card.Header> */}
                                     <Card.Body>
                                         <Form.Group as={Row} className="mb-1" controlId="formGrid2">
-                                            <Col sm={1}></Col>
-                                            <Col sm={10} >
+                                            
+                                            <Col sm={12} >
                                                 <Table
                                                     striped
                                                     bordered
@@ -736,12 +761,11 @@ const DatosGenerales = () => {
 
 
 
-                                <Card style={{ height: '100%', width: '100%' }}>
-                                    {/* <Card.Header style={{ height: '35px' }}>Sub Presupuestos</Card.Header> */}
+                                {/* <Card style={{ height: '100%', width: '100%' }}>
                                     <Card.Body >
                                         <Form.Group as={Row} className="mb-1" controlId="formGrd3">
-                                            <Col sm={1}></Col>
-                                            <Col sm={10} style={{ height: window.innerHeight - 500 }}>
+                                            
+                                            <Col sm={12} style={{ height: window.innerHeight - 500 }}>
                                                 <ViewerSc />
 
 
@@ -749,7 +773,7 @@ const DatosGenerales = () => {
                                             </Col>
                                         </Form.Group>
                                     </Card.Body>
-                                </Card>
+                                </Card> */}
 
 
 
