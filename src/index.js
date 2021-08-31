@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import 'devextreme/dist/css/dx.light.css';
 import './styles/main.css';
 
 import { Provider } from "react-redux";

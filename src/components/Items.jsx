@@ -1,5 +1,6 @@
 //import React from 'react'
-import { Card, Form, Table } from "react-bootstrap";
+import { Card, Form, Table, Button } from "react-bootstrap";
+import Swal from 'sweetalert2'
 import { Col, Nav } from "react-bootstrap";
 //import Bar from "./Charts/Bar";
 import { useEffect, useState } from "react";
@@ -15,7 +16,9 @@ import TreeList, {
 	FilterRow,
 	Scrolling,
 	Column,
-	Sorting
+	Sorting,
+	SearchPanel,
+	ColumnFixing
 } from 'devextreme-react/tree-list';
 import { Resizable } from "re-resizable";
 import { Collapse } from "@material-ui/core";
@@ -32,6 +35,7 @@ import { ViewerSc, RefrescarV } from "../views/ViewerSc";
 import { ContextMenu, DropDownButton } from "devextreme-react";
 import notify from 'devextreme/ui/notify';
 import { Width } from "devextreme-react/chart";
+import zIndex from "@material-ui/core/styles/zIndex";
 
 
 
@@ -65,7 +69,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 	const [minimop, setMinimoP] = useState(600);
 	const [width, setWidth] = useState(600);
 	const [width1, setWidth1] = useState(500);
-	const [height, setHeight] = useState(window.innerHeight - 580 - 18);
+	const [height, setHeight] = useState(window.innerHeight - 480 - 18);
 	
 	
 	const [open, setOpen] = useState(true);
@@ -140,8 +144,14 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 			if (item.Precio1 === null) item.Precio1 = null;
 			else item.Precio1 = roundN(item.Precio1, 2);
 
-			if (item.Total === null) item.Total = 0.00;
-			else item.Total = roundN(item.Metrado * item.Precio1, 2);
+			if (item.Total === null) {
+				item.Total = 0.00;
+				item.Total = formatNumber(0.00);
+			}
+			else {
+				item.Total = roundN(item.Metrado * item.Precio1, 2);
+				item.Totalf = formatNumber(roundN(item.Metrado * item.Precio1, 2));
+			}
 
 			//item.Metrado=dosDecimales(item.Metrado);
 
@@ -164,11 +174,12 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 		for (let i = 0; i < filtro.length; i++) {
 
 			if (filtro[i].Metrado !== null) {
-				Sumatoria = Sumatoria + parseFloat(filtro[i].Total);
+				Sumatoria = Sumatoria + parseFloat(filtro[i].Total);				
 			} else {
 				var TotalAux = ObtenerSuma(filtro[i]);
 				Sumatoria = Sumatoria + TotalAux;
-				filtro[i].Total = formatNumber(TotalAux);
+				filtro[i].Total = (TotalAux);
+				filtro[i].Totalf = formatNumber(TotalAux);
 			}
 
 		}
@@ -190,7 +201,8 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 					//buscar los datos de los hijos
 					var TotalAux = ObtenerSuma(filtro[i]);
 					Sumatoria = Sumatoria + TotalAux;
-					filtro[i].Total = formatNumber(TotalAux);
+					filtro[i].Total = TotalAux;
+					filtro[i].Totalf = formatNumber(TotalAux);
 				}
 			}
 
@@ -211,8 +223,8 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 		if (cents < 10)
 			cents = "0" + cents;
 		for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
-			num = num.substring(0, num.length - (4 * i + 3)) + '.' + num.substring(num.length - (4 * i + 3));
-		return (((sign) ? '' : '-') + num + ',' + cents);
+			num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+		return (((sign) ? '' : '-') + num + '.' + cents);
 	}
 
 	function roundN(num, n) {
@@ -238,6 +250,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 		// console.log(result);
 		// }
 		// eslint-disable-next-line
+		//alert();
 	}, [levelStart, proyects.DataPc])
 
 	useEffect(() => {
@@ -249,14 +262,13 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 				if (proyects.Avisa!==undefined) 
 				if (proyects.Avisa===1) //abierto
 				{
-					
-					setWidth(window.innerWidth-260 - widthItems - 50);
+					setWidth(window.innerWidth - 180 - widthItems - 45);
 				}else{
-					setWidth(window.innerWidth- 70 - widthItems - 50);
+					setWidth(window.innerWidth- 10 - widthItems - 45);
 
 				}
 				if (proyects.Avisa===undefined) 
-				setWidth(window.innerWidth-widthNav - widthItems - 50);
+				setWidth(window.innerWidth - widthNav - widthItems - 45);
 				//setOpen1(false);
 				//setOpen2(false);
 				//setHeight(window.innerHeight-60);
@@ -275,10 +287,10 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 				if (proyects.Avisa===1) //abierto
 				{
 					//setWidth(window.innerWidth- 260 - widthItems - 50);
-					$("#ab").animate({ width: window.innerWidth - width - 260 - widthItems - 20}, 0);	
+					$("#ab").animate({ width: window.innerWidth - width - 200 - widthItems - 20}, 0);	
 				}else{
 					//setWidth(window.innerWidth-  70 - widthItems - 50);
-					$("#ab").animate({ width: window.innerWidth - width - 70 -  widthItems - 20}, 0);	
+					$("#ab").animate({ width: window.innerWidth - width - 40 -  widthItems - 20}, 0);	
 				}
 				if (proyects.Avisa===undefined) 
 				{
@@ -287,7 +299,8 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 				}
 				//setWidth(window.innerWidth-widthNav - widthItems - 50);				
 				//$("#ab").animate({ width: window.innerWidth - Width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
-
+				$("#ab").fadeOut(10);
+				$("#ab").fadeIn(1000);
 
 				setTimeout(() => {
 					RefrescarV();
@@ -341,6 +354,8 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 	}
 
 	useEffect(() => {
+		
+		if (proyects.Sub_sel!=='') return;
 		if (proyects.treeSubControl)
 			if (proyects.treeSubControl.length !== 0) {
 				//llamar a metrados de tosod los subs
@@ -356,6 +371,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 						
 					}
 				}*/
+				//alert(proyects.DatosPresupuesto[0].CodPresupuesto);
 				//alert(proyects.DatosPresupuesto[0].CodPresupuesto);
 				if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0])
 					dispatch(selectItems(proyects.DatosPresupuesto[0].CodPresupuesto, '', ''));
@@ -516,7 +532,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 		  //selectedEmployeeNames: this.getEmployeeNames(selectedData)
 		});*/
 	}
-	console.log('Renderizando Items');
+	//console.log('Renderizando Items');
 
 	
 
@@ -560,18 +576,35 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 					maxHeight={window.innerHeight - 200}
 					minWidth={minimop}
 					minHeight="320px"
+					onResizeStart={(e, direction, ref, d) => {
+						//$("#ab").hide();
+						$("#ab").fadeOut();
+					}}
 					onResizeStop={(e, direction, ref, d) => {
-					
+						//$("#ab").show();
+						$("#ab").fadeIn(900);
 						setWidth(width + d.width);
 						
 						if (open1)
 							setHeight(height + d.height);
 
-							$("#barra1").animate({ height: height + d.height }, 0);
+							
 						//alert('');
-						
+						if (open1){
+							//$("#barra1").animate({ height: height + d.height }, 0);
+							$("#barra2").animate({ marginTop: height + d.height-10 }, 0);
+							$("#ContenedorTotal").animate({ height: height + d.height }, 0);
+							$("#Card1").animate({ height: height + d.height -20 }, 0);
+							$("#ContDet").animate({ top: height + d.height + 10 }, 0);
+							$("#ContDet2").animate({ top: height + d.height + 3 }, 0);
+							$("#ab").animate({ height: height + d.height -22}, 0);
+							$("#forgeViewer").animate({ height: '100%'}, 0);
+							
+							
+						}
+						$("#barra1").animate({ height: height + d.height - 20}, 0);
 						//$("#ab").animate({ height: height + d.height -20 }, 10);
-
+						//$("#forgeViewer").animate({ left: 0 }, 0);
 
 						//$("#DetalleItem").animate({ height: window.innerHeight - (height + d.height) - 130 }, 100);
 
@@ -590,10 +623,10 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 						//console.log('resizando');
 						//$("#barra2").marginTop=width;
 						if (open1){
-							$("#barra1").animate({ height: height + d.height }, 0);
-							$("#barra2").animate({ marginTop: height + d.height }, 0);
+							$("#barra1").animate({ height: height + d.height - 20 }, 0);
+							$("#barra2").animate({ marginTop: height + d.height -10}, 0);
 							$("#ContenedorTotal").animate({ height: height + d.height }, 0);
-							$("#Card1").animate({ height: height + d.height }, 0);
+							$("#Card1").animate({ height: height + d.height -20 }, 0);
 							$("#ContDet").animate({ top: height + d.height + 10 }, 0);
 							$("#ContDet2").animate({ top: height + d.height + 3 }, 0);
 							$("#ab").animate({ height: height + d.height -22}, 0);
@@ -601,6 +634,12 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 							
 							
 						}
+
+						//$("#ab").animate({ left: width + d.width + 10 }, 0);
+						//$("#ab").animate({ top: width + d.width + 10 }, 0);
+						//$("#forgeViewer").animate({ visibility:'hidden'}, 0);
+						//$("#forgeViewer").animate({ left: width + 10 }, 0);
+
 						//$("#ab").animate({ display: 'none'}, 0);
 						//$("#forgeViewer").animate({ display: 'none'}, 0);
 						//alert(width + d.width +50);
@@ -631,7 +670,13 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 
 
-						<Card id="Card1" style={{ height: height - 20, overflow: 'scroll' }}>
+						<Card id="Card1" style={{ height: height - 20, overflow: 'scroll',
+							background: 'rgb(242,245,246)',
+							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
+							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+							background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',
+						}}>
 
 							<Card.Header>Hoja del Presupuesto
 
@@ -655,7 +700,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 									if (e.itemData.name==='Solo hoja')
 									{
 										setMinimoW(3000);
-										setWidth(window.innerWidth-$("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80);
+										setWidth(window.innerWidth-$("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 45);
 										setOpen1(false);
 										setOpen2(false);
 										setHeight(window.innerHeight-60);
@@ -665,7 +710,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 									if (e.itemData.name==='Detalle')
 									{
 										setMinimoW(3000);
-										setWidth(window.innerWidth-$("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80);
+										setWidth(window.innerWidth-$("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 45);
 										setOpen1(true);
 										setOpen2(false);
 										setHeight(window.innerHeight-500);
@@ -681,7 +726,9 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 										$("#barra1").animate({ height: window.innerHeight-500  }, 0);
 
 										setWidth(600);
-										$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
+										$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 35}, 0);
+										$("#ab").fadeOut(10);
+										$("#ab").fadeIn(1000);
 										//let tam=window.innerWidth - width;
 										//alert(width);
 										//$("#ab").animate({ width: 800}, 0);
@@ -695,11 +742,13 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 										setOpen1(false);
 										setOpen2(true);
 										setHeight(window.innerHeight-60);
-										$("#barra1").animate({ height: height  }, 0);
+										//$("#barra1").animate({ height: height  }, 0);
 										setWidth(600);
 
-										$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
-										
+										$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 35}, 0);
+										$("#barra1").animate({ height: window.innerHeight - 60 }, 0);
+										$("#ab").fadeOut(10);
+										$("#ab").fadeIn(1000);
 										//$("#ab").animate({ width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
 										//$("#ab").animate({ width: 800}, 0);
 										//$("#forgeViewer").animate({ width: '100%'}, 0);
@@ -738,18 +787,56 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 										//defaultExpandedRowKeys={[1, 2, 3, 5]}
 										columnAutoWidth={false}
 										hasItemsExpr="Has_Items"
-										selectedRowKeys={selectedRowKeys}
+										//selectedRowKeys={selectedRowKeys}
 										orderTree={"CodSubpresupuesto"}
+										allowColumnResizing={true}
+
+										
+										/*columnResizingMode={{
+											columnResizingMode: 'nextColumn'
+										  }}*/
 
 										//onSelectionChanged={() => {alert('hola')}}
-										//onRowClick={() => {alert(this)}}
+										onRowClick={(e) => {
+											const Item = e.data;
+											const codP = Item.CodPresupuesto;
+											const codSub = Item.CodSubpresupuesto;
+											const codItem = Item.Item;
+											let encuentra=0;
+											if (proyects.Sub_sel===''){
+												//alert('Estoy en presupuesto ' + Item.CodPresupuesto + ' Subpresupuesto ' + Item.CodSubpresupuesto + ' ');
+												let IdModelo = '';
+												for (let i = 0; i < proyects.treeSubControl.length; i++) {
+													if (Item.CodSubpresupuesto === proyects.treeSubControl[i].CodSubpresupuesto) {
+														//IdModelo = proyects.treeSubControl[i].CodModelo;
+														encuentra=1;
+														//if (proyects.treeSubControl[i].UrnWeb)
+														if (proyects.Urn !== proyects.treeSubControl[i].UrnWeb){
+															proyects.Urn=proyects.treeSubControl[i].UrnWeb;
+														}
+
+													}
+
+												}
+
+												//if (encuentra===1 && proyects.Urn==='')
+
+
+												//console.log(e);
+											}
+											
+											//alert(Item.CodPresupuesto)
+											
+											
+										}}
 										onFocusedRowChanged={onSelectionChanged}
 										wordWrapEnabled={true}
 									>
+										<SearchPanel visible={true} />
 										<Editing
 											allowUpdating={false}
 											allowDeleting={false}
-											selectTextOnEditStart={true}
+											selectTextOnEditStart={false}
 											useIcons={true}
 										/>
 										<Sorting
@@ -762,7 +849,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 											visible={false}
 										/>
 										<FilterRow
-											visible={true}
+											visible={false}
 										/>
 										<Scrolling
 											mode="standard"
@@ -779,7 +866,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 											width={'15%'}
 											dataField="Orden"
 											caption="Orden"
-
+											
 										/>
 
 										<Column
@@ -812,8 +899,8 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 											
 											alignment={'right'}
 											width={'18%'}
-											dataField="Total" 
-											
+											dataField="Totalf" 
+											caption="Parcial"
 											//style={{fontSize:'0.5rem|important'}}
 											
 											//customizeText={priceColumn_customizeText}
@@ -826,8 +913,9 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 										/>
 										<Paging
 											enabled={true}
-											defaultPageSize={15}
+											defaultPageSize={100}
 										/>
+										<ColumnFixing enabled={true} />
 									</TreeList>
 
 
@@ -852,16 +940,23 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 						<div
 						id="barra1"
-						className="bara-cerrar d-flex align-items-center"
+						className="bara-cerrar d-flex align-items-center barras"
 						style={{
-							width: 12,
+							width: '12px',
 							height: "100%",
-							background: "#dee2e6",
+							/*background: "#dee2e6",*/
 							marginLeft: 5,
 						}}
 					>
 						<div
-							style={{ cursor: "pointer", width:'14px' }}
+							style={{ cursor: "pointer", width:'20px',
+							background: 'rgb(184,225,252)',
+							background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
+							background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+							background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0',
+							zIndex:'1'
+						}}
 							className="h-25 w-100 bg-primary d-flex justify-contentcenter align-items-center"
 							onClick={() => {
 								if (open){
@@ -871,6 +966,9 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 									setWidth(600);
 									setMinimoP(600);
 								}
+
+								$("#ab").fadeOut(10);
+								$("#ab").fadeIn(1000);
 
 								setOpen(!open);
 
@@ -906,27 +1004,40 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 
 					<div
-						id="barra2" className="bara-cerrar d-flex align-items-center"
+						id="barra2" className="bara-cerrar d-flex align-items-center barras"
 						style={{
 							/*cursor: 'row-resize',*/
 							position: 'absolute',
 							//width: '98%',
 							width: '100vw',
 							height: '12px',
-							background: "#dee2e6",
+							/*background: "#dee2e6",*/
 							marginLeft: 5,
 							marginTop: height - 12,
 
 						}}
 					>
 						<div
-							style={{ cursor: "pointer", marginLeft: $("#ContDet2").innerWidth()/2-70  , width: '140px', height: '14px', zIndex:'1' }}
+							style={{ cursor: "pointer", marginLeft: $("#ContDet2").innerWidth()/2-80  , width: '160px', height: '18px', zIndex:'1',
+							/*background: 'rgb(242,245,246)',
+							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
+							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+							background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',*/
+							
+
+							background: 'rgb(184,225,252)',
+							background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
+							background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+							background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0'
+						}}
 							className="bg-primary d-flex justify-contentcenter align-items-center"
 							onClick={() => {
 								setOpen1(!open1);
 								if (open1){
 									setHeight(window.innerHeight-60);
-									
+									$("#barra1").animate({ height: window.innerHeight - 60 }, 0);	
 									if (open2)
 									setModo('Modelo');
 									else
@@ -934,8 +1045,8 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 
 								}else{
-									setHeight(window.innerHeight-500);
-									$("#barra1").animate({ height: window.innerHeight-500  }, 0);									
+									setHeight(window.innerHeight - 500);
+									$("#barra1").animate({ height: window.innerHeight - 500  }, 0);									
 
 									if (open2)
 									setModo('Detalle y modelo');
@@ -945,8 +1056,10 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 									
 									//setModo('Solo hoja');									
 								}
+								
+								$("#ab").fadeOut(10);
+								$("#ab").fadeIn(1000);
 
-						
 
 								setTimeout(() => {
 									RefrescarV();
@@ -1006,7 +1119,9 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 						//$("#ab").animate({ height: height + d.height -20 }, 100);
 						//$("#Conten1").animate({ height: height + d.height -20 }, 100);
 						//alert('');
-
+						$("#ab").fadeOut(10);
+						$("#ab").fadeIn(1000);
+		
 						setTimeout(() => {
 							RefrescarV();
 						}, 150);
@@ -1037,7 +1152,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 						//$("#forgeViewer").animate({ height: '100%'}, 100);
 						//$("#ab").animate({ width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }, 0);
 						//$("#ab").animate({ left: width + 10 }, 0);
-						
+						//$("#forgeViewer").animate({ left: width + 10 }, 0);
 						/*setTimeout(() => {
 							RefrescarV();
 						}, 150);*/
@@ -1083,7 +1198,56 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 			
 			
 			{open2 ? <div id="ab" /*style={{width:'100%'}}*/ style={{ left: width + 10, top: '5px', height: height - 22, width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50 }}>
-				<ViewerSc />
+				
+				{(proyects.Urn!=='') ?
+				<ViewerSc /> 
+				: 
+				<>
+				<div id="" style={{  width: '100%', height:'100%',
+					/*background: '#e4efc0',
+					background: '-moz-linear-gradient(top, #e4efc0 0%, #abbd73 100%)', 
+					background: '-webkit-linear-gradient(top, #e4efc0 0%,#abbd73 100%)',
+					background: 'linear-gradient(to bottom, #e4efc0 0%,#abbd73 100%)', 
+					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#e4efc0", endColorstr="#abbd73",GradientType=0)',*/
+					background: 'rgb(242,246,248)', 
+					background: '-moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 55%, rgba(181,198,208,1) 82%, rgba(224,239,249,1) 100%)',
+					background: '-webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
+					background: 'linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
+					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f6f8", endColorstr="#e0eff9",GradientType=0 )',
+
+				}}>
+					
+					{proyects.Sub_sel==='' ?
+					<>
+
+					</>:
+					<>
+					<p style={{  position:'absolute', left:'47%', top:'42%' }}>No tiene modelo asignado</p>
+					<Button variant="outline-info" style={{position:'absolute', left:'47%', top:'48%'}} onClick={() => {
+                                        if (true) {
+                                           
+                                        } else {
+                                            Swal.fire({
+                                                title: 'Error!',
+                                                text: 'No tiene un Presupuesto seleccionado',
+                                                icon: 'error',
+                                                confirmButtonText: 'Ok'
+                                            })
+                                        }
+                                    }}><i class="fas fa-sign-in-alt"></i>   Asignar un modelo</Button>
+
+					</>
+
+
+
+					}
+
+				</div>
+				
+				</>
+				}
+				
+				
 			</div>:''}
 			
 			
@@ -1091,10 +1255,22 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 
 
-			<div id="ContDet2" className="" style={{ position: 'absolute', top: height+3 , height: window.innerHeight - height - 60, width: '100%', background:'white'/*, zIndex: '9', background: 'red'*/ }}>
+			<div id="ContDet2" className="" style={{ position: 'absolute', top: height+3 , height: window.innerHeight - height - 60, width: '100%', 
+					background: 'rgb(242,245,246)',
+					background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
+					background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+					background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',
+/*, zIndex: '9', background: 'red'*/ }}>
 
-				<Collapse in={open1} style={{ height: '90%', background:'white' }}>
-					<div className="p-2 w-100" style={{ height: '90%',  background:'white' }}>
+				<Collapse in={open1} style={{ height: '90%', 
+					background: 'rgb(242,245,246)',
+					background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
+					background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+					background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',			 
+			 }}>
+					<div className="p-2 w-100" style={{ height: '90%',   }}>
 						<Nav
 							variant="tabs"
 							defaultActiveKey="/home"
@@ -1240,7 +1416,13 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 						</Nav>
 
 
-						<div id="DetalleItem" className="mt-0 p-2 overflow-scroll" style={{ position: 'absolute', height: '92%', overflow: 'scroll' }}>
+						<div id="DetalleItem" className="mt-0 p-2 overflow-scroll" style={{ position: 'absolute', height: '92%', overflow: 'scroll',
+							background: 'rgb(242,245,246)',
+							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
+							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+							background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',
+							}}>
 							{levelPC === 1 ? (
 								<Apus
 									levelStart={1}

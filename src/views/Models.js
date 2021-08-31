@@ -30,7 +30,7 @@ const Models = ({ match }) => {
 	// console.log(codProject)
 	const auth = useSelector((state) => state.auth);
 	const proyects = useSelector((state) => state.proyects);
-	const [width, setWidth] = useState(400);
+	const [width, setWidth] = useState(260);
 	const [height, setHeight] = useState(window.innerHeight );
 	const [levelPC, setLevelPC] = useState(1);
 	const [level, setLevel] = useState(2);
@@ -131,7 +131,7 @@ const Models = ({ match }) => {
 					enable={{ top:false, right:true, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
 					size={{ width: width, height: height }}
 					//maxHeight="60vh"
-					maxWidth={open ? 800 : 0}
+					maxWidth={open ? 600 : 0}
 					//minHeight="67.5vh"
 
 					minWidth="20px"
@@ -160,7 +160,13 @@ const Models = ({ match }) => {
 					<Collapse in={open}>
 
 
-						<div className="p-0 h-100 w-100" style={{ overflow: 'scroll' }}>
+						<div className="p-0 h-100 w-100" style={{ overflow: 'scroll',
+							background: 'rgb(242,245,246)',
+							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
+							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+							background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',					
+						}}>
 
 
 							
@@ -203,16 +209,22 @@ const Models = ({ match }) => {
 						</div>
 					</Collapse>
 					<div
-						className="bara-cerrar d-flex align-items-center"
+						className="bara-cerrar d-flex align-items-center barras"
 						style={{
 							width: 12,
 							height: "100%",
-							background: "#dee2e6",
+							/*background: "#dee2e6",*/
 							marginLeft: 5,
 						}}
 					>
 						<div
-							style={{ cursor: "pointer" }}
+							style={{ cursor: "pointer",
+							background: 'rgb(184,225,252)',
+							background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
+							background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+							background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0'						
+						}}
 							className="h-25 w-100 bg-primary d-flex justify-contentcenter align-items-center"
 							onClick={() => {
 								setOpen(!open);

@@ -13,6 +13,8 @@ import $ from 'jquery';
 import { RefrescarV } from "./ViewerSc";
 import Items from "../components/Items";
 import axios from "../config/axios";
+import { TextBox } from "devextreme-react";
+import { Search } from "@material-ui/icons";
 
 
 const Presupuestos = ({ match }) => {
@@ -24,7 +26,7 @@ const Presupuestos = ({ match }) => {
 
 	// console.log(codProject)
 	const proyects = useSelector((state) => state.proyects);
-	const [width, setWidth] = useState(400);
+	const [width, setWidth] = useState(260);
 	const [height, setHeight] = useState(window.innerHeight);
 	const [levelPC, setLevelPC] = useState(1);
 	const [level, setLevel] = useState(2);
@@ -174,7 +176,7 @@ const Presupuestos = ({ match }) => {
 					size={{ width: width, height: height }}
 					marginLeft="-20px"
 					//maxHeight="60vh"
-					maxWidth={open ? 800 : 0}
+					maxWidth={open ? 600 : 0}
 					//minHeight="67.5vh"
 
 					minWidth="20px"
@@ -203,7 +205,14 @@ const Presupuestos = ({ match }) => {
 					<Collapse in={open}>
 
 
-						<div id="Conte1" className="p-0 h-100 w-100" style={{ overflow: 'scroll' }}>
+						<div id="Conte1" className="p-0 h-100 w-100" style={{ overflow: 'scroll',
+							background: 'rgb(242,245,246)',
+							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
+							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+							background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',
+					
+						}}>
 
 
 							{/* <Nav
@@ -247,19 +256,32 @@ const Presupuestos = ({ match }) => {
 							{/* <!-- SidebarSearch Form --> */}
 							<div className="form mt-3">
 								<div className="input-group" data-widget="">
-									<input
+									{/* <input
 										className="form-control form-control"
 										type="search"
 										placeholder="Search"
 										aria-label="Search"
 										value={textoB}
 										onChange={buscarPres}
-									/>
-									<div className="input-group-append">
+									/> */}
+									<TextBox
+									//stylingMode={'Search'}
+									defaultValue={textoB}
+									value={textoB}
+									width="100%"
+									showClearButton={true}
+									//placeholder="Subject"
+									
+									placeholder="Search.."
+									>
+									<i className="fas fa-search fa-fw" style={{position:'absolute', top:'10px', right:'30px', width:'12px', height:'12px' }}></i>
+
+									</TextBox>
+									{/* <div className="input-group-append">
 										<button className="btn btn-sidebar">
-											<i className="fas fa-search fa-fw"></i>
+											
 										</button>
-									</div>
+									</div> */}
 								</div>
 							</div>
 							{/* <div id="DetalleItem" className="mt-0 p-2 h-20 overflow-scroll" style={{ height:'100%', overflow:'scroll' }}> */}
@@ -292,16 +314,22 @@ const Presupuestos = ({ match }) => {
 						</div>
 					</Collapse>
 					<div
-						className="bara-cerrar d-flex align-items-center"
+						className="bara-cerrar d-flex align-items-center barras"
 						style={{
 							width: 12,
 							height: "100%",
-							background: "#dee2e6",
+							/*background: "#dee2e6",*/
 							marginLeft: 5,
 						}}
 					>
 						<div
-							style={{ cursor: "pointer" }}
+							style={{ cursor: "pointer",
+							background: 'rgb(184,225,252)',
+							background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
+							background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+							background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0'						 
+						}}
 							className="h-25 w-100 bg-primary d-flex justify-contentcenter align-items-center"
 							onClick={() => {
 								//alert('se activa');
@@ -312,9 +340,9 @@ const Presupuestos = ({ match }) => {
 
 								if (!open){
 									document.getElementById("Conte1").style.width = 0;
-									setWidth(300);
+									setWidth(260);
 								}else{
-									document.getElementById("Conte1").style.width = '300px';
+									document.getElementById("Conte1").style.width = '260px';
 									setWidth(20);
 								}
 								//alert('');
@@ -346,7 +374,15 @@ const Presupuestos = ({ match }) => {
 					</div>
 				</Resizable>
 
-				<Col className="w-100">
+				<Col className="w-100" style={{
+					background: 'rgb(242,245,246)',
+					background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
+					background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+					background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',
+
+
+				}}>
 					{/* <Route
 						path="/projects/project/:codProject"
 						component={IdProyect}

@@ -297,11 +297,12 @@ const Calculo = ({levelStart=1, idProject}) => {
 			<TreeList
 				style={{width:'75%'}}
 				dataSource={proyects.Datacalculo}
-				keyExpr="Descripcion"
+				keyExpr="CodCalculo"
 				//parentIdExpr="PhantomParentId"
 				//orderedLevels="Nivel ASC"
 				showBorders={true}
-				focusedRowEnabled={true}
+				//focusedRowEnabled={true}
+				focusStateEnabled={true}
 				defaultExpandedRowKeys={[1, 2, 3, 5]}
 				columnAutoWidth={false}
 				rootValue={-1}
@@ -316,10 +317,11 @@ const Calculo = ({levelStart=1, idProject}) => {
 				wordWrapEnabled={true}
 			>
 				<Editing
-					allowUpdating={false}
+					allowUpdating={true}
 					allowDeleting={false}
 					selectTextOnEditStart={true}
 					useIcons={true}
+					mode="cell"
 				/>
 				<HeaderFilter
 					visible={false}
@@ -375,12 +377,12 @@ const Calculo = ({levelStart=1, idProject}) => {
 			<TreeList
 				style={{position:'absolute', width:'25%', left:'75%', top:'10px'}}
 				dataSource={proyects.Datacalculodet}
-				keyExpr="Campo"
+				keyExpr="CodCalculoDetalle"
 				//parentIdExpr="PhantomParentId"
 				//orderedLevels="Nivel ASC"
 				showBorders={true}
 				focusedRowEnabled={true}
-				defaultExpandedRowKeys={[1, 2, 3, 5]}
+				//defaultExpandedRowKeys={[1, 2, 3, 5]}
 				columnAutoWidth={false}
 				rootValue={-1}
 				//selectedRowKeys={selectedRowKeys}
@@ -398,6 +400,7 @@ const Calculo = ({levelStart=1, idProject}) => {
 					allowDeleting={false}
 					selectTextOnEditStart={true}
 					useIcons={true}
+					
 				/>
 				<HeaderFilter
 					visible={false}

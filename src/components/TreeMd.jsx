@@ -21,8 +21,9 @@ import { red } from "@material-ui/core/colors";
 function MinusSquare(props) {
 	return (
 		<div className="d-flex">
-			<ion-icon name="chevron-down-outline"></ion-icon>
-			<img src={projectIcon} alt="icons" width="10" style={{ marginRight: 20 }} {...props} />
+			{/* <ion-icon name="chevron-down-outline"></ion-icon> */}
+			<ion-icon name="caret-down-outline" style={{width:'12px'}}></ion-icon>
+			<img src={projectIcon} alt="icons" width="18" style={{ marginRight: 20 }} {...props} />
 		</div>
 	);
 }
@@ -30,8 +31,9 @@ function MinusSquare(props) {
 function PlusSquare(props) {
 	return (
 		<div className="d-flex">
-			<ion-icon name="chevron-forward-outline"></ion-icon>
-			<img src={projectIcon} alt="icons" width="20" style={{ marginRight: 20 }} {...props} />
+			{/* <ion-icon name="chevron-forward-outline"></ion-icon> */}
+			<ion-icon name="caret-forward-outline" style={{width:'12px'}}></ion-icon>
+			<img src={projectIcon} alt="icons" width="18" style={{ marginRight: 20 }} {...props} />
 
 		</div>
 	);
@@ -39,19 +41,14 @@ function PlusSquare(props) {
 
 function CloseSquare(props) {
 	return (
-		<img src={subprojectIcon} width="20" alt="icons" style={{ marginRight: 20 }} {...props} />
+		<img src={subprojectIcon} width="18" alt="icons" style={{ marginRight: 20 }} {...props} />
 	);
 }
-
 function CloseSquare1(props) {
 	return (
-		<img src={managerIcon} width="20" alt="icons" style={{ marginRight: 20 }} {...props} />
+		<img src={subprojectIcon} width="18" alt="icons" style={{ marginRight: 20 }} {...props} />
 	);
 }
-
-
-
-
 const StyledTreeItem = withStyles((theme) => ({
 	iconContainer: {
 		"& .close": {
@@ -59,16 +56,16 @@ const StyledTreeItem = withStyles((theme) => ({
 		},
 	},
 	group: {
-		font: "22px Arial, sans-serif",
+		font: "20px Arial, sans-serif",
 		marginLeft: 15,
-		paddingLeft: 5,
-		borderLeft: `2px dashed ${alpha(theme.palette.text.primary, 0.3)}`,
+		paddingLeft: 0,
+		borderLeft: `0.02px dashed ${alpha(theme.palette.text.primary, 0.1)}`,
 	},
 }))((props) => <TreeItem {...props} />);
 
 const useStyles = makeStyles({
 	root: {
-		font: "26px Arial, sans-serif",
+		font: "20px Arial, sans-serif",
 		marginTop: 10,
 		marginLeft: 15,
 		height: 264,

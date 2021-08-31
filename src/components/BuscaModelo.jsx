@@ -19,12 +19,14 @@ import { ViewerScP } from '../views/ViewerScP';
 import axiosmdl from "../config/axiosmdl";
 import qs from "querystring";
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
-import { selectMODELOS, SelectUrn, SelectUrnB, guardarModelo } from '../actions/proyects.actions';
+import { selectMODELOS,ModificarSubPresupuesto, SelectUrn, SelectUrnB, guardarModelo } from '../actions/proyects.actions';
 import Swal from 'sweetalert2'
 import axios from 'axios';
+import { Template, TextBox } from 'devextreme-react';
+import EmployeeCell from './EmployeeCell';
 
 
-const BuscaModelo = ({ show, setShow, item }) => {
+const BuscaModelo = ({ show, setShow, subseleccionado, setSubSeleccionado ,item, CodPresupuesto }) => {
 	const dispatch = useDispatch();
 	const handleClose = () => setShow(false);
 	const auth = useSelector(state => state.auth);
@@ -42,7 +44,7 @@ const BuscaModelo = ({ show, setShow, item }) => {
 
 
 
-	const [allLevels, setAllLevels] = useState({ Id: null, Descripcion: '', PhantomParentId: '' })
+	const [allLevels, setAllLevels] = useState({ Id: null, Descripcion: '', PhantomParentId: '', Tipo:'' })
 	const [itemSelected, setItemSelected] = useState('')
 	const [lastLevel, setLastLevel] = useState(0);
 
@@ -142,6 +144,7 @@ const BuscaModelo = ({ show, setShow, item }) => {
 				Id: data.data[1].id,
 				Descripcion: data.data[1].attributes.name,
 				PhantomParentId: null,
+				Tipo:'Proyecto'
 			},
 		]);
 		/*setAllLevels([
@@ -198,6 +201,7 @@ const BuscaModelo = ({ show, setShow, item }) => {
 						Id: data.data[i].id,
 						Descripcion: data.data[i].attributes.name,
 						PhantomParentId: idproy,
+						Tipo:'Folder'
 					},
 
 					]
@@ -270,6 +274,18 @@ const BuscaModelo = ({ show, setShow, item }) => {
 			if (data.data[i].type === 'folders') {
 				folders.push(data.data[i].id);
 			}
+			if (data.data[i].type === 'folders') {
+			setAllLevels((state) => {
+				return [...state,
+				{
+					Id: data.data[i].id,
+					Descripcion: data.data[i].attributes.displayName,
+					PhantomParentId: urnfolder,
+					Tipo:'Folder'
+				}
+				]
+			});
+		}else{
 
 			setAllLevels((state) => {
 				return [...state,
@@ -277,10 +293,13 @@ const BuscaModelo = ({ show, setShow, item }) => {
 					Id: data.data[i].id,
 					Descripcion: data.data[i].attributes.displayName,
 					PhantomParentId: urnfolder,
+					Tipo:'Modelo'
 				}
 				]
 			});
 
+
+		}
 			/*arreglo.push(
 				{
 					Id:data.data[i].id,
@@ -297,7 +316,8 @@ const BuscaModelo = ({ show, setShow, item }) => {
 						{
 							Id: data.included[j].id,
 							Descripcion: 'Version ' + data.included[j].attributes.versionNumber + ' ' + data.included[j].attributes.lastModifiedTime.substring(0,10),
-							PhantomParentId: data.data[i].id
+							PhantomParentId: data.data[i].id,
+							Tipo:'Version'
 						}
 						]
 					});
@@ -378,7 +398,8 @@ const BuscaModelo = ({ show, setShow, item }) => {
 				{
 					Id: data.data[i].id,
 					Descripcion: data.data[i].attributes.displayName,
-					PhantomParentId: idf
+					PhantomParentId: idf,
+					Tipo:'Modelo'
 				}
 				]
 			});
@@ -391,7 +412,8 @@ const BuscaModelo = ({ show, setShow, item }) => {
 						{
 							Id: data.included[j].id,
 							Descripcion: 'Version ' + data.included[j].attributes.versionNumber + ' ' + data.included[j].attributes.lastModifiedTime.substring(0,10),
-							PhantomParentId: data.data[i].id
+							PhantomParentId: data.data[i].id,
+							Tipo:'Version'
 						}
 						]
 					});
@@ -463,12 +485,20 @@ const BuscaModelo = ({ show, setShow, item }) => {
         console.log("ACTUALMENTE LOS MODELOS");
         console.log(proyects.DataModelos);
 
+
+		
+
 		let buscado = proyects.DataModelos.find(item => item.UrnWeb === modeloSel.urnweb);
 
+		let uid='';
+		let nombre='';
 		if (buscado){
 
 			//SI EXISTE EN MI TABLA DEBO COGER LOS DATOS DE ID NOMBRE Y MODIFICAR EL REGISTRO DE SUBPRESUPUESTO	
-
+			uid = buscado.CodPlano;
+			nombre = buscado.NombreArchivoRvt;
+			
+			
 
 		}else{
 			
@@ -477,17 +507,44 @@ const BuscaModelo = ({ show, setShow, item }) => {
 			//let encoded = base64_encode(guid);
 			//let encoded = btoa(guid);
 			//let encoded =b64EncodeUnicode(guid); 
-			var uid = getRandomString(24);
+			uid = getRandomString(24);
 			console.log("llamando a guardar modelos");
 			//alert(uid + );
 
 			const resp = dispatch(guardarModelo(uid, modeloSel.nombre, '',  modeloSel.urnaddin,  modeloSel.urnweb, ''));
-
+			nombre = modeloSel.nombre;
+			setTimeout(() => {
+				dispatch(selectMODELOS(''));
+			}, 1000);
+			setTimeout(() => {
+				console.log("AHORA LOS MODELOS DESPUES DE GUARDAR");
+				console.log(proyects.DataModelos);
+			}, 3800);
 
 
 		}
 
+		/*setSubSeleccionado((state)=>{
+			return ({...state,
+				     //CodModelo:uid,
+					 CodModelo:'8888888',
+					 NombreModelo:'blablabla',
+					 //NombreModelo:nombre
+					})
+		});*/
+		subseleccionado.CodModelo=uid;
+		subseleccionado.NombreModelo=nombre;
+        console.log("EL SELECCIONADO despues de modificar");
+        console.log(subseleccionado);
 
+        console.log("el codigo del presupuesto");
+        console.log(CodPresupuesto);
+
+		//CodSubpresupuesto
+		//ModificarSubPresupuesto = (CodPresupuesto, CodSubPresupuesto, Descripcion,  CodModelo, userId) =>{
+			dispatch(ModificarSubPresupuesto(CodPresupuesto, subseleccionado.CodSubpresupuesto, subseleccionado.Descripcion,  subseleccionado.CodModelo,  ''));
+			console.log("DISPATCH");
+			console.log(CodPresupuesto, subseleccionado.CodSubpresupuesto, subseleccionado.Descripcion,  subseleccionado.CodModelo,  '');
 
 		}else{
 			Swal.fire({
@@ -500,7 +557,7 @@ const BuscaModelo = ({ show, setShow, item }) => {
 		}
 
 		//proyects.AuxModelo = modeloSel.nombre;
-		//setShow(false);
+		setShow(false);
 	}
 
 
@@ -579,7 +636,12 @@ const BuscaModelo = ({ show, setShow, item }) => {
 		<>
 
 			<Modal show={show} size="lg" centered onHide={handleClose} >
-				<Modal.Header closeButton style={{ background: '#3c8dbc', color: 'white', height: '50px' }}>
+				<Modal.Header closeButton style={{ /*background: '#3c8dbc',*/ color: 'white', height: '50px',
+				background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
+				background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
+				background: 'linear-gradient(to bottom, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
+				filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'
+			 }}>
 					<Modal.Title style={{ fontSize: '0.95rem' }}>Selecciona un Modelo</Modal.Title>
 				</Modal.Header>
 
@@ -596,19 +658,29 @@ const BuscaModelo = ({ show, setShow, item }) => {
 							<Col sm={6}>
 								<div className="form mt-0">
 									<div className="input-group" data-widget="">
-										<input
+										{/* <input
 											className="form-control form-control"
 											type="search"
 											placeholder="Buscar"
 											aria-label="Buscar"
 											value={''}
 											onChange={''}
-										/>
-										<div className="input-group-append">
-											<button className="btn btn-sidebar">
-												<i className="fas fa-search fa-fw"></i>
-											</button>
-										</div>
+										/> */}
+
+											<TextBox
+											//stylingMode={'Search'}
+											defaultValue={''}
+											value={''}
+											width="100%"
+											showClearButton={true}
+											//placeholder="Subject"
+											
+											placeholder="Search.."
+											>
+											<i className="fas fa-search fa-fw" style={{position:'absolute', top:'10px', right:'30px', width:'12px', height:'12px' }}></i>
+
+											</TextBox>
+										
 									</div>
 								</div>
 
@@ -624,8 +696,7 @@ const BuscaModelo = ({ show, setShow, item }) => {
 				<Modal.Body style={{ width: '100%', height: '650px', overflow: 'hidden' }}>
 
 
-					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '1px' }}>
-					</div>
+					{/* <div className="" style={{ background: '#3c8dbc', width: '100%', height: '1px' }}></div> */}
 
 
 					<Form.Group as={Row} className="mt-0 mb-0" controlId="formModelos" >
@@ -670,7 +741,10 @@ const BuscaModelo = ({ show, setShow, item }) => {
 
 								<Column
 									width={'100%'}
-									dataField="Descripcion" />
+									dataField="Descripcion" 
+									caption="Mi Catálogo (BIM360docs)"
+									cellTemplate="employeeTemplate"
+									/>
 								{/*<Column
 							width={'10%'}
 							dataField="Cantidad"
@@ -718,6 +792,7 @@ const BuscaModelo = ({ show, setShow, item }) => {
 									enabled={true}
 									defaultPageSize={15}
 								/>
+								<Template name="employeeTemplate" render={EmployeeCell} />
 							</TreeList>
 
 
@@ -753,8 +828,7 @@ const BuscaModelo = ({ show, setShow, item }) => {
 
 
 
-					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '1px' }}>
-					</div>
+					{/* <div className="" style={{ background: '#3c8dbc', width: '100%', height: '1px' }}></div> */}
 					{/* <ListGroup>
 						{
 							proyects.DataClientes ? proyects.DataClientes.map(cliente => (
@@ -770,21 +844,21 @@ const BuscaModelo = ({ show, setShow, item }) => {
 
 					<Form.Group as={Row} className="mt-1 mb-1" controlId="formModel2" style={{ width: '100%', height: '20px' }}>
 
-						<Col sm={1}></Col>
-						<Col sm={10}>
+
+						<Col sm={12}>
 
 
-							<strong style={{ fontSize: '0.8rem', position: 'absolute', left: '5px', marginLeft: '20px', }}> No está asignado a presupuestos</strong>
+							<strong style={{ fontSize: '0.7rem', position: 'absolute', left: '10px', marginLeft: '10px', marginTop:'30px' }}> No está asignado a presupuestos</strong>
 
 
 						</Col>
-						<Col sm={1}></Col>
+
 					</Form.Group>
 
 
 
-					<div className="" style={{ background: '#3c8dbc', width: '100%', height: '1px' }}>
-					</div>
+					{/* <div className="" style={{ background: '#3c8dbc', width: '100%', height: '1px' }}>
+					</div> */}
 
 				</Modal.Body>
 
@@ -793,6 +867,13 @@ const BuscaModelo = ({ show, setShow, item }) => {
 					<Button
 						variant="primary"
 						onClick={Selecciona}
+						style={{
+							background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
+							background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
+							background: 'linear-gradient(to bottom, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'
+
+						}}
 					>
 						Seleccionar
 					</Button>

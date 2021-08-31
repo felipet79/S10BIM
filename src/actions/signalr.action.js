@@ -109,8 +109,8 @@ export const connectSignalr = (token) => {
 					break;
 
 				case LISTAR_MONEDAS:
-					console.log('MoNEDAS llegadAs:');
-					console.log(JSON.parse(data.Data));
+					//console.log('MoNEDAS llegadAs:');
+					//console.log(JSON.parse(data.Data));
 
 					dispatch({
 						type: LISTAR_MONEDAS,
@@ -151,8 +151,8 @@ export const connectSignalr = (token) => {
 
 
 				case LEER_PRESUPUESTO:
-					console.log('datos llegados de pRESUPUESTO:');
-					console.log(JSON.parse(data.Data));
+					//console.log('datos llegados de pRESUPUESTO:');
+					//console.log(JSON.parse(data.Data));
 					dispatch({
 						type: LEER_PRESUPUESTO,
 						payload: JSON.parse(data.Data),
@@ -160,8 +160,8 @@ export const connectSignalr = (token) => {
 					break;
 
 				case MENSUAL_DETALLE:
-					console.log('datos llegados de items:');
-					console.log(JSON.parse(data.Data));
+					//console.log('datos llegados de items:');
+					//console.log(JSON.parse(data.Data));
 					dispatch({
 						type: MENSUAL_DETALLE,
 						payload: JSON.parse(data.Data),
@@ -179,8 +179,8 @@ export const connectSignalr = (token) => {
 					break;
 
 				case METRADO_DETALLE:
-					console.log('metrados llegados:');
-					console.log(JSON.parse(data.Data));		
+					//console.log('metrados llegados:');
+					//console.log(JSON.parse(data.Data));		
 					dispatch({
 						type: METRADO_DETALLE,
 						payload: JSON.parse(data.Data),
@@ -188,8 +188,8 @@ export const connectSignalr = (token) => {
 					break;
 
 				case UNIQUE_DETALLE:
-					console.log('UNIQUES llegados:');
-					console.log(JSON.parse(data.Data));
+					//console.log('UNIQUES llegados:');
+					//console.log(JSON.parse(data.Data));
 					dispatch({
 						type: UNIQUE_DETALLE,
 						payload: JSON.parse(data.Data),

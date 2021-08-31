@@ -3,7 +3,7 @@ import {Table} from "react-bootstrap";
 //import Bar from "./Charts/Bar";
 import {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import { cleanDataChartAPU, selectAPUS } from "../actions/proyects.actions";
+import { agregaRegistro, cleanDataChartAPU, selectAPUS } from "../actions/proyects.actions";
 import TreeList, {
 	Pager,
 	Paging,
@@ -14,11 +14,23 @@ import TreeList, {
 	Scrolling,
 	Column } from 'devextreme-react/tree-list';
 
+import { ContextMenu } from "devextreme-react";	
+import notify from 'devextreme/ui/notify';
+import Swal from 'sweetalert2'
+
+const opcMenuInicio = [
+	{ text: 'Agregar' },
+	{ text: 'Eliminar' }
+];
+
+
 
 const allowedPageSizes = [5, 10, 15, 20, 50, 100, 500];
 
 const Asociados = ({levelStart=1, idProject}) => {
 	
+	
+	const [opcMenu, setOpcMenu] = useState(opcMenuInicio)
 	
 	
 	const dispatch = useDispatch();
@@ -140,13 +152,43 @@ const Asociados = ({levelStart=1, idProject}) => {
 	}
 
 
+	function itemClick(e) {
+		if (!e.itemData.items) {
+			//notify(`The "${ e.itemData.text }" item was clicked`, 'success', 200);
+
+
+
+			if (e.itemData.text === 'Agregar') {
+				if (proyects.Urn ==='' || proyects.Urn===undefined || proyects.Urn===null){
+					Swal.fire({
+						title: 'Error!',
+						text: 'Este Presupuesto no tiene modelo asociado',
+						icon: 'error',
+						confirmButtonText: 'Ok'						
+					})
+					dispatch(agregaRegistro(''));
+					return;
+				}
+				dispatch(agregaRegistro('Asociado'));
+				//alert('Datos generales : Pres ' + itemSelected + ' Sub ' + itemSelected1 + ' tipo '+ tipoSeleccion);
+				/*if (tipoSeleccion === 'Presupuesto')
+					setDatosGenerales(true);
+				else
+					setDatosGeneralesSub(true);*/
+			}
+
+		}
+	}
+
+
 	
 	return (
 		<>
 
-<TreeList
+			<TreeList
+				id='TreeAsociado'
 				dataSource={ proyects.DataAsociado}
-				keyExpr="Categoria"
+				keyExpr="CodAsociado"
 				//parentIdExpr="PhantomParentId"
 				showBorders={true}
 				focusedRowEnabled={true}
@@ -224,6 +266,14 @@ const Asociados = ({levelStart=1, idProject}) => {
 					defaultPageSize={15}
 				/>
 			</TreeList>
+
+
+			<ContextMenu
+				dataSource={opcMenu}
+				width={120}
+				target="#TreeAsociado"
+				onItemClick={itemClick}
+			/>
 
 			{/*<Bar />*/}
 			{/* <Table

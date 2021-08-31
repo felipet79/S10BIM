@@ -13,7 +13,8 @@ import Home from "./views/Home";
 import Proyects from "./views/Proyects";
 // import Test from "./views/Test";
 
-import 'devextreme/dist/css/dx.light.css';
+
+
 import Presupuestos from "./views/Presupuestos";
 
 import Models from "./views/Models";

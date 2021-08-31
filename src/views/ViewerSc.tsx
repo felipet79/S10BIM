@@ -819,7 +819,7 @@ export const ViewerSc = (props) => {
             console.log('estas son las vistas',items);*/
 
 
-
+            if (!viewer) return;
 
             viewer.loadDocumentNode(doc, viewables).then(i => {
                 // any additional action here?
@@ -2508,6 +2508,18 @@ export const ViewerSc = (props) => {
 		//console.log('datos de subProyectos actualizados')
 		//if (proyects.treeSubControl==undefined) return;
 		//console.log(proyects.treeSubControl)
+        //alert(proyects.Urn);
+        if (proyects.Urn===''){
+            if (viewer){
+                //viewer.uninitialize();
+                viewer.finish();
+                viewer=null;
+                return;
+            }
+
+            //return;
+        }
+
         if (proyects.Urn){
 
             setModelURL(proyects.Urn);
@@ -2602,7 +2614,16 @@ export const ViewerSc = (props) => {
     },[]);
 
 
+    useEffect(() => {
+        if (proyects.agregandoReg){
 
+            if (proyects.agregandoReg==='Asociado'){
+                alert('Agregando Registro de asociado');
+            }
+
+        }
+       
+    },[proyects.agregandoReg]);
     
 
 
@@ -2662,7 +2683,14 @@ export const ViewerSc = (props) => {
 
     return (
         <>
-            <div className="card" id="forgeViewer" style={{ height: "100%", width: '100%', background: 'rgba(107, 97, 103, 0.466)' }}></div>
+            <div className="card" id="forgeViewer" style={{ height: "100%", width: '100%',
+            /*background: 'rgb(242,246,248)', 
+            background: '-moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 55%, rgba(181,198,208,1) 82%, rgba(224,239,249,1) 100%)',
+            background: '-webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',*/
+            background: 'linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
+            filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f6f8", endColorstr="#e0eff9",GradientType=0 )',            
+            
+            }}></div>
             <div style={{ fontSize:'0.7rem', top:'10px', position:'absolute', zIndex:1 }}>Items seleccionados: <span id="MySelectionValue">0</span></div>
 
  

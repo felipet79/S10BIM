@@ -20,8 +20,8 @@ export default function SignIn() {
   // Formulario y validación con formik y Yup
   const formik = useFormik({
     initialValues: {
-      UserName: ''/*'ctorres@s10peru.com'*/,
-      Password: ''/*'uT9pLH4V'*/,
+      UserName: 'ctorres@s10peru.com',
+      Password: 'uT9pLH4V',
     },
     validationSchema: Yup.object({
       UserName: Yup.string()
@@ -80,7 +80,14 @@ export default function SignIn() {
             </div>
           </Card.Body>
             <Card.Footer className="p-0 mt-5">
-              <Button type="submit" variant="primary" block className="py-3 rounded-0">
+              <Button type="submit" variant="primary" block className="py-3 rounded-0" style={{
+background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
+background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
+background: 'linear-gradient(to bottom, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
+filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'
+
+
+              }}>
               	<i className="fas fa-sign-out-alt"></i> INICIAR SESIÓN
               </Button>
             </Card.Footer>

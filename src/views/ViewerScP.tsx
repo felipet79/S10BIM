@@ -824,7 +824,10 @@ export const ViewerScP = (props) => {
 
     return (
         <>
-            <div className="card" id="forgeViewer1" style={{ height: "100%", width: '100%', background: 'rgba(107, 97, 103, 0.466)' }}></div>
+            <div className="card" id="forgeViewer1" style={{ height: "100%", width: '100%', 
+            background: 'linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
+            filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f6f8", endColorstr="#e0eff9",GradientType=0 )',             
+         }}></div>
             
 
             {/* </div> */}

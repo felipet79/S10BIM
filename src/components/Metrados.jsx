@@ -280,12 +280,13 @@ const Metrados = ({levelStart=1, idProject}) => {
 
 		  //selectedEmployeeNames: this.getEmployeeNames(selectedData)
 		});*/
-	  }
+	}
+	
 
-
-	  useEffect(() => {
+	/*useEffect(() => {
 		dispatch(SelectUrn('dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmktWmdsQkg4UnRXRWI1Zi1CWnZnQ0E/dmVyc2lvbj0x'));
-	},[])	  
+	},[])*/
+
 	
 	return (
 		<>

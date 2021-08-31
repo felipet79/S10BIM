@@ -9,6 +9,7 @@ import { ViewerSc } from './ViewerSc';
 import Swal from 'sweetalert2'
 import BuscaModelo from '../components/BuscaModelo';
 import BuscaMoneda from '../components/BuscaMoneda';
+import { DateBox, SelectBox, TextBox } from 'devextreme-react';
 //import { ViewScreen1 } from './ViewScreen1'
 
 const DatosGenerales = () => {
@@ -23,6 +24,9 @@ const DatosGenerales = () => {
     const [showMdl, setShowMdl] = useState(false);
     const [showMnd, setShowMnd] = useState(false);
 
+    const [subseleccionado, setSubSeleccionado] = useState(null);
+
+
     const [historicoSel, setHistoricoSel] = useState("");
     const [historicos, setHistoricos] = useState([]);
 
@@ -32,7 +36,7 @@ const DatosGenerales = () => {
 
 
     //VARIABLES PARA TAMAÑO DE PANTALLA
-    const [titulos, setTitulos] = useState('85%');
+    const [titulos, setTitulos] = useState('100%');
 
 
 
@@ -71,16 +75,44 @@ const DatosGenerales = () => {
         //console.log(allLevels1[0])
 
 
-       return (
+        return (
             proyects.treeSubControl ?
                 proyects.treeSubControl.map(filter => {
                     return (<tr key={filter.CodSubpresupuesto}>
                         <td>{filter.CodSubpresupuesto}</td>
                         <td>{filter.CodAlterno}</td>
-                        <td>{filter.Descripcion}</td>
+                        <td>
+                            <Form.Group as={Row} className="mb-1" controlId="formDF">
+                                <Col sm={11}>
+                                    <TextBox
+                                        defaultValue={filter.Descripcion}
+                                        value={filter.Descripcion}
+                                        height={'25px'}
+                                        width={'90%'}
+                                    //rtlEnabled={true}
+                                    //readOnly={true}
+                                    />
+                                </Col>
+                                <Col sm={1}>
+                                    <Button variant="outline-info" style={{ height: '25px' }} onClick={() => {
+                                        if (true) {
+
+                                        } else {
+                                            Swal.fire({
+                                                title: 'Error!',
+                                                text: 'No tiene un Presupuesto seleccionado',
+                                                icon: 'error',
+                                                confirmButtonText: 'Ok'
+                                            })
+                                        }
+                                    }}><i class="far fa-save" style={{ position: 'relative', top: '-5px' }}></i></Button>
+                                </Col>
+
+                            </Form.Group>
+                        </td>
                         <td align="right">{formatNumber(filter.Cantidad)}</td>
                         <td align="right">{formatNumber(filter.CostoOferta1)}</td>
-                        <td align="left">{ filter.NombreModelo ? filter.NombreModelo : 'No asignado' } <div className="btn btn-outline-info" style={{ position:'absolute', right:'20px', color: '#3c8dbc', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></div></td>
+                        <td align="left">{filter.NombreModelo ? filter.NombreModelo : 'No asignado'} <div className="btn btn-outline-info" style={{ position: 'absolute', right: '20px', color: '#3c8dbc', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></div></td>
                     </tr>
                     )
                 }) : ''
@@ -101,8 +133,8 @@ const DatosGenerales = () => {
         if (cents < 10)
             cents = "0" + cents;
         for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
-            num = num.substring(0, num.length - (4 * i + 3)) + '.' + num.substring(num.length - (4 * i + 3));
-        return (((sign) ? '' : '-') + num + ',' + cents);
+            num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+        return (((sign) ? '' : '-') + num + '.' + cents);
     }
 
     function roundN(num, n) {
@@ -110,22 +142,26 @@ const DatosGenerales = () => {
     }
 
 
+
+
     const Selecciona = (dato) => {
         //alert(dato.CodSubpresupuesto);
-            if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
-                
-                setShowMdl(true);
-                dato.CodModelo=proyects.AuxModelo;
-                //alert(proyects.AuxModelo);
+        if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
 
-            } else {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'No tiene un Presupuesto seleccionado',
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                })
-            }
+
+            setShowMdl(true);
+            setSubSeleccionado(dato);
+            //dato.CodModelo=proyects.AuxModelo;
+            //alert(proyects.AuxModelo);
+
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: 'No tiene un Presupuesto seleccionado',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
 
     }
 
@@ -138,10 +174,36 @@ const DatosGenerales = () => {
                     return (<tr key={filter.CodSubpresupuesto}>
                         <td>{filter.CodSubpresupuesto}</td>
                         <td>{filter.CodAlterno}</td>
-                        <td>{filter.Descripcion}</td>
+                        <td><Form.Group as={Row} className="mb-1" controlId="formDF">
+                            <Col sm={11}>
+                                <TextBox
+                                    defaultValue={filter.Descripcion}
+                                    value={filter.Descripcion}
+                                    height={'25px'}
+                                    width={'90%'}
+                                //rtlEnabled={true}
+                                //readOnly={true}
+                                />
+                            </Col>
+                            <Col sm={1}>
+                                <Button variant="outline-info" style={{ height: '25px' }} onClick={() => {
+                                    if (true) {
+
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error!',
+                                            text: 'No tiene un Presupuesto seleccionado',
+                                            icon: 'error',
+                                            confirmButtonText: 'Ok'
+                                        })
+                                    }
+                                }}><i class="far fa-save" style={{ position: 'relative', top: '-5px' }}></i></Button>
+                            </Col>
+
+                        </Form.Group></td>
                         <td align="right">{formatNumber(filter.Cantidad)}</td>
                         <td align="right">{formatNumber(filter.CostoOferta1)}</td>
-                        <td align="left">{filter.NombreModelo ? filter.NombreModelo : 'No asignado'} <div className="btn btn-outline-info" style={{ position:'absolute', right:'20px', color: '#3c8dbc', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></div></td>
+                        <td align="left">{filter.NombreModelo ? filter.NombreModelo : 'No asignado'} <div className="btn btn-outline-info" style={{ position: 'absolute', right: '20px', color: '#3c8dbc', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></div></td>
                     </tr>
                     )
                 }) : ''
@@ -151,26 +213,23 @@ const DatosGenerales = () => {
 
 
     useEffect(() => {
-        
         if (!proyects.DataModelos) {
             dispatch(selectMODELOS(''));
-            
+            //alert('');
         }
-            
-        for (let i=0;i<proyects.treeSubControl.length;i++){
-
-            const reg = proyects.DataModelos.find((filtro1) => filtro1.CodPlano === proyects.treeSubControl[i].CodModelo);
-            if (reg){
-                proyects.treeSubControl[i].NombreModelo=reg.NombreArchivoRvt;
-            }else
-                proyects.treeSubControl[i].NombreModelo=null;
-        }
-        
-        
+        //alert(proyects.treeSubControl.length);
         /*console.log("LOS SUBPRESUPUESTOS AHORA SON");
         console.log(proyects.treeSubControl);
         console.log("ACTUALMENTE LOS MODELOS");
         console.log(proyects.DataModelos);*/
+        for (let i = 0; i < proyects.treeSubControl.length; i++) {
+            const reg = proyects.DataModelos.find((filtro1) => filtro1.CodPlano === proyects.treeSubControl[i].CodModelo);
+            if (reg) {
+                proyects.treeSubControl[i].NombreModelo = reg.NombreArchivoRvt;
+                //alert(proyects.treeSubControl[i].CodModelo);    
+            } else
+                proyects.treeSubControl[i].NombreModelo = null;
+        }
     }, [proyects.treeSubControl])
 
     useEffect(() => {
@@ -205,34 +264,34 @@ const DatosGenerales = () => {
 
 
 
-    useEffect(() => {  
+    useEffect(() => {
         //if (proyects.seleccionado === undefined) return;
-          //setselecOP(proyects.seleccionado)
-        
-        
+        //setselecOP(proyects.seleccionado)
+
+
         //alert(proyects.AuxModelo);
     }, [proyects.AuxModelo])
 
-    
+
     //establecer tamaños y posiciones
-    useEffect(() => {  
-        if (window.innerWidth >= 2000){
+    useEffect(() => {
+        if (window.innerWidth >= 2000) {
             //alert('es de' + window.innerWidth)
+            setTitulos('100%');
+        } else if (window.innerWidth >= 1640) {
+            //alert('2do caso es de' + window.innerWidth)
             setTitulos('90%');
-        }else if (window.innerWidth >= 1640){
+        } else if (window.innerWidth >= 1440) {
             //alert('2do caso es de' + window.innerWidth)
-            setTitulos('80%');
-        }else if (window.innerWidth >= 1440){
-            //alert('2do caso es de' + window.innerWidth)
-            setTitulos('75%');
-        }else if (window.innerWidth >= 1024){
+            setTitulos('85%');
+        } else if (window.innerWidth >= 1024) {
             //alert('3er caso es de' + window.innerWidth)
-            setTitulos('70%');
-        }else if (window.innerWidth >= 768){
+            setTitulos('80%');
+        } else if (window.innerWidth >= 768) {
             //alert('4to caso es de' + window.innerWidth)        
-            setTitulos('65%');
-        }else if (window.innerWidth >= 425){
-            setTitulos('50%');
+            setTitulos('75%');
+        } else if (window.innerWidth >= 425) {
+            setTitulos('70%');
             //alert('5to caso es de' + window.innerWidth)        
         }
 
@@ -271,69 +330,109 @@ const DatosGenerales = () => {
     }
 
     return (
-        <div className="animate__animated animate__fadeIn" style={{ marginLeft:'0px', marginTop: '10px', height: '96%', width: '100%' }}>
+        <div className="animate__animated animate__fadeIn" style={{ marginLeft: '0px', marginTop: '10px', height: '96%', width: '100%' }}>
             <BuscaCliente setShow={setShow} show={show} />
             <BuscaUbicacion setShow={setShowUb} show={showUb} />
-            <BuscaModelo setShow={setShowMdl} show={showMdl} />
+            <BuscaModelo
+                setShow={setShowMdl}
+                subseleccionado={subseleccionado}
+                setSubSeleccionado={setSubSeleccionado}
+                CodPresupuesto={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}
+                show={showMdl}
+            />
             <BuscaMoneda setShow={setShowMnd} show={showMnd} />
             {selecOP === 1 ?
-                (<Card className="animate__animated animate__fadeIn" style={{overflow:'scroll', marginLeft:'20px', height: '93vh', padding:'15px'}}>
+                (<Card className="animate__animated animate__fadeIn" style={{ overflow: 'scroll', marginLeft: '20px', height: '93vh', padding: '15px' }}>
                     <Card.Header>Datos Generales
-                                    <Button variant="outline-info" style={{position:'absolute', right:'80px', top:'3px'}} onClick={() => {
-                                        if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
-                                           
-                                        } else {
-                                            Swal.fire({
-                                                title: 'Error!',
-                                                text: 'No tiene un Presupuesto seleccionado',
-                                                icon: 'error',
-                                                confirmButtonText: 'Ok'
-                                            })
-                                        }
-                                    }}><i class="far fa-save"></i>   Actualizar</Button>
+                                    <Button variant="outline-info" style={{ position: 'absolute', left: '210px', top: '-3px' }} onClick={() => {
+                            if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
+
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'No tiene un Presupuesto seleccionado',
+                                    icon: 'error',
+                                    confirmButtonText: 'Ok'
+                                })
+                            }
+                        }}><i class="far fa-save"></i>   Actualizar</Button>
                     </Card.Header>
                     <Card.Body>
 
                         <Form>
                             <Form.Group as={Row} className="mb-1" controlId="formCodigo">
-                            <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Codigo
                             </Form.Label>
                                 <Col sm={2}>
-                                    <Form.Control type="Input" placeholder="Codigo" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Input" placeholder="Codigo" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''} onChange={handlerOnChange} /> */}
+
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}
+                                        readOnly={true}
+                                    />
+
                                 </Col>
 
                             </Form.Group>
 
                             <Form.Group as={Row} className="mb-1" controlId="formAlterno">
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Alterno
                             </Form.Label>
                                 <Col sm={2}>
-                                    <Form.Control type="Input" placeholder="Alterno" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodAlterno : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Input" placeholder="Alterno" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodAlterno : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodAlterno : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodAlterno : ''}
+                                    /*valueChangeEvent="keyup"
+                                    onValueChanged={(data)=>{
+                                        console.log(data.value);
+
+                                    }}*/
+                                    //value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}                                    
+                                    />
                                 </Col>
                             </Form.Group>
 
 
                             <Form.Group as={Row} className="mb-1" controlId="formDescripcion">
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Descripcion
                             </Form.Label>
                                 <Col sm={10}>
-                                    <Form.Control type="Input" placeholder="Descripcion" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Descripcion : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Input" placeholder="Descripcion" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Descripcion : ''} onChange={handlerOnChange} /> */}
+
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Descripcion : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Descripcion : ''}
+                                    //readOnly={true}
+                                    />
                                 </Col>
                             </Form.Group>
 
 
                             <Form.Group as={Row} className="mb-1" controlId="formCliente">
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Cliente
                             </Form.Label>
                                 <Col sm={2}>
-                                    <Form.Control type="Input" placeholder="ID Cliente" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodCliente : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Input" placeholder="ID Cliente" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodCliente : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodCliente : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodCliente : ''}
+                                    //readOnly={true}
+                                    />
                                 </Col>
                                 <Col sm={8}>
-                                    <Form.Control type="Input" placeholder="Cliente" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Cliente : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Input" placeholder="Cliente" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Cliente : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Cliente : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Cliente : ''}
+                                        readOnly={true}
+                                    />
+
                                 </Col>
 
                                 <Col sm={1}>
@@ -356,20 +455,31 @@ const DatosGenerales = () => {
                             </Form.Group>
 
                             <Form.Group as={Row} className="mb-1" controlId="formGeograqfica">
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Ubicación Geográfica
                             </Form.Label>
                                 <Col sm={2}>
-                                    <Form.Control type="Input" placeholder="ID Ubicación" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodLugar : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Input" placeholder="ID Ubicación" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodLugar : ''} onChange={handlerOnChange} /> */}
+
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodLugar : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodLugar : ''}
+                                    //readOnly={true}
+                                    />
                                 </Col>
                                 <Col sm={7}>
-                                    <Form.Control type="Input" placeholder="Ubicación" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].UbicacionGeografica : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Input" placeholder="Ubicación" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].UbicacionGeografica : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].UbicacionGeografica : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].UbicacionGeografica : ''}
+                                        readOnly={true}
+                                    />
                                 </Col>
 
                                 <Col sm={1}>
                                     <Button variant="outline-info" onClick={() => {
                                         if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
-                                            setShowUb(true); dispatch(limpiaUbicaciones()); dispatch(selectUBICACIONES('', ''));    
+                                            setShowUb(true); dispatch(limpiaUbicaciones()); dispatch(selectUBICACIONES('', ''));
                                         } else {
                                             Swal.fire({
                                                 title: 'Error!',
@@ -378,7 +488,7 @@ const DatosGenerales = () => {
                                                 confirmButtonText: 'Ok'
                                             })
                                         }
-                                        
+
                                     }}>...</Button>
                                     {/* <Button variant="outline-info"><i class="fas fa-binoculars"></i></Button> */}
                                 </Col>
@@ -395,21 +505,33 @@ const DatosGenerales = () => {
 
 
                             <Form.Group as={Row} className="mb-1" controlId="formFecha">
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Fecha
                             </Form.Label>
                                 <Col sm={2}>
-                                    <Form.Control type="Date" placeholder="Fecha" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? (proyects.DatosPresupuesto[0].Fecha).substring(0, 10) : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Date" placeholder="Fecha" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? (proyects.DatosPresupuesto[0].Fecha).substring(0, 10) : ''} onChange={handlerOnChange} /> */}
+
+                                    <DateBox
+                                        //defaultValue={this.now}
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? (proyects.DatosPresupuesto[0].Fecha).substring(0, 10) : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? (proyects.DatosPresupuesto[0].Fecha).substring(0, 10) : ''}
+                                        type="date" />
+
+
                                 </Col>
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Histórico
                             </Form.Label>
 
                                 <Col sm={3}>
 
+                                    <SelectBox items={historicos}
+                                        defaultValue={historicoSel}
+                                    //readOnly={true} 
+                                    />
 
-                                    <InputGroup className="mb-1">
-                                        <FormControl aria-label="Text input with dropdown button" value={historicoSel} />
+                                    {/* <InputGroup className="mb-1">
+                                        <FormControl aria-label="" value={historicoSel} />
                                         <DropdownButton
                                             variant="outline-secondary"
                                             title=""
@@ -420,24 +542,28 @@ const DatosGenerales = () => {
                                                 historicos.map((ff) => {
                                                     return (<Dropdown.Item >{ff}</Dropdown.Item>)
                                                 }
-
-
                                                 )
 
                                             }
                                         </DropdownButton>
-                                    </InputGroup>
+                                    </InputGroup> */}
                                 </Col>
 
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Plazo
                             </Form.Label>
 
-                                <Col sm={2} style={{fontSize:{titulos} }}>
-                                    <Form.Control type="Text" placeholder="Plazo" style={{ textAlign: 'right' }} value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Plazo) : ''} onChange={handlerOnChange} />
+                                <Col sm={2} style={{ fontSize: { titulos } }}>
+                                    {/* <Form.Control type="Text" placeholder="Plazo" style={{ textAlign: 'right' }} value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Plazo) : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Plazo) : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Plazo) : ''}
+                                        rtlEnabled={true}
+                                    //readOnly={true}
+                                    />
                                 </Col>
 
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     días
                             </Form.Label>
 
@@ -445,46 +571,73 @@ const DatosGenerales = () => {
 
 
                             <Form.Group as={Row} className="mb-1" controlId="formJornada">
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Jornada diaria
                             </Form.Label>
                                 <Col sm={1}>
-                                    <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Jornada) : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Jornada) : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Jornada) : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Jornada) : ''}
+                                        rtlEnabled={true}
+                                    //readOnly={true}
+                                    />
+
                                 </Col>
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     días
                             </Form.Label>
 
 
 
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Semanal
                             </Form.Label>
                                 <Col sm={1}>
-                                    <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaSemana) : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaSemana) : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaSemana) : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaSemana) : ''}
+                                        rtlEnabled={true}
+                                    //readOnly={true}
+                                    />
+
                                 </Col>
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     horas
                             </Form.Label>
 
 
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Mensual
                             </Form.Label>
                                 <Col sm={1}>
-                                    <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaMes) : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaMes) : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaMes) : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaMes) : ''}
+                                        rtlEnabled={true}
+                                    //readOnly={true}
+                                    />
                                 </Col>
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     horas
                             </Form.Label>
 
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Año
                             </Form.Label>
                                 <Col sm={1}>
-                                    <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaAno) : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaAno) : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaAno) : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].JornadaAno) : ''}
+                                        rtlEnabled={true}
+
+                                    //readOnly={true}
+                                    />
                                 </Col>
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     horas
                             </Form.Label>
 
@@ -493,14 +646,26 @@ const DatosGenerales = () => {
 
 
                             <Form.Group as={Row} className="mb-1" controlId="formMoneda">
-                                <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Moneda Principal
                             </Form.Label>
                                 <Col sm={1}>
-                                    <Form.Control type="Input" placeholder="ID Moneda" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodMoneda : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Input" placeholder="ID Moneda" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodMoneda : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodMoneda : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodMoneda : ''}
+
+                                    //readOnly={true}
+                                    />
                                 </Col>
                                 <Col sm={4}>
-                                    <Form.Control type="Input" placeholder="Modeda" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Moneda : ''} onChange={handlerOnChange} />
+                                    {/* <Form.Control type="Input" placeholder="Modeda" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Moneda : ''} onChange={handlerOnChange} /> */}
+                                    <TextBox
+                                        defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Moneda : ''}
+                                        value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Moneda : ''}
+                                        //stylingMode={'underlined'}                                    
+                                        readOnly={true}
+                                    />
                                 </Col>
 
                                 <Col sm={1}>
@@ -524,8 +689,8 @@ const DatosGenerales = () => {
 
 
 
-                            <Card style={{ height: '100%', width: '100%', marginTop:'25px' }}>
-                                <Card.Header style={{ height: '38px' }}> <div style={{marginTop:'-5px' }}>Moneda Principal ({proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].SimboloMoneda : ''}) </div> </Card.Header>
+                            <Card style={{ height: '100%', width: '100%', marginTop: '25px' }}>
+                                <Card.Header style={{ height: '38px' }}> <div style={{ marginTop: '-5px' }}>Moneda Principal ({proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].SimboloMoneda : ''}) </div> </Card.Header>
                                 <Card.Body>
 
                                     <Form.Group as={Row} className="mb-1" controlId="formPrt2">
@@ -539,18 +704,32 @@ const DatosGenerales = () => {
                                                         <Form.Label column sm={1}>
                                                         </Form.Label>
 
-                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
+                                                        <Form.Label column sm={2} style={{ fontSize: titulos }}>
                                                             C.D.
                                                 </Form.Label>
                                                         <Col sm={3}>
-                                                            <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoDirectoBase1) : ''} onChange={handlerOnChange} />
+                                                            {/* <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoDirectoBase1) : ''} onChange={handlerOnChange} /> */}
+                                                            <TextBox
+                                                                defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoDirectoBase1) : ''}
+                                                                value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoDirectoBase1) : ''}
+                                                                rtlEnabled={true}
+
+                                                                readOnly={true}
+                                                            />
                                                         </Col>
-                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
+                                                        <Form.Label column sm={2} style={{ fontSize: titulos }}>
                                                             C.I.
                                                 </Form.Label>
 
                                                         <Col sm={3}>
-                                                            <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoIndirectoBase1) : ''} onChange={handlerOnChange} />
+                                                            {/* <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoIndirectoBase1) : ''} onChange={handlerOnChange} /> */}
+                                                            <TextBox
+                                                                defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoIndirectoBase1) : ''}
+                                                                value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoIndirectoBase1) : ''}
+                                                                rtlEnabled={true}
+
+                                                                readOnly={true}
+                                                            />
                                                         </Col>
                                                     </Form.Group>
 
@@ -561,19 +740,25 @@ const DatosGenerales = () => {
                                                         <Col sm={3}>
 
                                                         </Col>
-                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
+                                                        <Form.Label column sm={2} style={{ fontSize: titulos }}>
                                                             Total
                                                 </Form.Label>
 
                                                         <Col sm={3}>
-                                                            <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoBase1) : ''} onChange={handlerOnChange} />
+                                                            {/* <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoBase1) : ''} onChange={handlerOnChange} /> */}
+                                                            <TextBox
+                                                                defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoBase1) : ''}
+                                                                value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoBase1) : ''}
+                                                                rtlEnabled={true}
+                                                                readOnly={true}
+                                                            />
                                                         </Col>
                                                     </Form.Group>
                                                 </Card.Body>
                                             </Card>
                                         </Col>
 
-                                        
+
                                         <Col sm={6}>
                                             <Card style={{ height: '100%' }}>
                                                 <Card.Header style={{ height: '30px' }}> <p style={{ marginTop: '-5px' }}>Presupuesto Oferta </p></Card.Header>
@@ -582,18 +767,32 @@ const DatosGenerales = () => {
                                                         <Form.Label column sm={1}>
                                                         </Form.Label>
 
-                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
+                                                        <Form.Label column sm={2} style={{ fontSize: titulos }}>
                                                             C.D.
                                                 </Form.Label>
                                                         <Col sm={3}>
-                                                            <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoDirectoOferta1) : ''} onChange={handlerOnChange} />
+                                                            {/* <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoDirectoOferta1) : ''} onChange={handlerOnChange} /> */}
+                                                            <TextBox
+                                                                defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoDirectoOferta1) : ''}
+                                                                value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoDirectoOferta1) : ''}
+                                                                rtlEnabled={true}
+                                                                readOnly={true}
+                                                            />
+
                                                         </Col>
-                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
+                                                        <Form.Label column sm={2} style={{ fontSize: titulos }}>
                                                             C.I.
                                                 </Form.Label>
 
                                                         <Col sm={3}>
-                                                            <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoIndirectoOferta1) : ''} onChange={handlerOnChange} />
+                                                            {/* <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoIndirectoOferta1) : ''} onChange={handlerOnChange} /> */}
+                                                            <TextBox
+                                                                defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoIndirectoOferta1) : ''}
+                                                                value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoIndirectoOferta1) : ''}
+                                                                rtlEnabled={true}
+                                                                readOnly={true}
+                                                            />
+
                                                         </Col>
                                                     </Form.Group>
 
@@ -604,12 +803,19 @@ const DatosGenerales = () => {
                                                         <Col sm={3}>
 
                                                         </Col>
-                                                        <Form.Label column sm={2} style={{fontSize:titulos }}>
+                                                        <Form.Label column sm={2} style={{ fontSize: titulos }}>
                                                             Total
                                                 </Form.Label>
 
                                                         <Col sm={3}>
-                                                            <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoOferta1) : ''} onChange={handlerOnChange} />
+                                                            {/* <Form.Control type="Input" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoOferta1) : ''} onChange={handlerOnChange} /> */}
+                                                            <TextBox
+                                                                defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoOferta1) : ''}
+                                                                value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].CostoOferta1) : ''}
+                                                                rtlEnabled={true}
+                                                                readOnly={true}
+                                                            />
+
                                                         </Col>
                                                     </Form.Group>
                                                 </Card.Body>
@@ -626,7 +832,7 @@ const DatosGenerales = () => {
                                 {/* <Card.Header style={{ height: '35px' }}>Sub Presupuestos</Card.Header> */}
                                 <Card.Body>
                                     <Form.Group as={Row} className="mb-1" controlId="formGridSub">
-                                        
+
                                         <Col sm={12}>
                                             <Table
                                                 striped
@@ -680,21 +886,27 @@ const DatosGenerales = () => {
                 </Card>)
                 :
                 (
-                    <Card className="animate__animated animate__fadeInUp" style={{overflow:'hidden', height: '100%', padding:'15px'}}>
+                    <Card className="animate__animated animate__fadeInUp" style={{ overflow: 'hidden', height: '100%', padding: '15px' }}>
                         <Card.Header className="">Datos de SubPresupuesto</Card.Header>
                         <Card.Body>
 
                             <Form>
                                 <Form.Group as={Row} className="mb-1" controlId="formPres">
                                     <Form.Label column sm={2}>
-                                        
+
                                     </Form.Label>
 
-                                    <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                    <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                         Presupuesto
                                     </Form.Label>
                                     <Col sm={2}>
-                                        <Form.Control type="Input" placeholder="Codigo" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''} onChange={handlerOnChange} />
+                                        {/* <Form.Control type="Input" placeholder="Codigo" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''} onChange={handlerOnChange} /> */}
+                                        <TextBox
+                                            defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}
+                                            value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}
+                                            rtlEnabled={true}
+                                            readOnly={true}
+                                        />
                                     </Col>
 
                                 </Form.Group>
@@ -705,11 +917,17 @@ const DatosGenerales = () => {
                                     <Form.Label column sm={2}>
                                     </Form.Label>
 
-                                    <Form.Label column sm={1} style={{fontSize:titulos }}>
+                                    <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                         Descripcion
                                     </Form.Label>
                                     <Col sm={7}>
-                                        <Form.Control type="Input" placeholder="Descripcion" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Descripcion : ''} onChange={handlerOnChange} />
+                                        {/* <Form.Control type="Input" placeholder="Descripcion" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Descripcion : ''} onChange={handlerOnChange} /> */}
+                                        <TextBox
+                                            defaultValue={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Descripcion : ''}
+                                            value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Descripcion : ''}
+                                            rtlEnabled={true}
+                                            readOnly={true}
+                                        />
                                     </Col>
                                 </Form.Group>
 
@@ -719,7 +937,7 @@ const DatosGenerales = () => {
                                     {/* <Card.Header style={{ height: '35px' }}>Sub Presupuestos</Card.Header> */}
                                     <Card.Body>
                                         <Form.Group as={Row} className="mb-1" controlId="formGrid2">
-                                            
+
                                             <Col sm={12} >
                                                 <Table
                                                     striped

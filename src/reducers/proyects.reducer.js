@@ -28,6 +28,7 @@ import {
 	LISTAR_UBICACIONES,
 	LIMPIAR_UBICACIONES,
 	LISTAR_MODELOS,
+	AGREGA_REGISTRO,	
 	LISTAR_MONEDAS,
 	URN_WEB1,
 	METRADO_LIMPIAR,
@@ -82,9 +83,9 @@ export default (state = initialState, { type, payload }) => {
 			};
 
 		case MENSUAL_DETALLE:
-			console.log('pasa a guardar datos de items');
-			console.log(state);
-			console.log(payload);
+			//console.log('pasa a guardar datos de items');
+			//console.log(state);
+			//console.log(payload);
 
 			return {
 				...state,
@@ -95,9 +96,9 @@ export default (state = initialState, { type, payload }) => {
 
 
 		case LISTAR_POR_PERIODO:
-			console.log('pasa a borrar');
-			console.log(state);
-			console.log(payload);
+			//console.log('pasa a borrar');
+			//console.log(state);
+			//console.log(payload);
 
 			return {
 				...state,
@@ -156,8 +157,8 @@ export default (state = initialState, { type, payload }) => {
 			};
 
 		case UNIQUE_DETALLE:
-			console.log('pasa al DataUnique');
-			console.log(payload);
+			//console.log('pasa al DataUnique');
+			//console.log(payload);
 
 			return {
 				...state,
@@ -167,9 +168,9 @@ export default (state = initialState, { type, payload }) => {
 
 
 		case METRADO_LIMPIAR:
-				console.log('pasa a borrar');
-				console.log(state);
-				console.log(payload);
+				//console.log('pasa a borrar');
+				//console.log(state);
+				//console.log(payload);
 			return { 
 					...state,
 					DataMetrado: []
@@ -293,6 +294,14 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				Sub_sel: payload,
 			};
+
+		case AGREGA_REGISTRO:
+				//alert('El payload ' + payload);
+			return {
+				...state,
+				agregandoReg: payload,
+			};
+	
 
 
 		default:
