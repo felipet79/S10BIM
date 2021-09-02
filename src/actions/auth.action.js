@@ -1,7 +1,7 @@
 import { SIGN_IN, SELECT_COMPANY, LOG_OUT } from "../constants";
 import {connectSignalr} from './signalr.action';
 import axios from "axios";
-
+import $ from 'jquery';
 
 export const signIn = (form, showFn) => {
   return async (dispatch) => { 
@@ -41,6 +41,8 @@ export const selectCompany = (company, history) => {
 	  });
     history.push("/presupuesto");
     window.location.reload(true);
+    //document.body.style.zoom = "80%";
+    
   };
 };
 

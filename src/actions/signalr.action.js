@@ -46,8 +46,9 @@ export const connectSignalr = (token) => {
 		hubProxy.on("receiveS10ERPDataResult", function (response) {
 			const data = JSON.parse(response);
 
-			//console.log(data);
-			//console.log(JSON.parse(data.Data));
+			console.log('data antes');
+			//console.log(JSON.parse(data.OutputValue));
+			console.log(JSON.parse(data.Data));
 
 			switch (data.Name) {
 				case ARBOL:
@@ -81,6 +82,9 @@ export const connectSignalr = (token) => {
 					break;
 
 				case PARTY_CONTROL:
+					console.log('datos llegados de PRESUPUESTO:');
+					console.log(JSON.parse(data.Data));
+
 					dispatch({
 						type: PARTY_CONTROL,
 						payload: JSON.parse(data.Data),
@@ -109,8 +113,8 @@ export const connectSignalr = (token) => {
 					break;
 
 				case LISTAR_MONEDAS:
-					//console.log('MoNEDAS llegadAs:');
-					//console.log(JSON.parse(data.Data));
+					console.log('MoNEDAS llegadAs:');
+					console.log(JSON.parse(data.Data));
 
 					dispatch({
 						type: LISTAR_MONEDAS,
@@ -120,9 +124,12 @@ export const connectSignalr = (token) => {
 
 
 				case LISTAR_UBICACIONES:
-					//console.log('ubicaciones llegadas:');
+					console.log('ubicaciones llegadas:');
+					//console.log(JSON.parse(data.OutputValue));
+					
+					//console.log(data.OutputValue);
 					//console.log(JSON.parse(data.Data));
-
+					localStorage.setItem("paginacion", data.OutputValue);
 					dispatch({
 						type: LISTAR_UBICACIONES,
 						payload: JSON.parse(data.Data),

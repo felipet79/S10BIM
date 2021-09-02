@@ -18,6 +18,7 @@ import notify from 'devextreme/ui/notify';
 import DatosGenerales from "../views/DatosGenerales";
 import { Button } from "react-bootstrap";
 import BuscaModelo from "./BuscaModelo";
+import DatosGeneralesAdd from "../views/DatosGeneralesAdd";
 
 
 const opcMenuInicio = [
@@ -118,6 +119,7 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 	const [datosgenerales, setDatosGenerales] = useState(false);
 	const [datosgeneralessub, setDatosGeneralesSub] = useState(false);
 
+	const [nuevoPres, setNuevoPres] = useState(false);
 
 	const auth = useSelector((state) => state.auth);
 	const proyects = useSelector((state) => state.proyects);
@@ -185,11 +187,6 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 		if (proyects.treeSubControl === undefined) return;
 		orderTree1(proyects.treeSubControl);
-
-
-
-
-
 
 
 		//setLoading(false);
@@ -341,7 +338,7 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 		//if (itemSelected!==idpadre) esperar=10000;
 		
 		
-		
+		setSubSeleccionado(pc);
 		
 		
 		if (itemSelected === idpadre) 
@@ -735,6 +732,11 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 				setShowMdl(true);
 			}
 
+			if (e.itemData.text === 'Presupuesto') {
+				setNuevoPres(true);
+				//alert('Agregar Presupuesto');
+			}			
+
 		}
 	}
 
@@ -784,22 +786,34 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 				onItemClick={itemClick}
 			/>
 
+			{nuevoPres &&
+				<>
+					<div className="" style={{ position: 'absolute', height: '92vh', width: ancho, marginTop: '-5px', top: '-5px', left: '-20px', zIndex: '9' }}>
+						<DatosGeneralesAdd 
+						itemSelected={itemSelected}
+						/>
+						<Button variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
+							setNuevoPres(false);
+						}
+						}><i class="fas fa-times"></i></Button>
+						{/* <div className="btn btn-outline-dark" style={{position: 'absolute', height:'35px', width:'35px', top:'10px', right:'10px', color:'#CDCDCD' }} onClick={ () => { setDatosGenerales(false) }}>
+					<i className="far fa-window-close fa-3x" style={{position:'absolute', top:'-2px', left:'-3px'}}></i>
+				</div> */}
+					</div>
+
+			</>}
+
 			{datosgenerales &&
 				<>
 					<div className="" style={{ position: 'absolute', height: '92vh', width: ancho, marginTop: '-5px', top: '-5px', left: '-20px', zIndex: '9' }}>
-
 						<DatosGenerales />
-
 						<Button variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
 							setDatosGenerales(false)
 						}
 						}><i class="fas fa-times"></i></Button>
-
 						{/* <div className="btn btn-outline-dark" style={{position: 'absolute', height:'35px', width:'35px', top:'10px', right:'10px', color:'#CDCDCD' }} onClick={ () => { setDatosGenerales(false) }}>
 					<i className="far fa-window-close fa-3x" style={{position:'absolute', top:'-2px', left:'-3px'}}></i>
 				</div> */}
-
-
 					</div>
 
 				</>}

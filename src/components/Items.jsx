@@ -69,6 +69,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 	const [minimop, setMinimoP] = useState(600);
 	const [width, setWidth] = useState(600);
 	const [width1, setWidth1] = useState(500);
+	
 	const [height, setHeight] = useState(window.innerHeight - 480 - 18);
 	
 	
@@ -255,7 +256,15 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 	useEffect(() => {
 		//alert('mODO=' + modo );
+		
+
 		if (!open2){
+
+			if (window.innerHeight<800)
+				setHeight(window.innerHeight - 250 - 18);
+			else
+				setHeight(window.innerHeight - 480 - 18);
+
 			if (modo==='Solo hoja' || modo==='Detalle')
 			{
 				setMinimoW(3000);
@@ -713,8 +722,17 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 										setWidth(window.innerWidth-$("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 45);
 										setOpen1(true);
 										setOpen2(false);
-										setHeight(window.innerHeight-500);
-										$("#barra1").animate({ height: window.innerHeight-500  }, 0);										
+										
+										if (window.innerHeight<800){
+											setHeight(window.innerHeight - 250 - 18);
+											$("#barra1").animate({ height: window.innerHeight - 250  }, 0);									
+										}else{
+											setHeight(window.innerHeight - 480 - 18);
+											$("#barra1").animate({ height: window.innerHeight - 500  }, 0);
+										}
+										
+										//setHeight(window.innerHeight-500);
+										//$("#barra1").animate({ height: window.innerHeight-500  }, 0);										
 									}
 
 									if (e.itemData.name==='Detalle y modelo')
@@ -722,9 +740,15 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 										setMinimoW(1200);
 										setOpen1(true);
 										setOpen2(true);
-										setHeight(window.innerHeight-500);
-										$("#barra1").animate({ height: window.innerHeight-500  }, 0);
-
+										//setHeight(window.innerHeight-500);
+										//$("#barra1").animate({ height: window.innerHeight-500  }, 0);
+										if (window.innerHeight<800){
+											setHeight(window.innerHeight - 250 - 18);
+											$("#barra1").animate({ height: window.innerHeight - 250  }, 0);									
+										}else{
+											setHeight(window.innerHeight - 480 - 18);
+											$("#barra1").animate({ height: window.innerHeight - 500  }, 0);
+										}
 										setWidth(600);
 										$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 35}, 0);
 										$("#ab").fadeOut(10);
@@ -1045,8 +1069,21 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 
 								}else{
-									setHeight(window.innerHeight - 500);
-									$("#barra1").animate({ height: window.innerHeight - 500  }, 0);									
+
+									if (window.innerHeight<800){
+										setHeight(window.innerHeight - 250 - 18);
+										$("#barra1").animate({ height: window.innerHeight - 250  }, 0);									
+									}else{
+										setHeight(window.innerHeight - 480 - 18);
+										$("#barra1").animate({ height: window.innerHeight - 500  }, 0);
+									}
+									
+									
+									
+						
+
+									//setHeight(window.innerHeight - 500);
+									
 
 									if (open2)
 									setModo('Detalle y modelo');
@@ -1323,8 +1360,22 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 							<Nav.Item
 								onClick={() => {
-									setLevel(3);
-									setLevelPC(3);
+
+									if (proyects.Urn===''){
+										setLevel(2);
+										setLevelPC(1);
+										Swal.fire({
+											title: 'Error!',
+											text: 'No tiene Modelo Asignado',
+											icon: 'error',
+											confirmButtonText: 'Ok'
+										})
+
+									}else{
+										setLevel(3);
+										setLevelPC(3);
+									}
+
 								}}
 							>
 								<Nav.Link
@@ -1345,8 +1396,20 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 							<Nav.Item
 								onClick={() => {
+									if (proyects.Urn===''){
+										setLevel(2);
+										setLevelPC(1);
+										Swal.fire({
+											title: 'Error!',
+											text: 'No tiene Modelo Asignado',
+											icon: 'error',
+											confirmButtonText: 'Ok'
+										})
+
+									}else{
 									setLevel(4);
 									setLevelPC(4);
+									}
 								}}
 							>
 								<Nav.Link
@@ -1369,8 +1432,20 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 							<Nav.Item
 								onClick={() => {
+									if (proyects.Urn===''){
+										setLevel(2);
+										setLevelPC(1);
+										Swal.fire({
+											title: 'Error!',
+											text: 'No tiene Modelo Asignado',
+											icon: 'error',
+											confirmButtonText: 'Ok'
+										})
+
+									}else{
 									setLevel(5);
 									setLevelPC(5);
+									}
 								}}
 							>
 								<Nav.Link

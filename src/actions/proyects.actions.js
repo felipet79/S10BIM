@@ -1,5 +1,5 @@
 import axios from '../config/axios';
-import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB,URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES, PARTY_CONTROL1, AGREGA_REGISTRO} from '../constants';
+import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB,URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES, PARTY_CONTROL1, AGREGA_REGISTRO, AGREGA_CATEGORIA, AGREGA_TIPO, AGREGA_FAMILIA} from '../constants';
 
 export const selectProyect = (idCod, userName, userId) =>{
 	return async (dispatch) =>{
@@ -399,7 +399,7 @@ export const selectMONEDAS = (userId) =>{
 }
 
 
-export const selectUBICACIONES = (Descripcion, userId) =>{
+export const selectUBICACIONES = (Descripcion,Cantidad,Pagina, userId) =>{
 	return async (dispatch) =>{
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
@@ -408,7 +408,7 @@ export const selectUBICACIONES = (Descripcion, userId) =>{
 			{
 				HasOutputParam: true,
 				// dbo.s10_06_Proyecto_General
-				ObjectName: `dbo.S10_00_UbicacionGeografica_ListarPorDescripcion '${Descripcion}','2700','1'`,
+				ObjectName: `dbo.S10_00_UbicacionGeografica_ListarPorDescripcion '${Descripcion}','${Cantidad}','${Pagina}'`,
 				RequestId: "LISTAR_UBICACIONES",
 				SignalRConnectionID: localStorage.getItem("connectionId"),
 				SecurityUserId: userId, // SecurityUserId obtenido al logear
@@ -764,6 +764,21 @@ export const cambiaSeleccion = (sel) => ({
 
  export const agregaRegistro = (sel) => ({
 	type: AGREGA_REGISTRO,
+	payload: sel
+  })
+
+  export const agregaCategoria = (sel) => ({
+	type: AGREGA_CATEGORIA,
+	payload: sel
+  })
+
+  export const agregaTipo = (sel) => ({
+	type: AGREGA_TIPO,
+	payload: sel
+  })
+
+  export const agregaFamilia = (sel) => ({
+	type: AGREGA_FAMILIA,
 	payload: sel
   })
 

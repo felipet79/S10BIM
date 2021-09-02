@@ -1,8 +1,8 @@
 //import React from 'react'
-import {Table} from "react-bootstrap";
+import { Table } from "react-bootstrap";
 //import Bar from "./Charts/Bar";
-import {useEffect, useState} from "react";
-import {useSelector, useDispatch} from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { agregaRegistro, cleanDataChartAPU, selectAPUS } from "../actions/proyects.actions";
 import TreeList, {
 	Pager,
@@ -12,9 +12,13 @@ import TreeList, {
 	FilterPanel,
 	FilterRow,
 	Scrolling,
-	Column } from 'devextreme-react/tree-list';
+	Column,
+	Lookup,
+	RequiredRule,
+	Button
+} from 'devextreme-react/tree-list';
 
-import { ContextMenu } from "devextreme-react";	
+import { ContextMenu } from "devextreme-react";
 import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2'
 
@@ -27,17 +31,17 @@ const opcMenuInicio = [
 
 const allowedPageSizes = [5, 10, 15, 20, 50, 100, 500];
 
-const Asociados = ({levelStart=1, idProject}) => {
-	
-	
+const Asociados = ({ levelStart = 1, idProject }) => {
+
+
 	const [opcMenu, setOpcMenu] = useState(opcMenuInicio)
-	
-	
+
+
 	const dispatch = useDispatch();
 	// const [loading, setLoading] = useState(true);
-	const [ allLevels, setAllLevels ] = useState(null)
-	const [ itemSelected, setItemSelected ] = useState('')
-	const [ lastLevel, setLastLevel ] = useState(0);
+	const [allLevels, setAllLevels] = useState(null)
+	const [itemSelected, setItemSelected] = useState('')
+	const [lastLevel, setLastLevel] = useState(0);
 
 
 	/*const [ allLevels1, setAllLevels1 ] = useState(null)
@@ -46,7 +50,7 @@ const Asociados = ({levelStart=1, idProject}) => {
 
 
 	const [loading, setLoading] = useState(true);
-	
+
 	const auth = useSelector((state) => state.auth);
 	const proyects = useSelector((state) => state.proyects);
 
@@ -55,7 +59,7 @@ const Asociados = ({levelStart=1, idProject}) => {
 
 	const orderTree = (tree) => {
 		//let orderedLevels = {};
-		
+
 		/*for (let i = 0; i < tree.length; i++) {
 			const item = tree[i];
 			if (item.Nivel >= levelStart) {
@@ -71,12 +75,12 @@ const Asociados = ({levelStart=1, idProject}) => {
 		orderedLevels[0] = [];
 		for (let i = 0; i < tree.length; i++) {
 			const item = tree[i];
-			orderedLevels[0].push({...item, open: false})
+			orderedLevels[0].push({ ...item, open: false })
 		}
 		setAllLevels(orderedLevels);
 
 
-		
+
 		//setAllLevels(orderedLevels);
 		//console.log('datos de apus')
 		//console.log(orderedLevels)
@@ -86,14 +90,14 @@ const Asociados = ({levelStart=1, idProject}) => {
 	useEffect(() => {
 		//console.log('datos de apus 1')
 		//console.log(proyects.DataAsociado)
-		if (proyects.DataAsociado==undefined) return;
+		if (proyects.DataAsociado == undefined) return;
 		orderTree(proyects.DataAsociado);
 		//alert('ejecutó la primera carga');
-			// console.log(result);
+		// console.log(result);
 		// }
-		 // eslint-disable-next-line
+		// eslint-disable-next-line
 	}, [levelStart, proyects.DataAsociado])
-	
+
 
 
 	const Seleccion_Item = (Item) => {
@@ -113,13 +117,13 @@ const Asociados = ({levelStart=1, idProject}) => {
 	}
 
 
-	
+
 	const drawerItems1 = (nivelact) => {
-		
+
 		if (allLevels == null || allLevels == undefined) return;
 		if (allLevels[nivelact] == null || allLevels[nivelact] == undefined) return;
 		//alert('ejecutó la carga');
-		
+
 		/*console.log('datos de subProyectos actualizados')
 		console.log(allLevels1[0])
 		
@@ -134,21 +138,22 @@ const Asociados = ({levelStart=1, idProject}) => {
 				>
 				</StyledTreeItem>
 			)})*/
-			return (
-				allLevels && allLevels[nivelact] ?
+		return (
+			allLevels && allLevels[nivelact] ?
 				allLevels[nivelact].map(filter => {
-					 return (<tr onClick={() => Seleccion_Item(filter)}>
-					<td>{filter.Categoria}</td>
-					<td>{filter.Familia}</td>
-					<td>{filter.Tipo}</td>
-					<td>{filter.CampoFiltro}</td>
-					<td>{filter.Valor}</td>								
-					<td>{filter.Valor}</td>					
+					return (<tr onClick={() => Seleccion_Item(filter)}>
+						<td>{filter.Categoria}</td>
+						<td>{filter.Familia}</td>
+						<td>{filter.Tipo}</td>
+						<td>{filter.CampoFiltro}</td>
+						<td>{filter.Valor}</td>
+						<td>{filter.Valor}</td>
 					</tr>
-				)}):''			
-			)
+					)
+				}) : ''
+		)
 
-			
+
 	}
 
 
@@ -159,12 +164,12 @@ const Asociados = ({levelStart=1, idProject}) => {
 
 
 			if (e.itemData.text === 'Agregar') {
-				if (proyects.Urn ==='' || proyects.Urn===undefined || proyects.Urn===null){
+				if (proyects.Urn === '' || proyects.Urn === undefined || proyects.Urn === null) {
 					Swal.fire({
 						title: 'Error!',
 						text: 'Este Presupuesto no tiene modelo asociado',
 						icon: 'error',
-						confirmButtonText: 'Ok'						
+						confirmButtonText: 'Ok'
 					})
 					dispatch(agregaRegistro(''));
 					return;
@@ -181,24 +186,66 @@ const Asociados = ({levelStart=1, idProject}) => {
 	}
 
 
+	 
 	
+	const employees = [{
+		'ID': 1,
+		'Name': 'Armazón estructural'
+	  }, {
+		'ID': 2,
+		'Name': 'Armadura Estructural'
+	  }, {
+		'ID': 3,
+		'Name': 'Arthur Miller'
+	  }, {
+		'ID': 4,
+		'Name': 'Robert Reagan'
+	  }, {
+		'ID': 5,
+		'Name': 'Greta Sims'
+	  }, {
+		'ID': 6,
+		'Name': 'Brett Wade'
+	  }, {
+		'ID': 7,
+		'Name': 'Sandra Johnson'
+	  }, {
+		'ID': 8,
+		'Name': 'Ed Holmes'
+	  }, {
+		'ID': 9,
+		'Name': 'Barb Banks'
+	  }];
+	  
+	  const operaciones = [{
+		'ID': 1,
+		'Name': 'Igual'
+	  }, {
+		'ID': 2,
+		'Name': 'Diferente'
+	  }];
+
+
+
+
 	return (
 		<>
 
 			<TreeList
 				id='TreeAsociado'
-				dataSource={ proyects.DataAsociado}
+				dataSource={proyects.DataAsociado}
 				keyExpr="CodAsociado"
 				//parentIdExpr="PhantomParentId"
 				showBorders={true}
-				focusedRowEnabled={true}
-				defaultExpandedRowKeys={[1, 2, 3, 5]}
+				//focusedRowEnabled={true}
+				//defaultExpandedRowKeys={[1, 2, 3, 5]}
 				columnAutoWidth={false}
-				rootValue={-1}
+				//rootValue={-1}
 				//selectedRowKeys={selectedRowKeys}
 
 				//onSelectionChanged={() => {alert('hola')}}
 				//onRowClick={() => {alert(this)}}
+				onCellClick={(e) => {console.log(e)}}
 
 
 				//onFocusedRowChanged={onSelectionChanged}
@@ -206,10 +253,12 @@ const Asociados = ({levelStart=1, idProject}) => {
 				wordWrapEnabled={true}
 			>
 				<Editing
-					allowUpdating={false}
-					allowDeleting={false}
+					allowAdding={true}
+					allowUpdating={true}
+					allowDeleting={true}
 					selectTextOnEditStart={true}
 					useIcons={true}
+					mode="cell"
 				/>
 				<HeaderFilter
 					visible={false}
@@ -226,36 +275,70 @@ const Asociados = ({levelStart=1, idProject}) => {
 
 				<Column
 					width={'25%'}
-					dataField="Categoria" />
-
+					dataField="Categoria" 
+					
+				>
+				<Lookup
+					//dataSource={employees}
+					dataSource={proyects.DataCategorias}
+					valueExpr="Name"
+					displayExpr="Name" />
+				{/* <RequiredRule/> */}
+				</Column>
+				
 				<Column
 					width={'25%'}
-					dataField="Familia" />
+					dataField="Familia">
+				<Lookup
+					//dataSource={employees}
+					dataSource={proyects.DataFamilia}
+					valueExpr="Name"
+					displayExpr="Name"/>
+								
+				</Column>
 				<Column
 					width={'25%'}
 					dataField="Tipo"
 					alignment={'center'}
-				/>
+				>
+				<Lookup
+					//dataSource={employees}
+					dataSource={proyects.DataTipo}
+					valueExpr="Name"
+					displayExpr="Name"/>
+				{/* <RequiredRule/>	 */}
+				</Column>
 				<Column
 					width={'20%'}
 					dataField="CampoFiltro"
-					caption="Cuadrilla"
+					caption="Campo"
 					alignment={'right'}
 				/>
 
 				<Column
 					width={'10%'}
-					dataField="Valor"
+					dataField="Comp"
+					caption="Comparación"
 					alignment={'right'}
-				/>
-
+				>
+				<Lookup
+					//dataSource={employees}
+					dataSource={operaciones}
+					valueExpr="Name"
+					displayExpr="Name" />
+				{/* <RequiredRule/> */}
+				</Column>
+				
 				<Column
 					width={'20%'}
 					dataField="Valor"
 					alignment={'right'}
 				/>
+				<Column type="buttons">
+            		<Button name="delete" />
+          		</Column>				
 
-				
+
 				<Pager
 					allowedPageSizes={allowedPageSizes}
 					showPageSizeSelector={true}

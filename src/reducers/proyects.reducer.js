@@ -28,10 +28,13 @@ import {
 	LISTAR_UBICACIONES,
 	LIMPIAR_UBICACIONES,
 	LISTAR_MODELOS,
-	AGREGA_REGISTRO,	
+	AGREGA_REGISTRO,
 	LISTAR_MONEDAS,
 	URN_WEB1,
 	METRADO_LIMPIAR,
+	AGREGA_CATEGORIA,
+	AGREGA_TIPO,
+	AGREGA_FAMILIA,
 } from '../constants';
 
 const initialState = {
@@ -123,8 +126,8 @@ export default (state = initialState, { type, payload }) => {
 		case LISTAR_UBICACIONES:
 			return {
 				...state,
-				DataUbicaciones: [...state.DataUbicaciones, ...payload]
-				//DataUbicaciones: payload
+				//DataUbicaciones: [...state.DataUbicaciones, ...payload]
+				DataUbicaciones: [...payload]
 			};
 
 		case LIMPIAR_UBICACIONES:
@@ -168,15 +171,15 @@ export default (state = initialState, { type, payload }) => {
 
 
 		case METRADO_LIMPIAR:
-				//console.log('pasa a borrar');
-				//console.log(state);
-				//console.log(payload);
-			return { 
-					...state,
-					DataMetrado: []
-		
-					//DataPc: payload
-			};		
+			//console.log('pasa a borrar');
+			//console.log(state);
+			//console.log(payload);
+			return {
+				...state,
+				DataMetrado: []
+
+				//DataPc: payload
+			};
 
 		case LEER_PRESUPUESTO:
 			return {
@@ -230,7 +233,7 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				UrnS1: payload
 			};
-	
+
 		/*	case LISTAR_POR_PERIODO:
 				return { 
 					...state,
@@ -296,13 +299,32 @@ export default (state = initialState, { type, payload }) => {
 			};
 
 		case AGREGA_REGISTRO:
-				//alert('El payload ' + payload);
+			//alert('El payload ' + payload);
 			return {
 				...state,
 				agregandoReg: payload,
 			};
-	
 
+		case AGREGA_CATEGORIA:
+			return {
+				...state,
+				//DataCategorias: [...state.DataCategorias, ...payload]
+				DataCategorias: payload,
+			};
+
+		case AGREGA_TIPO:
+			return {
+				...state,
+				//DataCategorias: [...state.DataCategorias, ...payload]
+				DataTipo: payload,
+			};
+
+		case AGREGA_FAMILIA:
+			return {
+				...state,
+				//DataCategorias: [...state.DataCategorias, ...payload]
+				DataFamilia: payload,
+			};
 
 		default:
 			return state

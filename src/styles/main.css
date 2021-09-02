@@ -364,3 +364,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', end
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 );
     color: #fff;
 }
+
+.swal2-container.swal2-center>.swal2-popup {
+    background-color: #fff;
+    background: rgb(242,246,248); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 18%, rgba(216,225,231,1) 18%, rgba(181,198,208,1) 54%, rgba(224,239,249,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 18%,rgba(216,225,231,1) 18%,rgba(181,198,208,1) 54%,rgba(224,239,249,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 18%,rgba(216,225,231,1) 18%,rgba(181,198,208,1) 54%,rgba(224,239,249,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#e0eff9',GradientType=0 );
+}
+
+.swal2-styled.swal2-confirm {
+    color: #fff;
+    background-color: #7367f0;
+    background: rgb(216,224,222); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(216,224,222,1) 0%, rgba(174,191,188,1) 22%, rgba(153,175,171,1) 33%, rgba(142,166,162,1) 50%, rgba(130,157,152,1) 71%, rgba(78,92,90,1) 99%, rgba(14,14,14,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(216,224,222,1) 0%,rgba(174,191,188,1) 22%,rgba(153,175,171,1) 33%,rgba(142,166,162,1) 50%,rgba(130,157,152,1) 71%,rgba(78,92,90,1) 99%,rgba(14,14,14,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(216,224,222,1) 0%,rgba(174,191,188,1) 22%,rgba(153,175,171,1) 33%,rgba(142,166,162,1) 50%,rgba(130,157,152,1) 71%,rgba(78,92,90,1) 99%,rgba(14,14,14,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d8e0de', endColorstr='#0e0e0e',GradientType=0 );     
+}

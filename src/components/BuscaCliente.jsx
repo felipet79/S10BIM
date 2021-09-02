@@ -15,14 +15,50 @@ import TreeList, {
 	Column,
 	SearchPanel
 } from 'devextreme-react/tree-list';
+import { useState } from 'react';
 
-const BuscaCliente = ({ show, setShow }) => {
+const BuscaCliente = ({ tipo='',presupuestoN, show, setShow }) => {
 	const dispatch = useDispatch();
 	const handleClose = () => setShow(false);
 	const auth = useSelector(state => state.auth);
 	const history = useHistory()
 	const proyects = useSelector((state) => state.proyects);
 	//dispatch(selectAPUS(codP, codSub, codItem, ''));
+	const [clienteSel, setClienteSel] = useState({
+		Codigo: '',
+		Descripcion: '',
+	});
+
+
+	const seleccionar = () => {
+
+		if (clienteSel.Descripcion===''){
+
+			//mensaje de error 
+			return;
+		}
+		if (tipo===''){
+			proyects.DatosPresupuesto[0].CodCliente=clienteSel.Codigo;
+			proyects.DatosPresupuesto[0].Cliente=clienteSel.Descripcion;
+		}else
+		{
+			presupuestoN.CodCliente=clienteSel.Codigo;
+			presupuestoN.Cliente=clienteSel.Descripcion;
+		}
+		//proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodCliente
+		//proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Cliente
+			//console.log('Este va a guardar');
+			//console.log(modeloSel);
+	
+			//console.log("LOS SUBPRESUPUESTOS AHORA SON");
+			//console.log(proyects.treeSubControl);
+			//console.log("ACTUALMENTE LOS MODELOS");
+			//console.log(proyects.DataModelos);
+	
+			setShow(false);
+	}
+
+
 
 	
 
@@ -109,7 +145,13 @@ const BuscaCliente = ({ show, setShow }) => {
 
 						//onSelectionChanged={() => {alert('hola')}}
 						//onRowClick={() => {alert(this)}}
-						onFocusedRowChanged={() => { }/*onSelectionChanged*/}
+						onFocusedRowChanged={(e) => { console.log(e) 
+							setClienteSel({
+								Codigo: e.row.data.CodIdentificador,
+								Descripcion: e.row.data.Descripcion,
+							});
+						
+						}/*onSelectionChanged*/}
 						wordWrapEnabled={true}
 						
 					>
@@ -208,9 +250,11 @@ const BuscaCliente = ({ show, setShow }) => {
 				</Modal.Body>
 
 				<Modal.Footer>
+				<strong style={{ fontSize: '0.6rem', position: 'absolute', left: '5px', marginLeft: '20px', }}> {clienteSel.Descripcion}</strong>
+					
 					<Button
 						variant="primary"
-						onClick={handleClose}
+						onClick={seleccionar}
 						style={{
 							background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
 							background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',

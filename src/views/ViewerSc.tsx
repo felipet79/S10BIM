@@ -11,7 +11,7 @@ import queryString from 'query-string';
 import * as THREE from 'three';
 import { useDispatch, useSelector } from 'react-redux';
 import { relativeTimeRounding } from 'moment';
-import { selectParidas } from '../actions/proyects.actions';
+import { agregaCategoria, agregaFamilia, agregaTipo, selectParidas } from '../actions/proyects.actions';
 /*import { Timeline } from 'react-svg-timeline'
 import { now } from 'moment';
 import Tooltip from "@material-ui/core/Tooltip";*/
@@ -815,39 +815,224 @@ export const ViewerSc = (props) => {
 
 
             var viewables = (viewableId ? doc.getRoot().findByGuid(viewableId) : doc.getRoot().getDefaultGeometry());
-            /*var items = doc.getRoot().find({ role: '3d', type: 'geometry' });
-            console.log('estas son las vistas',items);*/
-
+            //var items = doc.getRoot().find({ role: '3d', type: 'geometry' });
+            
+            var arrg=[];
+            var selectedItems=[];
+            const employees = [];
+            const employees1 = [];
+            const employees2 = [];
 
             if (!viewer) return;
 
             viewer.loadDocumentNode(doc, viewables).then(i => {
+                console.log('estas son las vistas',i);
+
+                viewer.getObjectTree(function (objTree) {
+                    objTree.enumNodeChildren(
+                        objTree.getRootId(),
+                        function (dbId) {
+                            // Work with dbId
+                            arrg.push(dbId);
+
+
+
+
+                            var uniqueIds = [];
+                            var categorias = [];
+                            var NombreT = [];
+                            var TipoT = [];
+                            T_cantidad_elementos=0;
+
+                            T_uniqueIds = [];
+                            T_NombreT = [];
+                            T_categorias = [];
+                            T_TipoT = [];
+
+                            var DBids = viewer.getSelection();
+                            var n = 0;
+                           
+                                //var objSelected = viewer.getSelection()[n];
+                                var objSelected = dbId;
+                                n = n + 1;
+                                viewer.getProperties(objSelected, (props) => {
+                                    uniqueIds.push(props.externalId);
+                                    T_uniqueIds.push(props.externalId);
+                                    
+
+                                    if (props.name.substring(props.name.length-1,props.name.length)===']'){
+
+                                        let reg2=null;
+                                        if (employees2){
+                                           reg2 = employees2.find((filtro1) => filtro1.Name === props.name.substring(0,props.name.length-9));
+                                        }
+                                        
+                                        if (!reg2){
+                                           employees2.push({
+                                               'ID': props.name.substring(0,props.name.length-9),
+                                               'Name': props.name.substring(0,props.name.length-9)
+                                             })
+                                           //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
+                                        }
+    
+
+                                    }else{
+
+
+                                        /*let reg2=null;
+                                        if (employees2){
+                                           reg2 = employees2.find((filtro1) => filtro1.Name === props.name);
+                                        }
+                                        
+                                        if (!reg2){
+                                           employees2.push({
+                                               'ID': props.name,
+                                               'Name': props.name
+                                             })
+                                           //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
+                                        }*/
+
+
+
+
+                                    }
+
+
+
+                                     //alert(props.name+" "+props.properties[0].displayValue+" "+props.properties[45].displayValue);   
+                                     let indice=0;
+                                     if (props.properties[0].displayName==="Category") indice=0;
+                                     if (props.properties[1].displayName==="Category") indice=1;
+                                     T_NombreT.push(props.name);
+                                     T_categorias.push(props.properties[indice].displayValue);
+                                     let reg=null;
+                                     if (employees){
+                                        reg = employees.find((filtro1) => filtro1.Name === props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length));
+                                     }
+                                     
+                                     if (!reg){
+                                        employees.push({
+                                            'ID': props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length),
+                                            'Name': props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length)
+                                          })
+                                        //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
+                                     }
+
+                                     //proyects.DataCategorias.find()
+
+                                     selectedItems.push(props.properties[indice].displayValue);
+
+                                    // Buscar en el arreglo la proiedad "Nombre de tipo"
+                                     //var T_TipoT = [];
+                                     T_cantidad_elementos++;
+                                     var enc=0;
+                                     for (var Propiedad of props.properties) {
+                                        if (Propiedad.displayName === 'Nombre de tipo'){
+                                            T_TipoT.push(Propiedad.displayValue);
+
+                                            let reg1=null;
+                                            if (employees1){
+                                               reg1= employees1.find((filtro1) => filtro1.Name === Propiedad.displayValue);
+                                            }
+                                            
+                                            if (!reg1){
+                                               employees1.push({
+                                                   'ID': Propiedad.displayValue,
+                                                   'Name': Propiedad.displayValue
+                                                 })
+                                               //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
+                                            }
+                                                   
+
+                                            enc=1;
+                                        }
+                                     }
+                                     if (!enc){
+
+                                        T_TipoT.push('sin tipo');
+                                     }
+                                     //console.log('Estas son las props', props);
+                                    if (n == DBids.length) {
+                                        //callbackObj.showMessage(uniqueIds);
+                                        //callbackObj.returnex(uniqueIds);
+                                        //alert(uniqueIds);
+                                        seleccionados=uniqueIds.toString();
+                                        //seleccionadosCat="", seleccionadosFamilia="", seleccionadosTipo=""; 
+
+                                       // console.log('Estas son las props', props);
+                                        //9c9538fd-af40-4b3d-bd89-f8e4acac1fd8-000525ae
+                                    }
+                                })
+                            
+
+                                
+
+
+
+
+
+
+                            //console.log('datos cargados de GetROOOOOT');
+                            //console.log(dbId);
+                            /*viewer.getProperties(dbId,
+                                function(item) {
+                                  item.properties = item.chain(item.properties)
+                                    .groupBy('displayCategory')
+                                    .toPairs()
+                                    .map(function(property) {
+                                      return item.zipObject(['displayCategory', 'properties'], property);
+                                    })
+                                    .value();
+                        
+                                selectedItems.push(item);
+                            },
+                            function(error) {
+                              console.log(error);
+                            });*/
+
+
+
+
+                        },true);
+                });
+                //alert('');
+                dispatch(agregaCategoria(employees));
+                
+                dispatch(agregaTipo(employees1));
+
+                dispatch(agregaFamilia(employees2));
+
+                console.log('datos cargados de GetROOOOOT');
+                console.log(arrg);
+
+                console.log('datos cargados de CATEGORIES');
+                console.log(employees);
+
                 // any additional action here?
                 //viewer.loadExtension("NestedViewerExtension", { filter: ["2d", "3d"], crossSelection: true });
-                viewer.loadExtension("Autodesk.BIM360.Minimap");
-                viewer.loadExtension("Autodesk.AEC.Minimap3DExtension");
-                viewer.loadExtension("Autodesk.AEC.LevelsExtension");
+                //viewer.loadExtension("Autodesk.BIM360.Minimap");
+                //viewer.loadExtension("Autodesk.AEC.Minimap3DExtension");
+                //viewer.loadExtension("Autodesk.AEC.LevelsExtension");
                 //alert("cargando extension "+viewer.isExtensionLoaded("NestedViewerExtension"));
             });
 
-            viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, onSelectionBinded);
-            viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, PonerProps);
-
-
+            //viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, onSelectionBinded);
+            //viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, PonerProps);
+            
             //viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, PonerProps);
 
 
 
-            onModelLoaded1(viewer);
+           // onModelLoaded1(viewer);
 
-            init22();
+            //init22();
 
-            viewer.hideModel(doc);
+            /*viewer.hideModel(doc);
             viewer.showModel(doc);
             if (viewer.areAllVisible())
             alert('se cargo bien')
             else
-            alert('no se cargo')
+            alert('no se cargo')*/
         }
 
 
@@ -1292,7 +1477,10 @@ export const ViewerSc = (props) => {
             }
 
             const DataVizCore = Autodesk.DataVisualization.Core;
-            viewer.addEventListener(DataVizCore.MOUSE_CLICK, onItemClick);
+           // viewer.addEventListener(DataVizCore.MOUSE_CLICK, onItemClick);
+           
+           
+           
             //viewer.addEventListener(DataVizCore.MOUSE_HOVERING, onItemHovering);
 
 
