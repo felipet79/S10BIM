@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
-import { cleanDataChart, cleanDataChart1, selectPc, navigationTree, navigationTreePC, selectItems, cambiaSeleccion, SeleccionaSub, selectMODELOS, LimpiarSubPres, SelectUrn } from '../actions/proyects.actions';
+import { cleanDataChart, cleanDataChart1, selectPc, navigationTree, navigationTreePC, selectItems, cambiaSeleccion, SeleccionaSub, selectMODELOS, LimpiarSubPres, SelectUrn, cleanDataChart22, cleanDataChartAPU, eliminaGrupo1 } from '../actions/proyects.actions';
 import { alpha, makeStyles, withStyles } from "@material-ui/core/styles";
 import TreeView from "@material-ui/lab/TreeView";
 import TreeItem from "@material-ui/lab/TreeItem";
 import { useHistory } from "react-router-dom";
 import axios from "../config/axios";
-
+import Button1 from 'devextreme-react/button';
 
 import subprojectIcon from '../assets/img/icons/subproject.png';
 import projectIcon from '../assets/img/icons/project.png';
 
-
+import Swal from 'sweetalert2'
 import { useSelector, useDispatch } from "react-redux";
 import { red } from "@material-ui/core/colors";
 import { ContextMenu } from "devextreme-react";
 import notify from 'devextreme/ui/notify';
 import DatosGenerales from "../views/DatosGenerales";
+import DatosGrupoAdd from "../views/DatosGrupoAdd";
 import { Button } from "react-bootstrap";
 import BuscaModelo from "./BuscaModelo";
 import DatosGeneralesAdd from "../views/DatosGeneralesAdd";
@@ -37,7 +38,7 @@ function MinusSquare(props) {
 	return (
 		<div className="d-flex">
 			{/* <ion-icon name="chevron-down-outline"></ion-icon> */}
-			<ion-icon name="caret-down-outline" style={{width:'12px', color: '#8A8D8F'}}></ion-icon>
+			<ion-icon name="caret-down-outline" style={{width:'12px', color: '#333337'}}></ion-icon>
 			<img src={projectIcon} alt="icons" width="18" style={{ marginRight: 20 }} {...props} />
 		</div>
 	);
@@ -47,7 +48,7 @@ function PlusSquare(props) {
 	return (
 		<div className="d-flex">
 			{/* <ion-icon name="chevron-forward-outline"></ion-icon> */}
-			<ion-icon name="caret-forward-outline" style={{width:'12px', color: '#8A8D8F'}}></ion-icon>
+			<ion-icon name="caret-forward-outline" style={{width:'12px', color: '#333337'}}></ion-icon>
 			<img src={projectIcon} alt="icons" width="18" style={{ marginRight: 20 }} {...props} />
 
 		</div>
@@ -67,7 +68,9 @@ const StyledTreeItem = withStyles((theme) => ({
 		},
 	},
 	group: {
-		font: "20px Arial, sans-serif",
+		//font: "16px roboto, sans-serif",
+		font: "12px Roboto, sans-serif !important",
+		color:'#333337',
 		marginLeft: 15,
 		paddingLeft: 0,
 		// borderLeft: `0.02px dashed ${alpha(theme.palette.text.primary, 0.1)}`,
@@ -76,7 +79,9 @@ const StyledTreeItem = withStyles((theme) => ({
 
 const useStyles = makeStyles({
 	root: {
-		font: "20px Arial, sans-serif",
+		//font: "16px roboto, sans-serif",
+		font: "10px Roboto, sans-serif !important",
+		color:'#333337',
 		marginTop: 10,
 		marginLeft: 15,
 		height: 264,
@@ -102,11 +107,13 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 	const [itemSelected, setItemSelected] = useState('')
 	const [itemSelected1, setItemSelected1] = useState('')
 
+	const [cambioSub, setCambioSub] = useState(false)
 
 	const [tipoSeleccion, setTipoSeleccion] = useState('')
 
 	const [lastLevel, setLastLevel] = useState(0);
-
+	
+	const [nivel, setNivel] = useState(1);
 
 	const [allLevels1, setAllLevels1] = useState(null)
 
@@ -114,12 +121,13 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 
 	const [loading, setLoading] = useState(true);
-
+	const [accion, setAccion] = useState(1);
 
 	const [datosgenerales, setDatosGenerales] = useState(false);
 	const [datosgeneralessub, setDatosGeneralesSub] = useState(false);
 
 	const [nuevoPres, setNuevoPres] = useState(false);
+	const [nuevoGrupo, setNuevoGrupo] = useState(false);
 
 	const auth = useSelector((state) => state.auth);
 	const proyects = useSelector((state) => state.proyects);
@@ -173,6 +181,10 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 		orderTree(proyects.treePartyControl);
 		//alert('se ejcuta carga1');
 		dispatch(selectMODELOS(''));
+
+
+		console.log('MIS NUEVOS DATOS DE ARBOLLLLLL');
+		console.log(proyects.treePartyControl);		
 		// console.log(result);
 		// }
 		// eslint-disable-next-line
@@ -206,8 +218,14 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 	const changeItem = (pc, newTitle) => {
 
 
-		dispatch(SelectUrn(''));
+		
 
+		if (pc.Nivel === 1 || pc.Nivel === 2) {
+		dispatch(cleanDataChart());
+		dispatch(cleanDataChart22());
+		dispatch(cleanDataChartAPU());
+		dispatch(SelectUrn(''));
+		}
 		//alert(pc.CodPresupuesto + " " + newTitle + ' ' + pc.Nivel);
 
 		if (pc.Nivel === 1) {
@@ -215,12 +233,12 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 				{
 					text: 'Nuevo',
 					items: [
-						{ text: 'Item de Presupuesto' },
-						{ text: 'Item de ' + pc.Descripcion },
+						{ text: 'Item de Nivel1' },
+						{ text: 'Item de Nivel2' },
 					]
-				},
-				/*{ text: 'Datos Generales' },
-				{ text: 'Asinar Modelo' }*/
+				},				
+				{ text: 'Cambiar Nombre' },
+				{ text: 'Eliminar' },				
 			])
 
 		}
@@ -233,8 +251,8 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 						{ text: 'Presupuesto' },
 					]
 				},
-				/*{ text: 'Datos Generales' },
-				{ text: 'Asinar Modelo' }*/
+				{ text: 'Cambiar Nombre' },
+				{ text: 'Eliminar' },
 			])
 
 		}
@@ -256,8 +274,11 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 		}
 
-
 		if (tipoSeleccion === 'Presupuesto' && itemSelected === pc.CodPresupuesto) return;
+		
+		//dispatch(cleanDataChart22());
+		dispatch(cleanDataChartAPU());
+		
 		setTipoSeleccion('Presupuesto');
 		setItemSelected(pc.CodPresupuesto);
 		//DatosPresupuesto('');
@@ -268,11 +289,8 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 			dispatch(SeleccionaSub(''))
 			
-
-
 			dispatch(cambiaSeleccion(1));
 			dispatch(navigationTreePC(newTitle))
-
 
 			//alert(pc.CodPresupuesto);
 
@@ -281,9 +299,37 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 			dispatch(LimpiarSubPres());
 
-
+			setCambioSub(false);
 
 		}, 200);
+
+
+		if (pc.Nivel === 3) {
+		let timerInterval
+		Swal.fire({
+		title: 'Cargando...!',
+		html: 'Cargando datos de Presupuestos <b></b> .',
+		timer: 700,
+		timerProgressBar: true,
+		didOpen: () => {
+			Swal.showLoading()
+			const b = Swal.getHtmlContainer().querySelector('b')
+			timerInterval = setInterval(() => {
+			b.textContent = Swal.getTimerLeft()
+			}, 400)
+		},
+		willClose: () => {
+			clearInterval(timerInterval)
+		}
+		}).then((result) => {
+		/* Read more about handling dismissals below */
+		if (result.dismiss === Swal.DismissReason.timer) {
+			//console.log('I was closed by the timer')
+		}
+		})
+
+		}
+		
 
 
 
@@ -407,7 +453,31 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 
 
-
+		
+			let timerInterval
+			Swal.fire({
+			title: 'Cargando...!',
+			html: 'Cargando datos de SubPresupuesto <b></b> .',
+			timer: 200,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+				b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+			}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				//console.log('I was closed by the timer')
+			}
+			})
+	
+			
 
 
 
@@ -644,11 +714,11 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 									<StyledTreeItem
 										nodeId={grupo3.CodPresupuesto}
 										label={grupo3.Descripcion}
-										onLabelClick={() => changeItem(grupo3, `${newTitle} / ${grupo3.Descripcion}`)}
+										onLabelClick={() => changeItem(grupo3, `${newTitle} ≫ ${grupo3.Descripcion}`)}
 									/>
 									// </Link>
 								))
-								: drawerItems(nextLevel, filtro, filter.CodPresupuesto, (level === 1 ? '' : `${newTitle} / `))
+								: drawerItems(nextLevel, filtro, filter.CodPresupuesto, (level === 1 ? '' : `${newTitle} ≫ `))
 
 							)}
 
@@ -728,14 +798,81 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 			}
 
 			if (e.itemData.text === 'Asignar Modelo') {
-
 				setShowMdl(true);
 			}
 
 			if (e.itemData.text === 'Presupuesto') {
+				setAccion(1);
 				setNuevoPres(true);
 				//alert('Agregar Presupuesto');
 			}			
+
+			if (e.itemData.text === 'Item de Nivel1' || e.itemData.text === 'Item de Nivel2') {
+				setAccion(1);
+				if (e.itemData.text === 'Item de Nivel1')
+				setNivel(1);
+				else
+				setNivel(2);
+				setNuevoGrupo(true);
+				//alert('Agregar Presupuesto');
+			}			
+
+			if (e.itemData.text === 'Cambiar Nombre' ) {				
+				setAccion(2);
+				setNuevoGrupo(true);
+				
+				//alert('Agregar Presupuesto');
+			}
+
+			if (e.itemData.text === 'Eliminar' ) {
+				/*setAccion(2);
+				setNuevoGrupo(true);*/
+				
+				//alert('Agregar Presupuesto');
+
+				const swalWithBootstrapButtons = Swal.mixin({
+					customClass: {
+					  confirmButton: 'btn btn-dark',
+					  cancelButton: 'btn btn-light'
+					},
+					buttonsStyling: false
+				  })
+				  
+				  swalWithBootstrapButtons.fire({
+					title: 'Estas Seguro?',
+					text: "Esta acción no podrá ser revertida!",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonText: 'Si, eliminarlo!',
+					cancelButtonText: 'No, salir!',
+					reverseButtons: true
+				  }).then((result) => {
+					if (result.isConfirmed) {
+
+						//dispatch(eliminaGrupo1())
+
+
+					  swalWithBootstrapButtons.fire(
+						'Borrado!',
+						'Su registro ha sido eliminado.',
+						'success'
+					  )
+					} else if (
+					  /* Read more about handling dismissals below */
+					  result.dismiss === Swal.DismissReason.cancel
+					) {
+					  swalWithBootstrapButtons.fire(
+						'Accion cancelada',
+						'No se hanb realizado Cambios :)',
+						'error'
+					  )
+					}
+				  })
+
+
+			}
+
+
 
 		}
 	}
@@ -781,7 +918,7 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 			<ContextMenu
 				dataSource={opcMenu}
-				width={160}
+				width={130}
 				target="#Tree"
 				onItemClick={itemClick}
 			/>
@@ -791,11 +928,12 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 					<div className="" style={{ position: 'absolute', height: '92vh', width: ancho, marginTop: '-5px', top: '-5px', left: '-20px', zIndex: '9' }}>
 						<DatosGeneralesAdd 
 						itemSelected={itemSelected}
+						setNuevoPres={setNuevoPres}
 						/>
-						<Button variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
 							setNuevoPres(false);
 						}
-						}><i class="fas fa-times"></i></Button>
+						}><i class="fas fa-times"></i></Button1>
 						{/* <div className="btn btn-outline-dark" style={{position: 'absolute', height:'35px', width:'35px', top:'10px', right:'10px', color:'#CDCDCD' }} onClick={ () => { setDatosGenerales(false) }}>
 					<i className="far fa-window-close fa-3x" style={{position:'absolute', top:'-2px', left:'-3px'}}></i>
 				</div> */}
@@ -803,14 +941,85 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 			</>}
 
+
+			{nuevoGrupo &&
+				<>
+					<div className="" style={{ position: 'absolute', height: '20vh', width: ancho, marginTop: '25%', top: '25%', left: '-20px', zIndex: '9' }}>
+						<DatosGrupoAdd
+						nivel={nivel}
+						itemSelected={itemSelected}
+						setNuevoGrupo={setNuevoGrupo}
+						accion={accion}
+						/>
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
+							setNuevoGrupo(false);
+						}
+						}><i class="fas fa-times"></i></Button1>
+						{/* <div className="btn btn-outline-dark" style={{position: 'absolute', height:'35px', width:'35px', top:'10px', right:'10px', color:'#CDCDCD' }} onClick={ () => { setDatosGenerales(false) }}>
+					<i className="far fa-window-close fa-3x" style={{position:'absolute', top:'-2px', left:'-3px'}}></i>
+				</div> */}
+					</div>
+
+			</>}
+
+
+
 			{datosgenerales &&
 				<>
 					<div className="" style={{ position: 'absolute', height: '92vh', width: ancho, marginTop: '-5px', top: '-5px', left: '-20px', zIndex: '9' }}>
-						<DatosGenerales />
-						<Button variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
+						<DatosGenerales 
+							setCambioSub={setCambioSub}
+						/>
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
 							setDatosGenerales(false)
+							
+							//dispatch(cleanDataChart22());
+							if (cambioSub){
+								dispatch(cleanDataChartAPU());							
+								//setTipoSeleccion('Presupuesto');
+								//setItemSelected(pc.CodPresupuesto);
+								//DatosPresupuesto('');
+								//SubPresupuestos('');					
+								DatosPresupuesto(itemSelected);
+								setTimeout(() => {
+									dispatch(SeleccionaSub(''))							
+									//dispatch(cambiaSeleccion(1));
+									//dispatch(navigationTreePC(newTitle))
+									//alert(pc.CodPresupuesto);
+									SubPresupuestos(itemSelected);
+									dispatch(LimpiarSubPres());
+								}, 200);
+
+
+								let timerInterval
+								Swal.fire({
+								title: 'Cargando...!',
+								html: 'Cargando datos de Presupuestos <b></b> .',
+								timer: 1300,
+								timerProgressBar: true,
+								didOpen: () => {
+									Swal.showLoading()
+									const b = Swal.getHtmlContainer().querySelector('b')
+									timerInterval = setInterval(() => {
+									b.textContent = Swal.getTimerLeft()
+									}, 400)
+								},
+								willClose: () => {
+									clearInterval(timerInterval)
+								}
+								}).then((result) => {
+								/* Read more about handling dismissals below */
+								if (result.dismiss === Swal.DismissReason.timer) {
+									//console.log('I was closed by the timer')
+								}
+								})
+
+	
+								setCambioSub(false);
+							}
+
 						}
-						}><i class="fas fa-times"></i></Button>
+						}><i class="fas fa-times"></i></Button1>
 						{/* <div className="btn btn-outline-dark" style={{position: 'absolute', height:'35px', width:'35px', top:'10px', right:'10px', color:'#CDCDCD' }} onClick={ () => { setDatosGenerales(false) }}>
 					<i className="far fa-window-close fa-3x" style={{position:'absolute', top:'-2px', left:'-3px'}}></i>
 				</div> */}
@@ -823,12 +1032,15 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 				<>
 					<div className="" style={{ position: 'absolute', height: '25vh', width: ancho, marginTop: '30wh', top: '30vh', left: '6px', zIndex: '9' }}>
 
-						<DatosGenerales />
+						<DatosGenerales 
+						setCambioSub={setCambioSub}
+						setDatosGeneralesSub={setDatosGeneralesSub}
+						/>
 
-						<Button variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
 							setDatosGeneralesSub(false)
 						}
-						}><i class="fas fa-times"></i></Button>
+						}><i class="fas fa-times"></i></Button1>
 
 						{/* <div className="btn btn-outline-dark" style={{position: 'absolute', height:'35px', width:'35px', top:'10px', right:'10px', color:'#CDCDCD' }} onClick={ () => { setDatosGenerales(false) }}>
 					<i className="far fa-window-close fa-3x" style={{position:'absolute', top:'-2px', left:'-3px'}}></i>

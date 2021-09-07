@@ -1,3 +1,4 @@
+
 import {
 	ARBOL,
 	DATA_GENERAL,
@@ -35,6 +36,14 @@ import {
 	AGREGA_CATEGORIA,
 	AGREGA_TIPO,
 	AGREGA_FAMILIA,
+	AGREGA_GRUPO,
+	MODIFICA_GRUPO,
+	ELIMINA_GRUPO,
+	AGREGA_ELEMENTOS,
+	MODIFICA_SUB,
+	MODIFICA_SUB1,
+	AGREGA_SUB1,
+	ACT_PRESUPUESTO,
 } from '../constants';
 
 const initialState = {
@@ -50,8 +59,25 @@ const initialState = {
 	treePartyControl: [],
 	treeSelecteds: [],
 	titleProject: null,
-	titlePC: null
+	titlePC: null,
+	DataApu: [],
+	DataClientes: [],
+	DataUbicaciones: [],
+	DataModelos: [],
+	DataMonedas: [],
+	DataMetrado: [],
+	Urn: null,
+	DatosPresupuesto: [],
+	DataAsociado: [],
+	Dataestructura: [],
+	Datacalculo: [],
+	DataCategorias: null,
+	DataTipo: null,
+	DataFamilia: null,
+	DataElementos: null,
 };
+
+
 
 
 
@@ -187,6 +213,19 @@ export default (state = initialState, { type, payload }) => {
 				DatosPresupuesto: payload
 			};
 
+		case ACT_PRESUPUESTO:
+			/*console.log('este es mi dato');
+			console.log(...state.DatosPresupuesto);
+
+		    console.log('este es mi nuevo dato');
+			console.log(payload);*/
+			return {
+				...state,
+				DatosPresupuesto: [payload]
+			};
+
+
+
 		case ASOCIADO_DETALLE:
 			return {
 				...state,
@@ -258,6 +297,69 @@ export default (state = initialState, { type, payload }) => {
 				treePartyControl: payload
 			};
 
+		case AGREGA_GRUPO:
+			return {
+				...state,
+				treePartyControl: [...state.treePartyControl, ...payload]
+			};
+
+		case MODIFICA_GRUPO:
+			//console.log('este es el codPresupuesto');
+			//console.log(payload);
+			return {
+				...state,
+				treePartyControl: [...state.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto), ...payload].sort((a, b) => a.Fila - b.Fila)
+				//treePartyControl: [...state.treePartyControl.filter( (filtro1) => filtro1.CodPresupuesto !== '1504' ), ...payload]
+			};
+		case ELIMINA_GRUPO:
+			return {
+				...state,
+				treePartyControl: [...state.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto)]
+			};
+
+
+		case MODIFICA_SUB:
+			/*console.log('este es el codSUBPresupuesto');
+			console.log(payload);			*/
+			return {
+				...state,
+				treeSubControl: [...state.treeSubControl.filter((filtro1) => filtro1.CodSubpresupuesto !== payload[0].CodSubpresupuesto), ...payload].sort((a, b) => a.CodSubpresupuesto - b.CodSubpresupuesto)
+			};
+
+		case MODIFICA_SUB1:
+			//console.log('este es el ELEMENTO QUE VOY A CAMBIAR');
+			//console.log(payload);			
+			return {
+				...state,
+				//subPres: [...state.subPres.filter( (filtro1) => (((filtro1.CodPresupuesto !== payload[0].CodPresupuesto) && (filtro1.CodSubpresupuesto !== payload[0].CodSubpresupuesto))) ), ...payload]/*.sort((a, b) => a.CodSubpresupuesto - b.CodSubpresupuesto)*/
+
+				subPres: [...state.subPres.filter((filtro1) => {
+					//if(filtro1.CodPresupuesto !== payload[0].CodPresupuesto && filtro1.CodSubpresupuesto!==payload[0].CodSubpresupuesto){
+					if (filtro1.CodPresupuesto + filtro1.CodSubpresupuesto !== payload[0].CodPresupuesto + payload[0].CodSubpresupuesto) {
+						return filtro1;
+					}
+				}), ...payload].sort((a, b) => a.CodPresupuesto - b.CodPresupuesto).sort((a, b) => a.CodSubpresupuesto - b.CodSubpresupuesto)
+
+
+			};
+
+
+		case AGREGA_SUB1:
+			//console.log('este es el ELEMENTO QUE VOY A CAMBIAR');
+			//console.log(payload);			
+			return {
+				...state,
+				subPres: [...state.subPres, ...payload].sort((a, b) => a.CodPresupuesto - b.CodPresupuesto).sort((a, b) => a.CodSubpresupuesto - b.CodSubpresupuesto)
+
+				/*subPres: [...state.subPres.filter((filtro1) => {
+					//if(filtro1.CodPresupuesto !== payload[0].CodPresupuesto && filtro1.CodSubpresupuesto!==payload[0].CodSubpresupuesto){
+					if (filtro1.CodPresupuesto + filtro1.CodSubpresupuesto !== payload[0].CodPresupuesto + payload[0].CodSubpresupuesto) {
+						return filtro1;
+					}
+				}), ...payload].sort((a, b) => a.CodPresupuesto - b.CodPresupuesto).sort((a, b) => a.CodSubpresupuesto - b.CodSubpresupuesto)*/
+
+
+			};
 		case LISTAR_SUBS:
 			return {
 				...state,
@@ -325,6 +427,14 @@ export default (state = initialState, { type, payload }) => {
 				//DataCategorias: [...state.DataCategorias, ...payload]
 				DataFamilia: payload,
 			};
+
+		case AGREGA_ELEMENTOS:
+			return {
+				...state,
+				//DataCategorias: [...state.DataCategorias, ...payload]
+				DataElementos: payload,
+			};
+
 
 		default:
 			return state

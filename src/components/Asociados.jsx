@@ -245,10 +245,21 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 
 				//onSelectionChanged={() => {alert('hola')}}
 				//onRowClick={() => {alert(this)}}
-				onCellClick={(e) => {console.log(e)}}
+				onCellClick={(e) => {console.log('OncellClick');console.log(e)}}
+				
+				//onFocusedRowChanged={(e)=>{ console.log('Cambiando de fila');console.log(e) } }
+				
+				onEditCanceling={(e)=>{ console.log('Editando celda y cancelando');console.log(e) } }
+				
+				onInitNewRow={(e)=>{ console.log('InitNewRow');console.log(e) } }
 
+				//onEditingChange={(e)=>{ console.log('EditChange');console.log(e) } }
+				//onEditingStart={(e)=>{ console.log('EditChange');console.log(e) } }
+				onRowUpdated={(e)=>{ console.log('Actualizando row');console.log(e) } } ///aqui actualizo
 
-				//onFocusedRowChanged={onSelectionChanged}
+				//onEditingChange={(e)=>{ console.log('cambiando valor de celda');console.log(e) } }
+				//onOptionChanged={(e)=>{ console.log('Option chaged');console.log(e) } }
+				//onRowInserted={(e)=>{ console.log('Celda insertada');console.log(e) } }
 
 				wordWrapEnabled={true}
 			>

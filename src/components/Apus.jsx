@@ -159,6 +159,9 @@ const Apus = ({ levelStart = 1, idProject }) => {
 				defaultExpandedRowKeys={[1, 2, 3, 5]}
 				columnAutoWidth={false}
 				rootValue={-1}
+				showRowLines={true}
+				showColumnLines={true}
+
 				//selectedRowKeys={selectedRowKeys}
 
 				//onSelectionChanged={() => {alert('hola')}}
@@ -210,18 +213,21 @@ const Apus = ({ levelStart = 1, idProject }) => {
 				<Column
 					width={'10%'}
 					dataField="CantidadInsumo"
+					caption="Cantidad"
 					alignment={'right'}
 				/>
 
 				<Column
 					width={'10%'}
 					dataField="PrecioInsumo1"
+					caption="Precio"
 					alignment={'right'}
 				/>
 
 				<Column
 					width={'10%'}
 					dataField="Parcial1"
+					caption="Parcial"
 					alignment={'right'}
 				/>
 

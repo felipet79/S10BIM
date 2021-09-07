@@ -3,6 +3,7 @@ import { Modal, Card, Form, Row, Button, Col, InputGroup, FormControl, Dropdown,
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCompany } from '../actions/auth.action';
 import { useHistory } from 'react-router-dom';
+import Button1 from 'devextreme-react/button';
 import $ from 'jquery';
 import TreeList, {
 	Pager,
@@ -50,14 +51,14 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 			//mensaje de error 
 			return;
 		}
-		if (tipo===''){
+		/*if (tipo===''){
 			proyects.DatosPresupuesto[0].CodLugar = ubicacionSel.Codigo;
 			proyects.DatosPresupuesto[0].UbicacionGeografica = ubicacionSel.Descripcion;
 		}else
-		{
+		{*/
 			presupuestoN.CodLugar = ubicacionSel.Codigo;
 			presupuestoN.UbicacionGeografica = ubicacionSel.Descripcion;
-		}
+		//}
 		
 		//proyects.DatosPresupuesto[0].CodCliente=clienteSel.Codigo;
 		//proyects.DatosPresupuesto[0].Cliente=clienteSel.Descripcion;
@@ -67,7 +68,9 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 
 	useEffect(() => {
 		var paginas = localStorage.getItem("paginacion");
-		var arrayDeCadenas = paginas.split('/');
+		var arrayDeCadenas = [];
+		if (paginas)
+		arrayDeCadenas = paginas.split('/');
 
 		var totalesp = Math.trunc((arrayDeCadenas[1] / 20));
 		if (arrayDeCadenas[1] % 20 !== 0) {
@@ -99,12 +102,13 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 		<>
 
 			<Modal size="lg" centered show={show} onHide={handleClose} >
-				<Modal.Header closeButton style={{
-					background: '#3c8dbc', color: 'white', height: '50px',
+				<Modal.Header closeButton style={{ background: '#3c8dbc', color: 'white', height: '42px',
+					/*background: '#3c8dbc', color: 'white', height: '50px',
 					background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
 					background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
 					background: 'linear-gradient(to bottom, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
-					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'
+					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'*/
+					background:'#398bf7'
 				}}>
 					<Modal.Title style={{ fontSize: '0.95rem' }}>Selecciona una Ubicación</Modal.Title>
 				</Modal.Header>
@@ -325,26 +329,28 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 
 				<Modal.Footer>
 					<strong style={{ fontSize: '0.6rem', position: 'absolute', left: '5px', marginLeft: '20px', }}> {ubicacionSel.Descripcion}</strong>
-					<Button
+					<Button1
 						variant="primary"
 						onClick={seleccionar}
 						style={{
-							background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
+							/*background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
 							background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
 							background: 'linear-gradient(to bottom, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'*/
 
 						}}
 					>
+						<ion-icon name="checkmark-done-outline"></ion-icon>
 						Seleccionar
-					</Button>
+					</Button1>
 
-					<Button
+					<Button1
 						variant="secondary"
 						onClick={handleClose}
 					>
+						<ion-icon name="close-outline"></ion-icon>
 						Cancelar
-			</Button>
+			</Button1>
 				</Modal.Footer>
 			</Modal>
 		</>

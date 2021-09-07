@@ -11,7 +11,7 @@ import queryString from 'query-string';
 import * as THREE from 'three';
 import { useDispatch, useSelector } from 'react-redux';
 import { relativeTimeRounding } from 'moment';
-import { agregaCategoria, agregaFamilia, agregaTipo, selectParidas } from '../actions/proyects.actions';
+import { agregaCategoria, agregaElementos, agregaFamilia, agregaTipo, selectParidas } from '../actions/proyects.actions';
 /*import { Timeline } from 'react-svg-timeline'
 import { now } from 'moment';
 import Tooltip from "@material-ui/core/Tooltip";*/
@@ -761,7 +761,7 @@ export const ViewerSc = (props) => {
     // @viewablesId which viewables to show, applies to BIM 360 Plans folder
     function launchViewer(urn, viewableId = '') {
         //alert(viewerLibraryLoaded1);
-
+        
         console.log('RENDERIZANDO EL VIEWER  ***********************');
         var options = {
             env: 'AutodeskProduction',
@@ -772,7 +772,7 @@ export const ViewerSc = (props) => {
         //if (!Autodesk) return;
             Autodesk.Viewing.Initializer(options, () => {
             const config = {
-                extensions: ['Autodesk.VisualClusters', 'Autodesk.DocumentBrowser', 'Autodesk.BIM360.Minimap', 'Autodesk.ViewCubeUi', 'Autodesk.AEC.Minimap3DExtension', 'Autodesk.AEC.Minimap3DExtension', 'MenuContextual', 'Botones', 'Autodesk.DataVisualization']
+                extensions: ['Autodesk.VisualClusters', 'Autodesk.DocumentBrowser', 'Autodesk.BIM360.Minimap', 'Autodesk.ViewCubeUi', 'Autodesk.AEC.Minimap3DExtension', 'Autodesk.AEC.Minimap3DExtension', 'MenuContextual', /*'Botones', */'Autodesk.DataVisualization']
             };
 
             viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), config);
@@ -789,8 +789,8 @@ export const ViewerSc = (props) => {
             viewer.autocam.shotParams.destinationPercent = 3;
             viewer.autocam.shotParams.duration = 3;
 
-
-
+            //viewer.setTheme('light -theme');
+            viewer.setTheme('light-theme');
 
         });
 
@@ -822,6 +822,9 @@ export const ViewerSc = (props) => {
             const employees = [];
             const employees1 = [];
             const employees2 = [];
+            var elementos = [];
+
+            var E_Id='',E_cat='',E_fam='',E_tip='',E_ext='';
 
             if (!viewer) return;
 
@@ -840,6 +843,7 @@ export const ViewerSc = (props) => {
 
                             var uniqueIds = [];
                             var categorias = [];
+                            
                             var NombreT = [];
                             var TipoT = [];
                             T_cantidad_elementos=0;
@@ -854,10 +858,13 @@ export const ViewerSc = (props) => {
                            
                                 //var objSelected = viewer.getSelection()[n];
                                 var objSelected = dbId;
+                                E_Id=objSelected;
                                 n = n + 1;
                                 viewer.getProperties(objSelected, (props) => {
+                                    
                                     uniqueIds.push(props.externalId);
                                     T_uniqueIds.push(props.externalId);
+                                    E_ext=props.externalId;
                                     
 
                                     if (props.name.substring(props.name.length-1,props.name.length)===']'){
@@ -873,9 +880,10 @@ export const ViewerSc = (props) => {
                                                'Name': props.name.substring(0,props.name.length-9)
                                              })
                                            //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
+                                           E_fam=props.name.substring(0,props.name.length-9);
                                         }
-    
-
+                                        
+                                        
                                     }else{
 
 
@@ -903,8 +911,11 @@ export const ViewerSc = (props) => {
                                      let indice=0;
                                      if (props.properties[0].displayName==="Category") indice=0;
                                      if (props.properties[1].displayName==="Category") indice=1;
+                                     
+                                     
                                      T_NombreT.push(props.name);
                                      T_categorias.push(props.properties[indice].displayValue);
+                                     
                                      let reg=null;
                                      if (employees){
                                         reg = employees.find((filtro1) => filtro1.Name === props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length));
@@ -915,6 +926,10 @@ export const ViewerSc = (props) => {
                                             'ID': props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length),
                                             'Name': props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length)
                                           })
+
+                                          E_cat=props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length);
+
+                                          
                                         //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
                                      }
 
@@ -939,7 +954,8 @@ export const ViewerSc = (props) => {
                                                employees1.push({
                                                    'ID': Propiedad.displayValue,
                                                    'Name': Propiedad.displayValue
-                                                 })
+                                                 });
+                                                 E_tip=Propiedad.displayValue;
                                                //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
                                             }
                                                    
@@ -948,9 +964,17 @@ export const ViewerSc = (props) => {
                                         }
                                      }
                                      if (!enc){
-
+                                        E_tip='sin tipo';
                                         T_TipoT.push('sin tipo');
                                      }
+
+                                     elementos.push({
+                                        'Id': E_Id,
+                                        'Categoria': E_cat,
+                                        'Familia': E_fam,
+                                        'Tipo': E_tip,
+                                        'UniqueId': E_ext,
+                                      });
                                      //console.log('Estas son las props', props);
                                     if (n == DBids.length) {
                                         //callbackObj.showMessage(uniqueIds);
@@ -1002,11 +1026,17 @@ export const ViewerSc = (props) => {
 
                 dispatch(agregaFamilia(employees2));
 
-                console.log('datos cargados de GetROOOOOT');
+                dispatch(agregaElementos(elementos));
+
+                console.log('TODOS LOS ELEMENTOS');
+                console.log(elementos);
+
+
+                /*console.log('datos cargados de GetROOOOOT');
                 console.log(arrg);
 
                 console.log('datos cargados de CATEGORIES');
-                console.log(employees);
+                console.log(employees);*/
 
                 // any additional action here?
                 //viewer.loadExtension("NestedViewerExtension", { filter: ["2d", "3d"], crossSelection: true });
@@ -2875,11 +2905,12 @@ export const ViewerSc = (props) => {
             /*background: 'rgb(242,246,248)', 
             background: '-moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 55%, rgba(181,198,208,1) 82%, rgba(224,239,249,1) 100%)',
             background: '-webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',*/
-            background: 'linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
-            filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f6f8", endColorstr="#e0eff9",GradientType=0 )',            
+            /*background: 'linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
+            filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f6f8", endColorstr="#e0eff9",GradientType=0 )',            */
+            background:'white'
             
             }}></div>
-            <div style={{ fontSize:'0.7rem', top:'10px', position:'absolute', zIndex:1 }}>Items seleccionados: <span id="MySelectionValue">0</span></div>
+            {/* <div style={{ fontSize:'0.7rem', top:'10px', position:'absolute', zIndex:1 }}>Items seleccionados: <span id="MySelectionValue">0</span></div> */}
 
  
             {/* </div> */}

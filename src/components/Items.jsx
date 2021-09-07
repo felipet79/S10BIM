@@ -2,6 +2,7 @@
 import { Card, Form, Table, Button } from "react-bootstrap";
 import Swal from 'sweetalert2'
 import { Col, Nav } from "react-bootstrap";
+import Button1 from 'devextreme-react/button';
 //import Bar from "./Charts/Bar";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -33,10 +34,36 @@ import Tree from "./TreeAll";
 //import { ViewScreen1 } from "../views/ViewScreen1";
 import { ViewerSc, RefrescarV } from "../views/ViewerSc";
 import { ContextMenu, DropDownButton } from "devextreme-react";
-import notify from 'devextreme/ui/notify';
+import { Tooltip } from 'devextreme-react/tooltip';
+//import notify from 'devextreme/ui/notify';
 import { Width } from "devextreme-react/chart";
 import zIndex from "@material-ui/core/styles/zIndex";
+import { red } from "@material-ui/core/colors";
 
+const animationConfig = {
+	show: {
+		type: 'slide',
+		from: {
+			top: -100,
+			opacity: 0
+		},
+		to: {
+			top: 0,
+			opacity: 1
+		}
+	},
+	hide: {
+		type: 'pop',
+		from: {
+			scale: 1,
+			opacity: 1
+		},
+		to: {
+			scale: 0.1,
+			opacity: 0
+		}
+	}
+};
 
 
 const allowedPageSizes = [5, 10, 15, 20, 50, 100, 500];
@@ -47,12 +74,12 @@ const menuModo = [
 	{ id: 1, name: 'Detalle', icon: 'menu' },
 	{ id: 4, name: 'Detalle y modelo', icon: 'event' },
 	{ id: 2, name: 'Modelo', icon: 'image' },
-  ];
+];
 
 
 
 
-const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
+const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 
 
@@ -69,10 +96,10 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 	const [minimop, setMinimoP] = useState(600);
 	const [width, setWidth] = useState(600);
 	const [width1, setWidth1] = useState(500);
-	
+
 	const [height, setHeight] = useState(window.innerHeight - 480 - 18);
-	
-	
+
+
 	const [open, setOpen] = useState(true);
 	const [open1, setOpen1] = useState(true);
 	const [open2, setOpen2] = useState(true);
@@ -80,7 +107,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 
 
-	
+
 
 
 	const [levelPC, setLevelPC] = useState(1);
@@ -90,7 +117,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 	const [ultimoAPU, setUltimoAPU] = useState('');
 	const [ultimoMETRADO, setUltimoMETRADO] = useState('');
 	const [ultimoESTRUCTURA, setUltimoESTRUCTURA] = useState('');
-	const [ultimoASOCIADOS, setUltimoASCOCIADOS] = useState('');	
+	const [ultimoASOCIADOS, setUltimoASCOCIADOS] = useState('');
 	const [ultimoCALCULO, setUltimoCALCULO] = useState('');
 
 	const [itemSeleccionado, setItemSeleccionado] = useState('');
@@ -112,6 +139,12 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 
 	const [loading, setLoading] = useState(true);
+	const [toltip, setToltip] = useState({
+		defaultVisible: false,
+		withAnimationVisible: false,
+		withTemplateVisible: false
+	});
+
 
 	const auth = useSelector((state) => state.auth);
 	const proyects = useSelector((state) => state.proyects);
@@ -175,7 +208,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 		for (let i = 0; i < filtro.length; i++) {
 
 			if (filtro[i].Metrado !== null) {
-				Sumatoria = Sumatoria + parseFloat(filtro[i].Total);				
+				Sumatoria = Sumatoria + parseFloat(filtro[i].Total);
 			} else {
 				var TotalAux = ObtenerSuma(filtro[i]);
 				Sumatoria = Sumatoria + TotalAux;
@@ -256,55 +289,53 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 	useEffect(() => {
 		//alert('mODO=' + modo );
-		
 
-		if (!open2){
 
-			if (window.innerHeight<800)
+		if (!open2) {
+
+			if (window.innerHeight < 800)
 				setHeight(window.innerHeight - 250 - 18);
 			else
 				setHeight(window.innerHeight - 480 - 18);
 
-			if (modo==='Solo hoja' || modo==='Detalle')
-			{
+			if (modo === 'Solo hoja' || modo === 'Detalle') {
 				setMinimoW(3000);
-				if (proyects.Avisa!==undefined) 
-				if (proyects.Avisa===1) //abierto
-				{
-					setWidth(window.innerWidth - 180 - widthItems - 45);
-				}else{
-					setWidth(window.innerWidth- 10 - widthItems - 45);
+				if (proyects.Avisa !== undefined)
+					if (proyects.Avisa === 1) //abierto
+					{
+						setWidth(window.innerWidth - 180 - widthItems - 45);
+					} else {
+						setWidth(window.innerWidth - 10 - widthItems - 45);
 
-				}
-				if (proyects.Avisa===undefined) 
-				setWidth(window.innerWidth - widthNav - widthItems - 45);
+					}
+				if (proyects.Avisa === undefined)
+					setWidth(window.innerWidth - widthNav - widthItems - 45);
 				//setOpen1(false);
 				//setOpen2(false);
 				//setHeight(window.innerHeight-60);
-				$("#barra1").animate({ height: height  }, 0);
+				$("#barra1").animate({ height: height }, 0);
 				//alert('cambiaron tamaños Nav=' + widthNav + ' Items=' + widthItems );
 				//alert('Avisa=' + proyects.Avisa );
 			}
 
-		}else{
-			if (modo==='Modelo' || modo==='Detalle y modelo'){
+		} else {
+			if (modo === 'Modelo' || modo === 'Detalle y modelo') {
 				setMinimoW(1200);
 				//alert(width);
 
 
-				if (proyects.Avisa!==undefined) 
-				if (proyects.Avisa===1) //abierto
-				{
-					//setWidth(window.innerWidth- 260 - widthItems - 50);
-					$("#ab").animate({ width: window.innerWidth - width - 200 - widthItems - 20}, 0);	
-				}else{
-					//setWidth(window.innerWidth-  70 - widthItems - 50);
-					$("#ab").animate({ width: window.innerWidth - width - 40 -  widthItems - 20}, 0);	
-				}
-				if (proyects.Avisa===undefined) 
-				{
+				if (proyects.Avisa !== undefined)
+					if (proyects.Avisa === 1) //abierto
+					{
+						//setWidth(window.innerWidth- 260 - widthItems - 50);
+						$("#ab").animate({ width: window.innerWidth - width - 200 - widthItems - 20 }, 0);
+					} else {
+						//setWidth(window.innerWidth-  70 - widthItems - 50);
+						$("#ab").animate({ width: window.innerWidth - width - 40 - widthItems - 20 }, 0);
+					}
+				if (proyects.Avisa === undefined) {
 					//setWidth(window.innerWidth-widthNav - widthItems - 50);
-					$("#ab").animate({ width: window.innerWidth - width - widthItems - widthNav - 20}, 0);
+					$("#ab").animate({ width: window.innerWidth - width - widthItems - widthNav - 20 }, 0);
 				}
 				//setWidth(window.innerWidth-widthNav - widthItems - 50);				
 				//$("#ab").animate({ width: window.innerWidth - Width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
@@ -363,8 +394,8 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 	}
 
 	useEffect(() => {
-		
-		if (proyects.Sub_sel!=='') return;
+
+		if (proyects.Sub_sel !== '') return;
 		if (proyects.treeSubControl)
 			if (proyects.treeSubControl.length !== 0) {
 				//llamar a metrados de tosod los subs
@@ -476,59 +507,59 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 		//console.log(e);
 
 		//alert(e.row.data.Descripcion);
-		
+
 		const Item = e.row.data;
 		const codP = Item.CodPresupuesto;
 		const codSub = Item.CodSubpresupuesto;
 		const codItem = Item.Item;
 
-		setItemSeleccionado(codP+codSub+codItem);
+		setItemSeleccionado(codP + codSub + codItem);
 		//alert(codP + "-" + codSub + "-" + codItem);
-		if (levelPC === 1){
-			if (ultimoAPU!==codP+codSub+codItem){
+		if (levelPC === 1) {
+			if (ultimoAPU !== codP + codSub + codItem) {
 				dispatch(selectAPUS(codP, codSub, codItem, ''));
 			}
-			setUltimoAPU(codP+codSub+codItem);
+			setUltimoAPU(codP + codSub + codItem);
 		}
-		
-		if (levelPC === 2){
-			if (ultimoMETRADO!==codP+codSub+codItem){
+
+		if (levelPC === 2) {
+			if (ultimoMETRADO !== codP + codSub + codItem) {
 				dispatch(selectMETRADOS(codP, codSub, codItem, ''));
-				dispatch(cleanDataChart22());	
-			}	
-			setUltimoMETRADO(codP+codSub+codItem);
+				dispatch(cleanDataChart22());
+			}
+			setUltimoMETRADO(codP + codSub + codItem);
 		}
 
-		if (levelPC === 3){
+		if (levelPC === 3) {
 
-			if (ultimoASOCIADOS!==codP+codSub+codItem){
+			if (ultimoASOCIADOS !== codP + codSub + codItem) {
 				dispatch(selectAsociados(codP, codSub, codItem, ''));
 			}
-			setUltimoASCOCIADOS(codP+codSub+codItem);
-			
+			setUltimoASCOCIADOS(codP + codSub + codItem);
+
 		}
 
-		if (levelPC === 4){
-			if (ultimoESTRUCTURA!==codP+codSub+codItem){
-				dispatch(selectEstructura(codP, codSub, codItem, ''));	
+		if (levelPC === 4) {
+			if (ultimoESTRUCTURA !== codP + codSub + codItem) {
+				dispatch(selectEstructura(codP, codSub, codItem, ''));
 			}
-			setUltimoESTRUCTURA(codP+codSub+codItem);
-		
+			setUltimoESTRUCTURA(codP + codSub + codItem);
+
 		}
 
-		if (levelPC === 5){
-			if (ultimoCALCULO!==codP+codSub+codItem){
-				dispatch(selectCalculo(codP, codSub, codItem, ''));	
-				dispatch(selectCalculoDet(codP, codSub, codItem, ''));				
+		if (levelPC === 5) {
+			if (ultimoCALCULO !== codP + codSub + codItem) {
+				dispatch(selectCalculo(codP, codSub, codItem, ''));
+				dispatch(selectCalculoDet(codP, codSub, codItem, ''));
 			}
-			setUltimoCALCULO(codP+codSub+codItem);
+			setUltimoCALCULO(codP + codSub + codItem);
 
 		}
-		
 
-		
 
-		
+
+
+
 
 
 
@@ -543,24 +574,28 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 	}
 	//console.log('Renderizando Items');
 
-	
+
 
 	const priceColumn_customizeText = (e) => {
-		return e ? (<p> {e.value} </p>): '';
+		return e ? (<p> {e.value} </p>) : '';
 	};
 
+	const toggleWithAnimation = () => {
+		setToltip({
+			withAnimationVisible: !toltip.withAnimationVisible
+		});
+	}
 
-
-	  const ItemsM = [
+	const ItemsM = [
 		{
-		  text: 'Nuevo',
-		  items: [
-			{ text: 'Item' },
-			{ text: 'Capitulo' }]
+			text: 'Nuevo',
+			items: [
+				{ text: 'Item' },
+				{ text: 'Capitulo' }]
 		},
 		{ text: 'Generar Metrado' },
 		{ text: 'Actualizar todos los metrados' },
-	  ];	  
+	];
 
 	const { selectedRowKeys, recursive, selectionMode, selectedEmployeeNames } = state;
 	return (
@@ -572,13 +607,13 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 			{/* <div style={{ overflow: 'scroll', marginTop: '0px', height: '100%' }}> */}
 
-			<div id="ContenedorTotal1" className="d-flex flex-wrap justify-content-between overflow-hidden h-100" style={{ height: height - 20, fontSize:'0.8rem !important' }}>
+			<div id="ContenedorTotal1" className="d-flex flex-wrap justify-content-between overflow-hidden h-100" style={{ height: height - 20, fontSize: '0.8rem !important' }}>
 				<Resizable
 					id="RPrincipal"
 					//className="tree-fixed p-0 d-flex justify-content-between"
 					className="p-0 d-flex justify-content-between"
 					size={{ width: width, height: height }}
-					enable={{ top:false, right:open2, bottom:true, left:false, topRight:open2, bottomRight:open2, bottomLeft:false, topLeft:false }}
+					enable={{ top: false, right: open2, bottom: true, left: false, topRight: open2, bottomRight: open2, bottomLeft: false, topLeft: false }}
 					//maxHeight="60vh"
 					maxWidth={open ? minimoW : 20}
 					//minHeight="67.5vh"
@@ -593,25 +628,25 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 						//$("#ab").show();
 						$("#ab").fadeIn(900);
 						setWidth(width + d.width);
-						
-						if (open1)
-							setHeight(height + d.height);
 
-							
+						if (open1)
+							setHeight(height + d.height - 5);
+
+
 						//alert('');
-						if (open1){
+						if (open1) {
 							//$("#barra1").animate({ height: height + d.height }, 0);
-							$("#barra2").animate({ marginTop: height + d.height-10 }, 0);
+							$("#barra2").animate({ marginTop: height + d.height - 10 }, 0);
 							$("#ContenedorTotal").animate({ height: height + d.height }, 0);
-							$("#Card1").animate({ height: height + d.height -20 }, 0);
+							$("#Card1").animate({ height: height + d.height - 20 }, 0);
 							$("#ContDet").animate({ top: height + d.height + 10 }, 0);
 							$("#ContDet2").animate({ top: height + d.height + 3 }, 0);
-							$("#ab").animate({ height: height + d.height -22}, 0);
-							$("#forgeViewer").animate({ height: '100%'}, 0);
-							
-							
+							$("#ab").animate({ height: height + d.height - 30 }, 0);
+							$("#forgeViewer").animate({ height: '100%' }, 0);
+
+
 						}
-						$("#barra1").animate({ height: height + d.height - 20}, 0);
+						$("#barra1").animate({ height: height + d.height - 20 }, 0);
 						//$("#ab").animate({ height: height + d.height -20 }, 10);
 						//$("#forgeViewer").animate({ left: 0 }, 0);
 
@@ -622,8 +657,8 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 						//alert('');
 						/*if ($("#FormLista").innerWidth()<=600)
 							document.getElementById("FormLista").style.width = '600px';*/
-							//$("#ab").animate({ display: 'block'}, 0);
-							//$("#forgeViewer").animate({ display: 'block'}, 0);
+						//$("#ab").animate({ display: 'block'}, 0);
+						//$("#forgeViewer").animate({ display: 'block'}, 0);
 						setTimeout(() => {
 							RefrescarV();
 						}, 150);
@@ -631,17 +666,17 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 					onResize={(e, direction, ref, d) => {
 						//console.log('resizando');
 						//$("#barra2").marginTop=width;
-						if (open1){
+						if (open1) {
 							$("#barra1").animate({ height: height + d.height - 20 }, 0);
-							$("#barra2").animate({ marginTop: height + d.height -10}, 0);
+							$("#barra2").animate({ marginTop: height + d.height - 10 }, 0);
 							$("#ContenedorTotal").animate({ height: height + d.height }, 0);
-							$("#Card1").animate({ height: height + d.height -20 }, 0);
+							$("#Card1").animate({ height: height + d.height - 20 }, 0);
 							$("#ContDet").animate({ top: height + d.height + 10 }, 0);
 							$("#ContDet2").animate({ top: height + d.height + 3 }, 0);
-							$("#ab").animate({ height: height + d.height -22}, 0);
-							$("#forgeViewer").animate({ height: '100%'}, 0);
-							
-							
+							$("#ab").animate({ height: height + d.height - 25 }, 0);
+							$("#forgeViewer").animate({ height: '100%' }, 0);
+
+
 						}
 
 						//$("#ab").animate({ left: width + d.width + 10 }, 0);
@@ -658,13 +693,13 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 						//$("#ab").animate({ width: window.innerWidth - width - widthItems - widthNav - 20}, 0);
 						//$("#forgeViewer").animate({ width: window.innerWidth - width - widthItems - widthNav - 20}, 0);
 						//console.log($("#FormLista").innerWidth());
-						
+
 						//$("#Conten1").animate({ height: height + d.height -20}, 0);
 						//$("#ab").animate({ height: height + d.height -20}, 0);
 						//$("#forgeViewer").animate({ height: '100%'}, 100);
 						//$("#ab").animate({ width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }, 0);
-						
-						
+
+
 						/*setTimeout(() => {
 							RefrescarV();
 						}, 150);*/
@@ -679,120 +714,165 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 
 
-						<Card id="Card1" style={{ height: height - 20, overflow: 'scroll',
-							background: 'rgb(242,245,246)',
+						<Card id="Card1" style={{
+							height: height - 20, overflow: 'scroll',
+							/*background: 'rgb(242,245,246)',
 							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
 							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
 							background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',*/
+							background: 'white'
 						}}>
 
-							<Card.Header>Hoja del Presupuesto
+							<Card.Header style={{ fontSize: '1rem' }}>Hoja de presupuestos
+							<ion-icon title="" id="tt1" name="information-circle" style={{ marginLeft: '5px',  }}
+									onMouseEnter={toggleWithAnimation}
+									onMouseLeave={toggleWithAnimation}
 
-							
-							<div className="dx-field-value" style={{position:'relative', right:'0px' , top:'0px', width:'180px'}}>
-							<DropDownButton
-								splitButton={true}
-								width='180px'
-								useSelectMode={false}
-								text={modo}
-								icon="dist/img/manager.png"
-								items={menuModo}
-								displayExpr="name"
-								keyExpr="id"
-								//onButtonClick={this.onButtonClick}
-								onItemClick={(e)=>{
+								></ion-icon>
+
+								<Tooltip
+									target="#tt1"
+									position="bottom"
+									animation={animationConfig}
+									visible={toltip.withAnimationVisible}
+									closeOnOutsideClick={false}
 									
-									setModo(e.itemData.name);
-									notify(e.itemData.name || e.itemData, 'success', 300);
+								>
+									<div style={{fontFamily: 'Roboto'}}>Hoja del presupuesto </div>
+								</Tooltip>
 
-									if (e.itemData.name==='Solo hoja')
-									{
-										setMinimoW(3000);
-										setWidth(window.innerWidth-$("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 45);
-										setOpen1(false);
-										setOpen2(false);
-										setHeight(window.innerHeight-60);
-										$("#barra1").animate({ height: height  }, 0);
-									}
+								{/* <ion-icon id="tt2" name="information-circle-outline" style={{ marginLeft: '5px' }}
 
-									if (e.itemData.name==='Detalle')
-									{
-										setMinimoW(3000);
-										setWidth(window.innerWidth-$("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 45);
-										setOpen1(true);
-										setOpen2(false);
-										
-										if (window.innerHeight<800){
-											setHeight(window.innerHeight - 250 - 18);
-											$("#barra1").animate({ height: window.innerHeight - 250  }, 0);									
-										}else{
-											setHeight(window.innerHeight - 480 - 18);
-											$("#barra1").animate({ height: window.innerHeight - 500  }, 0);
-										}
-										
-										//setHeight(window.innerHeight-500);
-										//$("#barra1").animate({ height: window.innerHeight-500  }, 0);										
-									}
+								></ion-icon> */}
 
-									if (e.itemData.name==='Detalle y modelo')
-									{
-										setMinimoW(1200);
-										setOpen1(true);
-										setOpen2(true);
-										//setHeight(window.innerHeight-500);
-										//$("#barra1").animate({ height: window.innerHeight-500  }, 0);
-										if (window.innerHeight<800){
-											setHeight(window.innerHeight - 250 - 18);
-											$("#barra1").animate({ height: window.innerHeight - 250  }, 0);									
-										}else{
-											setHeight(window.innerHeight - 480 - 18);
-											$("#barra1").animate({ height: window.innerHeight - 500  }, 0);
-										}
-										setWidth(600);
-										$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 35}, 0);
-										$("#ab").fadeOut(10);
-										$("#ab").fadeIn(1000);
-										//let tam=window.innerWidth - width;
-										//alert(width);
-										//$("#ab").animate({ width: 800}, 0);
-										//$("#forgeViewer").animate({ height: '100%'}, 100);
-										//$("#forgeViewer").animate({ width: '100%'}, 0);
-									}
 
-									if (e.itemData.name==='Modelo')
-									{
-										setMinimoW(1200);
-										setOpen1(false);
-										setOpen2(true);
-										setHeight(window.innerHeight-60);
-										//$("#barra1").animate({ height: height  }, 0);
-										setWidth(600);
 
-										$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 35}, 0);
-										$("#barra1").animate({ height: window.innerHeight - 60 }, 0);
-										$("#ab").fadeOut(10);
-										$("#ab").fadeIn(1000);
-										//$("#ab").animate({ width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
-										//$("#ab").animate({ width: 800}, 0);
-										//$("#forgeViewer").animate({ width: '100%'}, 0);
+								
+								<div className="dx-field-value" style={{ position: 'relative', right: '0px', top: '0px', width: '180px' }}>
+									<DropDownButton
+										splitButton={true}
+										width='180px'
+										useSelectMode={false}
+										text={modo}
+										//icon="dist/img/manager.png"
+										icon="tips"
+										items={menuModo}
+										displayExpr="name"
+										keyExpr="id"
+										//onButtonClick={this.onButtonClick}
+										onItemClick={(e) => {
 
-									}
-									
-									//if (open1){
-										
-									//}else{
-										//
-	
-									//}
-									setTimeout(() => {
-										RefrescarV();
-									}, 120);				
+											setModo(e.itemData.name);
+											//notify(e.itemData.name || e.itemData, 'success', 300);
 
-									//alert(e.itemData.name);
-								}}
-							/>
-							</div>
+
+											let timerInterval
+											Swal.fire({
+												title: 'Cambiando de vista!',
+												html: 'Aplicando vista en <b></b> .',
+												timer: 300,
+												timerProgressBar: true,
+												didOpen: () => {
+													Swal.showLoading()
+													const b = Swal.getHtmlContainer().querySelector('b')
+													timerInterval = setInterval(() => {
+														b.textContent = Swal.getTimerLeft()
+													}, 100)
+												},
+												willClose: () => {
+													clearInterval(timerInterval)
+												}
+											}).then((result) => {
+												/* Read more about handling dismissals below */
+												if (result.dismiss === Swal.DismissReason.timer) {
+													//console.log('I was closed by the timer')
+												}
+											})
+
+											if (e.itemData.name === 'Solo hoja') {
+												setMinimoW(3000);
+												setWidth(window.innerWidth - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 55);
+												setOpen1(false);
+												setOpen2(false);
+												setHeight(window.innerHeight - 60);
+												$("#barra1").animate({ height: height }, 0);
+											}
+
+											if (e.itemData.name === 'Detalle') {
+												setMinimoW(3000);
+												setWidth(window.innerWidth - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 55);
+												setOpen1(true);
+												setOpen2(false);
+
+												if (window.innerHeight < 800) {
+													setHeight(window.innerHeight - 250 - 18);
+													$("#barra1").animate({ height: window.innerHeight - 250 }, 0);
+												} else {
+													setHeight(window.innerHeight - 480 - 18);
+													$("#barra1").animate({ height: window.innerHeight - 500 }, 0);
+												}
+
+												//setHeight(window.innerHeight-500);
+												//$("#barra1").animate({ height: window.innerHeight-500  }, 0);										
+											}
+
+											if (e.itemData.name === 'Detalle y modelo') {
+												setMinimoW(1200);
+												setOpen1(true);
+												setOpen2(true);
+												//setHeight(window.innerHeight-500);
+												//$("#barra1").animate({ height: window.innerHeight-500  }, 0);
+												if (window.innerHeight < 800) {
+													setHeight(window.innerHeight - 250 - 18);
+													$("#barra1").animate({ height: window.innerHeight - 250 }, 0);
+												} else {
+													setHeight(window.innerHeight - 480 - 18);
+													$("#barra1").animate({ height: window.innerHeight - 500 }, 0);
+												}
+												setWidth(600);
+												$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 35 }, 0);
+												$("#ab").fadeOut(10);
+												$("#ab").fadeIn(1000);
+												//let tam=window.innerWidth - width;
+												//alert(width);
+												//$("#ab").animate({ width: 800}, 0);
+												//$("#forgeViewer").animate({ height: '100%'}, 100);
+												//$("#forgeViewer").animate({ width: '100%'}, 0);
+											}
+
+											if (e.itemData.name === 'Modelo') {
+												setMinimoW(1200);
+												setOpen1(false);
+												setOpen2(true);
+												setHeight(window.innerHeight - 60);
+												//$("#barra1").animate({ height: height  }, 0);
+												setWidth(600);
+
+												$("#ab").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 35 }, 0);
+												$("#barra1").animate({ height: window.innerHeight - 60 }, 0);
+												$("#ab").fadeOut(10);
+												$("#ab").fadeIn(1000);
+												//$("#ab").animate({ width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50}, 0);
+												//$("#ab").animate({ width: 800}, 0);
+												//$("#forgeViewer").animate({ width: '100%'}, 0);
+
+											}
+
+											//if (open1){
+
+											//}else{
+											//
+
+											//}
+											setTimeout(() => {
+												RefrescarV();
+											}, 120);
+
+											//alert(e.itemData.name);
+										}}
+									/>
+								</div>
 
 							</Card.Header>
 							<Card.Body>
@@ -814,8 +894,9 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 										//selectedRowKeys={selectedRowKeys}
 										orderTree={"CodSubpresupuesto"}
 										allowColumnResizing={true}
+										showRowLines={true}
+										showColumnLines={true}
 
-										
 										/*columnResizingMode={{
 											columnResizingMode: 'nextColumn'
 										  }}*/
@@ -826,17 +907,17 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 											const codP = Item.CodPresupuesto;
 											const codSub = Item.CodSubpresupuesto;
 											const codItem = Item.Item;
-											let encuentra=0;
-											if (proyects.Sub_sel===''){
+											let encuentra = 0;
+											if (proyects.Sub_sel === '') {
 												//alert('Estoy en presupuesto ' + Item.CodPresupuesto + ' Subpresupuesto ' + Item.CodSubpresupuesto + ' ');
 												let IdModelo = '';
 												for (let i = 0; i < proyects.treeSubControl.length; i++) {
 													if (Item.CodSubpresupuesto === proyects.treeSubControl[i].CodSubpresupuesto) {
 														//IdModelo = proyects.treeSubControl[i].CodModelo;
-														encuentra=1;
+														encuentra = 1;
 														//if (proyects.treeSubControl[i].UrnWeb)
-														if (proyects.Urn !== proyects.treeSubControl[i].UrnWeb){
-															proyects.Urn=proyects.treeSubControl[i].UrnWeb;
+														if (proyects.Urn !== proyects.treeSubControl[i].UrnWeb) {
+															proyects.Urn = proyects.treeSubControl[i].UrnWeb;
 														}
 
 													}
@@ -848,20 +929,21 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 												//console.log(e);
 											}
-											
+
 											//alert(Item.CodPresupuesto)
-											
-											
+
+
 										}}
 										onFocusedRowChanged={onSelectionChanged}
 										wordWrapEnabled={true}
 									>
 										<SearchPanel visible={true} />
 										<Editing
-											allowUpdating={false}
+											allowUpdating={true}
 											allowDeleting={false}
 											selectTextOnEditStart={false}
 											useIcons={true}
+											mode="cell"
 										/>
 										<Sorting
 											mode="singular"
@@ -890,46 +972,50 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 											width={'15%'}
 											dataField="Orden"
 											caption="Orden"
-											
+											allowEditing={false}
 										/>
 
 										<Column
 											width={'34%'}
 											dataField="Descripcion"
 											caption="Descripcion"
+											allowEditing={false}
 										/>
 										<Column
 											width={'7%'}
 											dataField="Unidad"
 											caption="Un"
+											allowEditing={false}
 										/>
 
 										<Column
 											alignment={'right'}
 											width={'12%'}
-											dataField="Metrado" 
-											
-											/>
+											dataField="Metrado"
+
+										/>
 
 
 										<Column
 											alignment={'right'}
 											width={'13%'}
-											dataField="Precio1" 
+											dataField="Precio1"
 											caption="Precio"
-											/>
-											
+											allowEditing={false}
+										/>
+
 										<Column
-											
+
 											alignment={'right'}
 											width={'18%'}
-											dataField="Totalf" 
+											dataField="Totalf"
 											caption="Parcial"
-											//style={{fontSize:'0.5rem|important'}}
-											
-											//customizeText={priceColumn_customizeText}
-											/>
-											
+											allowEditing={false}
+										//style={{fontSize:'0.5rem|important'}}
+
+										//customizeText={priceColumn_customizeText}
+										/>
+
 										<Pager
 											allowedPageSizes={allowedPageSizes}
 											showPageSizeSelector={true}
@@ -953,76 +1039,92 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 
 
 					</Collapse>
-							<ContextMenu
-							dataSource={ItemsM}
-							width={200}
-							target="#Card1"
-							//onItemClick={itemClick} 
-							/>
+					<ContextMenu
+						dataSource={ItemsM}
+						width={200}
+						target="#Card1"
+					//onItemClick={itemClick} 
+					/>
 
 					{open2 ? (
 
 						<div
-						id="barra1"
-						className="bara-cerrar d-flex align-items-center barras"
-						style={{
-							width: '12px',
-							height: "100%",
-							/*background: "#dee2e6",*/
-							marginLeft: 5,
-						}}
-					>
-						<div
-							style={{ cursor: "pointer", width:'20px',
-							background: 'rgb(184,225,252)',
-							background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
-							background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
-							background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0',
-							zIndex:'1'
-						}}
-							className="h-25 w-100 bg-primary d-flex justify-contentcenter align-items-center"
-							onClick={() => {
-								if (open){
-									setMinimoP(0);
-									setWidth(20);
-								}else{
-									setWidth(600);
-									setMinimoP(600);
-								}
-
-								$("#ab").fadeOut(10);
-								$("#ab").fadeIn(1000);
-
-								setOpen(!open);
-
-								//alert('');
-								//$("#ab").animate({ with: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }, 100);
-								
-								setTimeout(() => {
-									RefrescarV();
-								}, 120);
-
-
-								//$("#ab").animate({ height: height -30 }, 100);
+							id="barra1"
+							className="bara-cerrar d-flex align-items-center barras"
+							style={{
+								width: '16px',
+								height: "100%",
+								background: 'transparent',
+								marginLeft: 5,
+								borderStyle: 'none double none none',
+								borderColor: '#c6c7d0',
+								//borderRightWidth:'0.5px',
+								zIndex: '1',
 							}}
-							aria-controls="example-collapse-text"
-							aria-expanded={open}
 						>
-							{open ? (
-								<ion-icon name="caret-back-outline"></ion-icon>
-							) : (
-								<ion-icon name="caret-forward-outline"></ion-icon>
-							)}
-						</div>
-					</div>
+							<div
+								style={{
+									cursor: "pointer", width: '30px',
+									/*background: 'rgb(184,225,252)',
+									background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
+									background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+									background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+									filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0',*/
+									/*background:'black',*/
+									zIndex: '1'
+								}}
+								className="h-0 w-100 "
+								onClick={() => {
+									/*$("#barra1").fadeOut(100);
+									$("#barra1").fadeIn(500);*/
+									//$("#RPrincipal").animate({ width: window.innerWidth - 600 - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 35}, 500);
 
-					):''
-					
-					
-					
+									//$("#RPrincipal").animate({ width: width}, 1800);
+									$("#RPrincipal").fadeOut(10);
+									$("#RPrincipal").fadeIn(900);
+									//alert();
+									if (open) {
+										setMinimoP(0);
+										setWidth(20);
+									} else {
+										setWidth(600);
+										setMinimoP(600);
+									}
+
+									$("#ab").fadeOut(10);
+									$("#ab").fadeIn(1000);
+
+									setOpen(!open);
+
+
+									//alert('');
+									//$("#ab").animate({ with: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }, 100);
+
+									setTimeout(() => {
+										RefrescarV();
+									}, 120);
+
+
+									//$("#ab").animate({ height: height -30 }, 100);
+								}}
+								aria-controls="example-collapse-text"
+								aria-expanded={open}
+								style={{ background: 'transparent', zIndex: '1', width: '80px' }}
+							>
+								{open ? (
+									<ion-icon name="chevron-back-outline" style={{ cursor: "pointer", color: '#c6c7d0', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px', }}></ion-icon>
+								) : (
+									<ion-icon name="chevron-forward-outline" style={{ cursor: "pointer", color: '#c6c7d0', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px' }}></ion-icon>
+								)}
+							</div>
+						</div>
+
+					) : ''
+
+
+
 					}
-					
+
 
 
 
@@ -1038,83 +1140,143 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 							/*background: "#dee2e6",*/
 							marginLeft: 5,
 							marginTop: height - 12,
+							background: 'transparent',
+
+							borderStyle: 'none none double none',
+							borderColor: '#c6c7d0',
+							//borderRightWidth:'0.5px',
+							//zIndex:'1',
 
 						}}
 					>
 						<div
-							style={{ cursor: "pointer", marginLeft: $("#ContDet2").innerWidth()/2-80  , width: '160px', height: '18px', zIndex:'1',
-							/*background: 'rgb(242,245,246)',
-							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
-							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
-							background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',*/
-							
+							style={{
+								cursor: "pointer", marginLeft: $("#ContDet2").innerWidth() / 2 - 80, width: '20px', height: '18px', zIndex: '1',
+								/*background: 'rgb(242,245,246)',
+								background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
+								background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+								background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+								filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',*/
 
-							background: 'rgb(184,225,252)',
-							background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
-							background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
-							background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0'
-						}}
-							className="bg-primary d-flex justify-contentcenter align-items-center"
+
+								/*background: 'rgb(184,225,252)',
+								background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
+								background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+								background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+								filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0'*/
+							}}
+							className="h-0 "
 							onClick={() => {
-								setOpen1(!open1);
-								if (open1){
-									setHeight(window.innerHeight-60);
-									$("#barra1").animate({ height: window.innerHeight - 60 }, 0);	
-									if (open2)
-									setModo('Modelo');
-									else
-									setModo('Solo hoja');									
 
+								//$("#ContDet").show(1200);
+								$("#ab").fadeOut(10);
 
-								}else{
+								$("#ContDet2").hide(10);
+								$("#ContDet2").fadeOut(10);
 
-									if (window.innerHeight<800){
-										setHeight(window.innerHeight - 250 - 18);
-										$("#barra1").animate({ height: window.innerHeight - 250  }, 0);									
-									}else{
-										setHeight(window.innerHeight - 480 - 18);
-										$("#barra1").animate({ height: window.innerHeight - 500  }, 0);
+								if (open1)
+									$("#barra2").animate({ marginTop: window.innerHeight - 80 }, 700);
+								else
+									if (window.innerHeight < 800) {
+										//setHeight(window.innerHeight - 250 - 18);
+										$("#barra2").animate({ marginTop: window.innerHeight - 280 }, 700);
+										//$("#barra1").animate({ height: window.innerHeight - 250  }, 600);									
+									} else {
+										//setHeight(window.innerHeight - 480 - 18);
+										//$("#barra1").animate({ height: window.innerHeight - 500  }, 600);
+										$("#barra2").animate({ marginTop: window.innerHeight - 510 }, 700);
 									}
-									
-									
-									
-						
 
+								if (open1) {
+									setHeight(window.innerHeight - 60);
+									$("#barra1").animate({ height: window.innerHeight - 80 }, 700);
+									if (open2)
+										setModo('Modelo');
+									else
+										setModo('Solo hoja');
+								} else {
+
+									if (window.innerHeight < 800) {
+										setHeight(window.innerHeight - 250 - 18);
+										$("#barra1").animate({ height: window.innerHeight - 280 }, 700);
+									} else {
+										setHeight(window.innerHeight - 480 - 18);
+										$("#barra1").animate({ height: window.innerHeight - 500 }, 700);
+									}
 									//setHeight(window.innerHeight - 500);
-									
+
 
 									if (open2)
-									setModo('Detalle y modelo');
+										setModo('Detalle y modelo');
 									else
-									setModo('Detalle');									
+										setModo('Detalle');
 
-									
+
 									//setModo('Solo hoja');									
 								}
-								
-								$("#ab").fadeOut(10);
-								$("#ab").fadeIn(1000);
+
+
+
+								if (open1)
+									$("#Card1").animate({ height: window.innerHeight - 60 - 30 }, 700);
+								else
+									if (window.innerHeight < 800) {
+										//setHeight(window.innerHeight - 250 - 18);
+										//$("#barra2").animate({ marginTop: window.innerHeight - 250  }, 600);	
+										$("#Card1").animate({ height: window.innerHeight - 250 - 18 - 30 }, 700);
+										//$("#barra1").animate({ height: window.innerHeight - 250  }, 600);									
+									} else {
+										//setHeight(window.innerHeight - 480 - 18);
+										//$("#barra1").animate({ height: window.innerHeight - 500  }, 600);
+										$("#Card1").animate({ height: window.innerHeight - 480 - 18 - 30 }, 700);
+										//$("#barra2").animate({ marginTop: window.innerHeight - 510  }, 600);	
+									}
 
 
 								setTimeout(() => {
-									RefrescarV();
-								}, 120);	
-								
-								
+
+
+
+									setOpen1(!open1);
+
+
+
+
+									$("#ContDet2").fadeIn(1500);
+									$("#ab").fadeIn(1500);
+
+									setTimeout(() => {
+										RefrescarV();
+									}, 120);
+
+
+
+								}, 700);
+
+
+
+
+
+
+
 							}}
 							//aria-controls="example-collapse-text"
 							aria-expanded={open}
+
 						>
 							{open1 ? (
+								<ion-icon name="chevron-down-outline" style={{ cursor: 'pointer', marginTop: '4px', color: '#c6c7d0', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px', }}></ion-icon>
+							) : (
+								<ion-icon name="chevron-up-outline" style={{ cursor: 'pointer', color: '#c6c7d0', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px' }}></ion-icon>
+							)}
+
+							{/*open1 ? (
 								<>
 									<ion-icon name="caret-down-outline" style={{ marginLeft: '45%' }}></ion-icon>
-									{/* <ion-icon name="caret-up-outline" style={{marginLeft:'1px'}}></ion-icon> */}
 								</>
 							) : (
 								<ion-icon name="caret-up-outline" style={{ marginLeft: '45%' }}></ion-icon>
-							)}
+							)*/}
 						</div>
 
 
@@ -1130,190 +1292,198 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 			</div>
 
 			<Resizable
-					id="Conten1"
-					//style={{ position: 'absolute', left: width + 10, top: '5px', height: height - 30, width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }}
-					style={{ position: 'absolute', left: width + 10, top: '5px' }}
-					size={{ width:  window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50, height: height-22 }}
-					//maxWidth={open ? 1200 : 0}
-					maxHeight={window.innerHeight-200}
-					enable={{ top:false, right:false, bottom:true, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
-					//minWidth="20px"
-					minHeight="320px"
-					
+				id="Conten1"
+				//style={{ position: 'absolute', left: width + 10, top: '5px', height: height - 30, width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }}
+				style={{ position: 'absolute', left: width + 10, top: '5px', bottom: '-15px' }}
+				size={{ width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50, height: height - 10 }}
+				//maxWidth={open ? 1200 : 0}
+				maxHeight={window.innerHeight - 200}
+				enable={{ top: false, right: false, bottom: true, left: false, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false }}
+				//minWidth="20px"
+				minHeight="320px"
 
 
-					onResizeStop={(e, direction, ref, d) => {
 
-						//setWidth(width + d.width);
-						if (open1)
-							setHeight(height + d.height);
-							//$("#barra1").animate({ height: height  }, 0);
+				onResizeStop={(e, direction, ref, d) => {
 
-						//alert('');
-						//$("#ab").animate({ height: height + d.height -30 }, 10);
-						//$("#DetalleItem").animate({ height: window.innerHeight - (height + d.height) - 130 }, 100);
-
-						//$("#ab").animate({ height: height + d.height -20 }, 100);
-						//$("#Conten1").animate({ height: height + d.height -20 }, 100);
-						//alert('');
-						$("#ab").fadeOut(10);
-						$("#ab").fadeIn(1000);
-		
-						setTimeout(() => {
-							RefrescarV();
-						}, 150);
-					}}
-					onResize={(e, direction, ref, d) => {
-						//console.log('resizando');
-						//$("#barra2").marginTop=width;
-						if (open1){
-							$("#barra1").animate({ height: height + d.height }, 0);
-							$("#barra2").animate({ marginTop: height + d.height }, 0);
-							$("#ContenedorTotal").animate({ height: height + d.height }, 0);						
-							$("#Card1").animate({ height: height + d.height }, 0);
-							$("#ContDet").animate({ top: height + d.height + 15 }, 0);
-							
-							
-
-							$("#ContDet2").animate({ top: height + d.height +3 }, 0);
-							$("#ab").animate({ height: height + d.height -22}, 0);
-							$("#forgeViewer").animate({ height: '100%'}, 100);
-
-
-	
-						}
-
-						//$("#Conten1").animate({ height: height + d.height - 20 }, 0);
-						
-						//$("#ab").animate({ height: height + d.height - 20 }, 0);
-						//$("#forgeViewer").animate({ height: '100%'}, 100);
-						//$("#ab").animate({ width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }, 0);
-						//$("#ab").animate({ left: width + 10 }, 0);
-						//$("#forgeViewer").animate({ left: width + 10 }, 0);
-						/*setTimeout(() => {
-							RefrescarV();
-						}, 150);*/
-
-						//$("#barra2").css("draggable:true")
-					}}
-
-					/*className="tree-fixed p-0 d-flex justify-content-between"
-					size={{ width: width, height: height }}
-					maxWidth={open ? 600 : 0}
-					maxHeight={window.innerHeight - 200}
-					minWidth="20px"
-					minHeight="320px"
-					onResizeStop={(e, direction, ref, d) => {
-
-						setWidth(width + d.width);
+					//setWidth(width + d.width);
+					if (open1)
 						setHeight(height + d.height);
+					//$("#barra1").animate({ height: height  }, 0);
 
+					//alert('');
+					//$("#ab").animate({ height: height + d.height -30 }, 10);
+					//$("#DetalleItem").animate({ height: window.innerHeight - (height + d.height) - 130 }, 100);
 
-						$("#ab").animate({ height: height + d.height - 30 }, 100);
-						//alert('');
+					//$("#ab").animate({ height: height + d.height -20 }, 100);
+					//$("#Conten1").animate({ height: height + d.height -20 }, 100);
+					//alert('');
+					$("#ab").fadeOut(10);
+					$("#ab").fadeIn(1000);
 
-						setTimeout(() => {
-							RefrescarV();
-						}, 150);
-					}}
-					onResize={(e, direction, ref, d) => {
-					
-						/*$("#barra2").animate({ marginTop: height + d.height }, 0);
+					setTimeout(() => {
+						RefrescarV();
+					}, 150);
+				}}
+				onResize={(e, direction, ref, d) => {
+					//console.log('resizando');
+					//$("#barra2").marginTop=width;
+					if (open1) {
+						$("#barra1").animate({ height: height + d.height }, 0);
+						$("#barra2").animate({ marginTop: height + d.height }, 0);
 						$("#ContenedorTotal").animate({ height: height + d.height }, 0);
 						$("#Card1").animate({ height: height + d.height }, 0);
-						$("#ContDet").animate({ top: height + d.height + 10 }, 0);
+						$("#ContDet").animate({ top: height + d.height + 15 }, 0);
 
-						$("#ab").animate({ height: height + d.height - 30 }, 0);
-						
-					}}*/
-				//onResizeStop={()=>{}}
 
-				>
-			
-			
-			
-			
-			
-			{open2 ? <div id="ab" /*style={{width:'100%'}}*/ style={{ left: width + 10, top: '5px', height: height - 22, width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 50 }}>
-				
-				{(proyects.Urn!=='') ?
-				<ViewerSc /> 
-				: 
-				<>
-				<div id="" style={{  width: '100%', height:'100%',
-					/*background: '#e4efc0',
-					background: '-moz-linear-gradient(top, #e4efc0 0%, #abbd73 100%)', 
-					background: '-webkit-linear-gradient(top, #e4efc0 0%,#abbd73 100%)',
-					background: 'linear-gradient(to bottom, #e4efc0 0%,#abbd73 100%)', 
-					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#e4efc0", endColorstr="#abbd73",GradientType=0)',*/
-					background: 'rgb(242,246,248)', 
-					background: '-moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 55%, rgba(181,198,208,1) 82%, rgba(224,239,249,1) 100%)',
-					background: '-webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
-					background: 'linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
-					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f6f8", endColorstr="#e0eff9",GradientType=0 )',
 
-				}}>
-					
-					{proyects.Sub_sel==='' ?
-					<>
-
-					</>:
-					<>
-					<p style={{  position:'absolute', left:'47%', top:'42%' }}>No tiene modelo asignado</p>
-					<Button variant="outline-info" style={{position:'absolute', left:'47%', top:'48%'}} onClick={() => {
-                                        if (true) {
-                                           
-                                        } else {
-                                            Swal.fire({
-                                                title: 'Error!',
-                                                text: 'No tiene un Presupuesto seleccionado',
-                                                icon: 'error',
-                                                confirmButtonText: 'Ok'
-                                            })
-                                        }
-                                    }}><i class="fas fa-sign-in-alt"></i>   Asignar un modelo</Button>
-
-					</>
+						$("#ContDet2").animate({ top: height + d.height + 3 }, 0);
+						$("#ab").animate({ height: height + d.height - 25 }, 0);
+						$("#forgeViewer").animate({ height: '100%' }, 100);
 
 
 
 					}
 
-				</div>
-				
-				</>
-				}
-				
-				
-			</div>:''}
+					//$("#Conten1").animate({ height: height + d.height - 20 }, 0);
+
+					//$("#ab").animate({ height: height + d.height - 20 }, 0);
+					//$("#forgeViewer").animate({ height: '100%'}, 100);
+					//$("#ab").animate({ width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 80 }, 0);
+					//$("#ab").animate({ left: width + 10 }, 0);
+					//$("#forgeViewer").animate({ left: width + 10 }, 0);
+					/*setTimeout(() => {
+						RefrescarV();
+					}, 150);*/
+
+					//$("#barra2").css("draggable:true")
+				}}
+
+			/*className="tree-fixed p-0 d-flex justify-content-between"
+			size={{ width: width, height: height }}
+			maxWidth={open ? 600 : 0}
+			maxHeight={window.innerHeight - 200}
+			minWidth="20px"
+			minHeight="320px"
+			onResizeStop={(e, direction, ref, d) => {
+
+				setWidth(width + d.width);
+				setHeight(height + d.height);
+
+
+				$("#ab").animate({ height: height + d.height - 30 }, 100);
+				//alert('');
+
+				setTimeout(() => {
+					RefrescarV();
+				}, 150);
+			}}
+			onResize={(e, direction, ref, d) => {
 			
-			
+				/*$("#barra2").animate({ marginTop: height + d.height }, 0);
+				$("#ContenedorTotal").animate({ height: height + d.height }, 0);
+				$("#Card1").animate({ height: height + d.height }, 0);
+				$("#ContDet").animate({ top: height + d.height + 10 }, 0);
+
+				$("#ab").animate({ height: height + d.height - 30 }, 0);
+				
+			}}*/
+			//onResizeStop={()=>{}}
+
+			>
+
+
+
+
+
+				{open2 ? <div id="ab" /*style={{width:'100%'}}*/ style={{ position: 'absolute', left: '7px', /*left: width + 25, */top: '5px', height: height - 30, width: window.innerWidth - width - $("#ContenedorSide").innerWidth() - $("#Conte1").innerWidth() - 58 }}>
+
+					{(proyects.Urn !== '') ?
+						<ViewerSc />
+						:
+						<>
+							<div id="" style={{
+								width: '100%', height: '100%',
+
+								/*background: '#e4efc0',
+								background: '-moz-linear-gradient(top, #e4efc0 0%, #abbd73 100%)', 
+								background: '-webkit-linear-gradient(top, #e4efc0 0%,#abbd73 100%)',
+								background: 'linear-gradient(to bottom, #e4efc0 0%,#abbd73 100%)', 
+								filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#e4efc0", endColorstr="#abbd73",GradientType=0)',*/
+								/*background: 'rgb(242,246,248)', 
+								background: '-moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 55%, rgba(181,198,208,1) 82%, rgba(224,239,249,1) 100%)',
+								background: '-webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
+								background: 'linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
+								filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f6f8", endColorstr="#e0eff9",GradientType=0 )',*/
+								background: 'transparent'
+
+							}}>
+
+								{proyects.Sub_sel === '' ?
+									<>
+
+									</> :
+									<>
+										<p style={{ position: 'absolute', left: '45%', top: '42%' }}>No tiene modelo asignado</p>
+										<Button1 variant="outline-info" style={{ position: 'absolute', left: '47%', top: '48%' }} onClick={() => {
+											if (true) {
+
+											} else {
+												Swal.fire({
+													title: 'Error!',
+													text: 'No tiene un Presupuesto seleccionado',
+													icon: 'error',
+													confirmButtonText: 'Ok'
+												})
+											}
+										}}><i class="fas fa-sign-in-alt"></i>   Asignar un modelo</Button1>
+
+									</>
+
+
+
+								}
+
+							</div>
+
+						</>
+					}
+
+
+				</div> : ''}
+
+
 			</Resizable>
 
 
 
-			<div id="ContDet2" className="" style={{ position: 'absolute', top: height+3 , height: window.innerHeight - height - 60, width: '100%', 
-					background: 'rgb(242,245,246)',
-					background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
-					background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
-					background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
-					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',
-/*, zIndex: '9', background: 'red'*/ }}>
+			<div id="ContDet2" className="" style={{
+				position: 'absolute', top: height + 3, height: window.innerHeight - height - 60, width: '100%',
+				/*background: 'rgb(242,245,246)',
+				background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
+				background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+				background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
+				filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',*/
+				background: 'transparent',
+				/*, zIndex: '9', background: 'red'*/
+			}}>
 
-				<Collapse in={open1} style={{ height: '90%', 
-					background: 'rgb(242,245,246)',
+				<Collapse in={open1} style={{
+					height: '90%',
+					/*background: 'rgb(242,245,246)',
 					background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
 					background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
 					background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
-					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',			 
-			 }}>
-					<div className="p-2 w-100" style={{ height: '90%',   }}>
+					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',			 */
+					background: 'transparent',
+				}}>
+					<div className="p-2 w-100" style={{ height: '90%', }}>
 						<Nav
 							variant="tabs"
 							defaultActiveKey="/home"
 							className="eyelashes"
 
-							
+
 							style={{ height: '100%' }}
 						>
 							<Nav.Item
@@ -1322,16 +1492,17 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 									setLevelPC(1);
 								}}
 							>
-								<Nav.Link href="#" 
-								active={level === 2}
-								onClick={()=>{
-								if (ultimoASOCIADOS!==itemSeleccionado){
-									dispatch(selectAPUS(itemSeleccionado.substring(0,7), itemSeleccionado.substring(7,10), itemSeleccionado.substring(10,25), ''));	
-									setUltimoAPU(itemSeleccionado);
-									}
-																	
-								}}	
+								<Nav.Link href="#"
+									active={level === 2}
+									onClick={() => {
+										if (ultimoASOCIADOS !== itemSeleccionado) {
+											dispatch(selectAPUS(itemSeleccionado.substring(0, 7), itemSeleccionado.substring(7, 10), itemSeleccionado.substring(10, 25), ''));
+											setUltimoAPU(itemSeleccionado);
+										}
+
+									}}
 								>
+									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
 									APU PARTIDA
 								</Nav.Link>
 							</Nav.Item>
@@ -1346,14 +1517,15 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 									href="#"
 									eventKey="link-1"
 									active={level === 1}
-									onClick={()=>{
-									if (ultimoASOCIADOS!==itemSeleccionado){
-										dispatch(selectMETRADOS(itemSeleccionado.substring(0,7), itemSeleccionado.substring(7,10), itemSeleccionado.substring(10,25), ''));	
-										dispatch(cleanDataChart22());	
-										setUltimoMETRADO(itemSeleccionado);
+									onClick={() => {
+										if (ultimoASOCIADOS !== itemSeleccionado) {
+											dispatch(selectMETRADOS(itemSeleccionado.substring(0, 7), itemSeleccionado.substring(7, 10), itemSeleccionado.substring(10, 25), ''));
+											dispatch(cleanDataChart22());
+											setUltimoMETRADO(itemSeleccionado);
 										}
-									}}										
+									}}
 								>
+									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
 									METRADO
 								</Nav.Link>
 							</Nav.Item>
@@ -1361,7 +1533,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 							<Nav.Item
 								onClick={() => {
 
-									if (proyects.Urn===''){
+									if (proyects.Urn === '') {
 										setLevel(2);
 										setLevelPC(1);
 										Swal.fire({
@@ -1371,7 +1543,7 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 											confirmButtonText: 'Ok'
 										})
 
-									}else{
+									} else {
 										setLevel(3);
 										setLevelPC(3);
 									}
@@ -1382,21 +1554,22 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 									href="#"
 									eventKey="link-2"
 									active={level === 3}
-									onClick={()=>{
-									if (ultimoASOCIADOS!==itemSeleccionado){
-										dispatch(selectAsociados(itemSeleccionado.substring(0,7), itemSeleccionado.substring(7,10), itemSeleccionado.substring(10,25), ''));	
-										setUltimoASCOCIADOS(itemSeleccionado);
+									onClick={() => {
+										if (ultimoASOCIADOS !== itemSeleccionado) {
+											dispatch(selectAsociados(itemSeleccionado.substring(0, 7), itemSeleccionado.substring(7, 10), itemSeleccionado.substring(10, 25), ''));
+											setUltimoASCOCIADOS(itemSeleccionado);
 										}
-																		
-									}}									
+
+									}}
 								>
+									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
 									ELEMENTOS ASOCIADOS
 								</Nav.Link>
 							</Nav.Item>
 
 							<Nav.Item
 								onClick={() => {
-									if (proyects.Urn===''){
+									if (proyects.Urn === '') {
 										setLevel(2);
 										setLevelPC(1);
 										Swal.fire({
@@ -1406,9 +1579,9 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 											confirmButtonText: 'Ok'
 										})
 
-									}else{
-									setLevel(4);
-									setLevelPC(4);
+									} else {
+										setLevel(4);
+										setLevelPC(4);
 									}
 								}}
 							>
@@ -1426,13 +1599,14 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 									}}
 
 								>
+									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
 									ESTRUCTURA DE METRADO
 								</Nav.Link>
 							</Nav.Item>
 
 							<Nav.Item
 								onClick={() => {
-									if (proyects.Urn===''){
+									if (proyects.Urn === '') {
 										setLevel(2);
 										setLevelPC(1);
 										Swal.fire({
@@ -1442,9 +1616,9 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 											confirmButtonText: 'Ok'
 										})
 
-									}else{
-									setLevel(5);
-									setLevelPC(5);
+									} else {
+										setLevel(5);
+										setLevelPC(5);
 									}
 								}}
 							>
@@ -1452,19 +1626,20 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 									href="#"
 									eventKey="link-4"
 									active={level === 5}
-									onClick={()=>{
-										if (ultimoCALCULO!==itemSeleccionado){
+									onClick={() => {
+										if (ultimoCALCULO !== itemSeleccionado) {
 											//alert(itemSeleccionado.substring(0,7));
 											//alert(itemSeleccionado.substring(7,10));
 											//alert(itemSeleccionado.substring(10,25));
-											dispatch(selectCalculo(itemSeleccionado.substring(0,7), itemSeleccionado.substring(7,10), itemSeleccionado.substring(10,25), ''));	
-											dispatch(selectCalculoDet(itemSeleccionado.substring(0,7), itemSeleccionado.substring(7,10), itemSeleccionado.substring(10,25), ''));	
+											dispatch(selectCalculo(itemSeleccionado.substring(0, 7), itemSeleccionado.substring(7, 10), itemSeleccionado.substring(10, 25), ''));
+											dispatch(selectCalculoDet(itemSeleccionado.substring(0, 7), itemSeleccionado.substring(7, 10), itemSeleccionado.substring(10, 25), ''));
 											setUltimoCALCULO(itemSeleccionado);
 										}
 										///////////////////////////////////////////////////////
-									
+
 									}}
 								>
+									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
 									DETALLE DE CALCULO
 								</Nav.Link>
 							</Nav.Item>
@@ -1491,13 +1666,15 @@ const Items = ({ widthItems, widthNav=0, levelStart = 1, idProject }) => {
 						</Nav>
 
 
-						<div id="DetalleItem" className="mt-0 p-2 overflow-scroll" style={{ position: 'absolute', height: '92%', overflow: 'scroll',
-							background: 'rgb(242,245,246)',
+						<div id="DetalleItem" className="mt-0 p-2 overflow-scroll" style={{
+							position: 'absolute', height: '92%', overflow: 'scroll',
+							/*background: 'rgb(242,245,246)',
 							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
 							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
 							background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',
-							}}>
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',*/
+							background: 'white'
+						}}>
 							{levelPC === 1 ? (
 								<Apus
 									levelStart={1}

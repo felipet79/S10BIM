@@ -1,5 +1,5 @@
 import axios from '../config/axios';
-import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB,URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES, PARTY_CONTROL1, AGREGA_REGISTRO, AGREGA_CATEGORIA, AGREGA_TIPO, AGREGA_FAMILIA} from '../constants';
+import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB,URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES, PARTY_CONTROL1, AGREGA_REGISTRO, AGREGA_CATEGORIA, AGREGA_TIPO, AGREGA_FAMILIA, AGREGA_GRUPO, MODIFICA_GRUPO, ELIMINA_GRUPO, AGREGA_ELEMENTOS, MODIFICA_SUB, MODIFICA_SUB1, AGREGA_SUB1, ACT_PRESUPUESTO} from '../constants';
 
 export const selectProyect = (idCod, userName, userId) =>{
 	return async (dispatch) =>{
@@ -246,6 +246,193 @@ export const selectCLIENTES = (Descripcion, userId) =>{
 			type: ID_PC,
 			payload: CodPres
 		})*/
+	}
+}
+
+
+
+export const guardarPresupuesto = (CodPresupuesto, Descripcion, Plazo,  Fecha,  Jornada, DobleMoneda ,CostoDirectoBase1,CostoIndirectoBase1,CostoBase1,CostoDirectoBase2,CostoIndirectoBase2,CostoBase2,CodIdentificador,CodLugar,CodMoneda1,CodMoneda2,CodigoAlterno,JornadaSemana,JornadaMes,JornadaAno,userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		const {data} = await axios.post(
+			"",
+			{
+				//dbo.S10_01_Presupuesto_Adicionar 'ctorres@s10peru.com','1502005','Presupuesto 5',0,'6/8/2021',8.00,0,0.00,0.00,0.00,0.00,0.00,0.00,'22000030','010112','01',NULL,'',0.00,0.00,0.00
+
+				//dbo.S10_01_Presupuesto_Adicionar 'ctorres@s10peru.com','1504002','Presupuesto 2',0,'6/8/2021',8.00,0,0.00,0.00,0.00,0.00,0.00,0.00,'22000048','010117','01',NULL,'',0.00,0.00,0.00
+				HasOutputParam: false,
+				//ObjectName: `dbo.S10_01_Presupuesto_Adicionar '${CodPresupuesto}','${Descripcion}',${Plazo},'${Fecha}',${Jornada},${0},${CostoDirectoBase1},${CostoIndirectoBase1},${CostoBase1},${CostoDirectoBase2},${CostoIndirectoBase2},${CostoBase2},'${CodIdentificador}','${CodLugar}','${CodMoneda1}','${CodMoneda2}','${CodigoAlterno}',${JornadaSemana},${JornadaMes},${JornadaAno},'${email}'`,
+				ObjectName: `dbo.S10_01_Presupuesto_Adicionar '${email}','${CodPresupuesto}','${Descripcion}',${Plazo},'${Fecha}',${Jornada},${0},${CostoDirectoBase1},${CostoIndirectoBase1},${CostoBase1},${CostoDirectoBase2},${CostoIndirectoBase2},${CostoBase2},'${CodIdentificador}','${CodLugar}','${CodMoneda1}',${'NULL'},'${CodigoAlterno}',${JornadaSemana},${JornadaMes},${JornadaAno}`,
+				//ObjectName: `dbo.S10_01_Presupuesto_Adicionar '${CodPresupuesto}','${Descripcion}','${Plazo}','${Fecha}','${Jornada}','${DobleMoneda}','${CostoDirectoBase1}','${CostoIndirectoBase1}','${CostoBase1}','${CostoDirectoBase2}','${CostoIndirectoBase2}','${CostoBase2}','${CodIdentificador}','${CodLugar}','${CodMoneda1}','${CodMoneda2}','${CodigoAlterno}','${JornadaSemana}','${JornadaMes}','${JornadaAno}'`,
+				RequestId: "IngPres",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+				
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log(`dbo.S10_01_Presupuesto_Adicionar '${email}','${CodPresupuesto}','${Descripcion}',${Plazo},'${Fecha}',${Jornada},${0},${CostoDirectoBase1},${CostoIndirectoBase1},${CostoBase1},${CostoDirectoBase2},${CostoIndirectoBase2},${CostoBase2},'${CodIdentificador}','${CodLugar}','${CodMoneda1}',${'NULL'},'${CodigoAlterno}',${JornadaSemana},${JornadaMes},${JornadaAno}`);
+	}
+}
+
+export const modificarPresupuesto = (CodPresupuesto, Descripcion, Plazo,  Fecha,  Jornada, DobleMoneda ,CostoDirectoBase1,CostoIndirectoBase1,CostoBase1,CostoDirectoBase2,CostoIndirectoBase2,CostoBase2,CodIdentificador,CodLugar,CodMoneda1,CodMoneda2,CodigoAlterno,JornadaSemana,JornadaMes,JornadaAno,userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				//ObjectName: `dbo.S10_01_Presupuesto_Modificar '${CodPresupuesto}','${Descripcion}','${Plazo}','${Fecha}','${Jornada}','${DobleMoneda}','${CostoDirectoBase1}','${CostoIndirectoBase1}','${CostoBase1}','${CostoDirectoBase2}','${CostoIndirectoBase2}','${CostoBase2}','${CodIdentificador}','${CodLugar}','${CodMoneda1}','${CodMoneda2}','${CodigoAlterno}','${JornadaSemana}','${JornadaMes}','${JornadaAno}','${email}'`,
+				ObjectName: `dbo.S10_01_Presupuesto_Modificar '${email}','${CodPresupuesto}','${Descripcion}',${Plazo},'${Fecha}',${Jornada},${0},${CostoDirectoBase1},${CostoIndirectoBase1},${CostoBase1},${CostoDirectoBase2},${CostoIndirectoBase2},${CostoBase2},'${CodIdentificador}','${CodLugar}','${CodMoneda1}',${'NULL'},'${CodigoAlterno}',${JornadaSemana},${JornadaMes},${JornadaAno}`,
+				RequestId: "ModPres",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log(`dbo.S10_01_Presupuesto_Modificar '${email}','${CodPresupuesto}','${Descripcion}',${Plazo},'${Fecha}',${Jornada},${0},${CostoDirectoBase1},${CostoIndirectoBase1},${CostoBase1},${CostoDirectoBase2},${CostoIndirectoBase2},${CostoBase2},'${CodIdentificador}','${CodLugar}','${CodMoneda1}',${'NULL'},'${CodigoAlterno}',${JornadaSemana},${JornadaMes},${JornadaAno}`);
+	}
+}
+
+
+
+export const guardarSubPresupuesto = (CodPresupuesto,CodSubpresupuesto,Descripcion,CodModelo,userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				ObjectName: `dbo.S10_01_Subpresupuesto_Adicionar '${CodPresupuesto}','${CodSubpresupuesto}','${Descripcion}','${CodModelo}','${email}'`,
+				RequestId: "IngSubPres",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log(data);
+	}
+}
+
+/*export const modificarSubPresupuesto = (CodPresupuesto,CodSubpresupuesto,Descripcion,CodModelo,userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				ObjectName: `dbo.S10_01_Subpresupuesto_Modificar '${CodPresupuesto}','${CodSubpresupuesto}','${Descripcion}','${CodModelo}','${email}'`,
+				RequestId: "ModSubPres",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log(data);
+	}
+}*/
+
+
+/*S10_01_Presupuesto_AdicionarGrupo
+@EMailUsuario VARCHAR(128),
+@CodPresupuesto VARCHAR(7),
+@Descripcion VARCHAR(250),
+@Nivel SMALLINT*/
+
+export const guardarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				ObjectName: `dbo.S10_01_Presupuesto_AdicionarGrupo '${email}','${CodPresupuesto}','${Descripcion}','${Nivel}'`,
+				RequestId: "IngGrupo",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log(data);
+	}
+}
+
+export const modificarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				ObjectName: `dbo.S10_01_Presupuesto_ModificarGrupo '${email}','${CodPresupuesto}','${Descripcion}','${Nivel}'`,
+				RequestId: "ModGrupo",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log(data);
+	}
+}
+
+
+export const eliminarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				ObjectName: `dbo.S10_01_Presupuesto_EliminarGrupo '${CodPresupuesto}','${Descripcion}','${Nivel}'`,
+				RequestId: "IngSubPres",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log(data);
 	}
 }
 
@@ -781,6 +968,80 @@ export const cambiaSeleccion = (sel) => ({
 	type: AGREGA_FAMILIA,
 	payload: sel
   })
+
+  export const agregaElementos = (sel) => ({
+	type: AGREGA_ELEMENTOS,
+	payload: sel
+  })
+
+
+  export const agregaGrupo1 = (sel) =>{
+	// console.log('reiniciando desde actions')
+	return (dispatch) =>
+		dispatch({
+			type: AGREGA_GRUPO,
+			payload: sel
+		})
+}
+
+export const modificaGrupo1 = (sel) =>{
+	 console.log('aGREGANDO MODIFICA GRUPO');
+	 console.log(sel);
+	return (dispatch) =>
+		dispatch({
+			type: MODIFICA_GRUPO,
+			payload: sel
+		})
+}
+
+export const modificaSub = (sel) =>{
+	/*console.log('aGREGANDO MODIFICA GRUPO');
+	console.log(sel);*/
+   return (dispatch) =>
+	   dispatch({
+		   type: MODIFICA_SUB,
+		   payload: sel
+	   })
+}
+
+export const modificaSub1 = (sel) =>{
+	/*console.log('aGREGANDO MODIFICA GRUPO');
+	console.log(sel);*/
+   return (dispatch) =>
+	   dispatch({
+		   type: MODIFICA_SUB1,
+		   payload: sel
+	   })
+}
+
+export const agregaSub1 = (sel) =>{
+	/*console.log('aGREGANDO MODIFICA GRUPO');
+	console.log(sel);*/
+   return (dispatch) =>
+	   dispatch({
+		   type: AGREGA_SUB1,
+		   payload: sel
+	   })
+}
+
+export const eliminaGrupo1 = (sel) =>{
+	// console.log('reiniciando desde actions')
+	return (dispatch) =>
+		dispatch({
+			type: ELIMINA_GRUPO,
+			payload: sel
+		})
+}
+
+export const actPresupuesto = (sel) =>{
+	/*console.log('aGREGANDO MODIFICA GRUPO');
+	console.log(sel);*/
+   return (dispatch) =>
+	   dispatch({
+		   type: ACT_PRESUPUESTO,
+		   payload: sel
+	   })
+}
 
 
 export const SeleccionaSub = (sel) => ({

@@ -126,7 +126,7 @@ export const connectSignalr = (token) => {
 				case LISTAR_UBICACIONES:
 					console.log('ubicaciones llegadas:');
 					//console.log(JSON.parse(data.OutputValue));
-					
+
 					//console.log(data.OutputValue);
 					//console.log(JSON.parse(data.Data));
 					localStorage.setItem("paginacion", data.OutputValue);
@@ -178,7 +178,7 @@ export const connectSignalr = (token) => {
 				case APU_DETALLE:
 					//console.log('APUS llegados:');
 					//console.log(JSON.parse(data.Data));		
-					
+
 					dispatch({
 						type: APU_DETALLE,
 						payload: JSON.parse(data.Data),
@@ -229,7 +229,26 @@ export const connectSignalr = (token) => {
 					});
 					break;
 
+				case 'IngPres':
+					console.log('Llega respuesta de resultado GUARDAR PRESUPUESTO');
+					console.log(data);
+					/*dispatch({
+						//type: PROJECT_LIST_DETAILS,
+						
+						payload: JSON.parse(data.Data),
+					});*/
+					break;
 
+
+				case 'ModPres':
+					console.log('Llega respuesta de resultado MODIFICAR PRESUPUESTO  !!!!!!!!');
+					console.log(data);
+					/*dispatch({
+						//type: PROJECT_LIST_DETAILS,
+						
+						payload: JSON.parse(data.Data),
+					});*/
+					break;
 
 				case PROJECT_LIST_DETAILS:
 					dispatch({

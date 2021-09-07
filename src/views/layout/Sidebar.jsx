@@ -11,10 +11,11 @@ import TreeCP from "../../components/TreeCP";
 const Sidebar = () => {
   return (
     <aside id="ContenedorSide" className="main-sidebar sidebar-dark-primary elevation-3" style={{opacity: 1.0,
-      background: '-moz-linear-gradient(top, rgba(53,53,42,1) 4%, rgba(53,53,42,1) 29%, rgba(53,53,42,0.97) 35%, rgba(122,155,141,0.91) 48%, rgba(78,99,78,0.86) 61%, rgba(116,135,117,0.8) 74%, rgba(165,183,169,0.8) 91%)',
+      /*background: '-moz-linear-gradient(top, rgba(53,53,42,1) 4%, rgba(53,53,42,1) 29%, rgba(53,53,42,0.97) 35%, rgba(122,155,141,0.91) 48%, rgba(78,99,78,0.86) 61%, rgba(116,135,117,0.8) 74%, rgba(165,183,169,0.8) 91%)',
       background: '-webkit-linear-gradient(top, rgba(53,53,42,1) 4%,rgba(53,53,42,1) 29%,rgba(53,53,42,0.97) 35%,rgba(122,155,141,0.91) 48%,rgba(78,99,78,0.86) 61%,rgba(116,135,117,0.8) 74%,rgba(165,183,169,0.8) 91%)',
       background: 'linear-gradient(to bottom, rgba(53,53,42,1) 4%,rgba(53,53,42,1) 29%,rgba(53,53,42,0.97) 35%,rgba(122,155,141,0.91) 48%,rgba(78,99,78,0.86) 61%,rgba(116,135,117,0.8) 74%,rgba(165,183,169,0.8) 91%)',
-      filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#35352a", endColorstr="#cca5b7a9",GradientType=0 )'    
+      filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#35352a", endColorstr="#cca5b7a9",GradientType=0 )'    */
+      background:'#1e282c'
     }}>
       {/* <!-- Brand Logo --> */}
       <Link to="/presupuesto" className="brand-link"  style={{ background:'#3c8dbc', height:'35px', 
@@ -23,10 +24,12 @@ const Sidebar = () => {
         background: '-webkit-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%)',
         background: 'linear-gradient(to bottom, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%)',
         filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#1e5799", endColorstr="#7db9e8",GradientType=0 )',    */
-        background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
+       /* background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
         background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
         background: 'linear-gradient(to bottom, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
-        filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'        
+        filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'        */
+       background:'#398bf7'
+
     }}>
         <img
           src={logo}
@@ -52,10 +55,13 @@ const Sidebar = () => {
         filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#1f303a", endColorstr="#b5bdc8",GradientType=0 )'*/
         
 
-        background: '-moz-linear-gradient(top, rgba(53,53,42,1) 4%, rgba(53,53,42,1) 29%, rgba(53,53,42,0.97) 35%, rgba(122,155,141,0.91) 48%, rgba(78,99,78,0.86) 61%, rgba(116,135,117,0.8) 74%, rgba(165,183,169,0.8) 91%)',
+        /*background: '-moz-linear-gradient(top, rgba(53,53,42,1) 4%, rgba(53,53,42,1) 29%, rgba(53,53,42,0.97) 35%, rgba(122,155,141,0.91) 48%, rgba(78,99,78,0.86) 61%, rgba(116,135,117,0.8) 74%, rgba(165,183,169,0.8) 91%)',
         background: '-webkit-linear-gradient(top, rgba(53,53,42,1) 4%,rgba(53,53,42,1) 29%,rgba(53,53,42,0.97) 35%,rgba(122,155,141,0.91) 48%,rgba(78,99,78,0.86) 61%,rgba(116,135,117,0.8) 74%,rgba(165,183,169,0.8) 91%)',
         background: 'linear-gradient(to bottom, rgba(53,53,42,1) 4%,rgba(53,53,42,1) 29%,rgba(53,53,42,0.97) 35%,rgba(122,155,141,0.91) 48%,rgba(78,99,78,0.86) 61%,rgba(116,135,117,0.8) 74%,rgba(165,183,169,0.8) 91%)',
-        filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#35352a", endColorstr="#cca5b7a9",GradientType=0 )'
+        filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#35352a", endColorstr="#cca5b7a9",GradientType=0 )'*/
+        background:'#1e282c',
+        color:'white'
+
       }} >
      
 
@@ -98,8 +104,8 @@ const Sidebar = () => {
            
             <li className="nav-item">
               <Link to="/presupuesto" className="nav-link font-12">
-                <i className="nav-icon fas fa-th" style={{fontSize: 15, marginLeft:'-20px'}}></i>
-                <p>
+                <i className="nav-icon fas fa-th" style={{fontSize: 15, marginLeft:'-20px', color:'white'}}></i>
+                <p style={{color:'white'}}>
                   Presupuesto
                 </p>
               </Link>
@@ -116,7 +122,7 @@ const Sidebar = () => {
 
             <li className="nav-item">
               <Link to="/presupuesto" className="nav-link font-12">
-                <i className="nav-icon far fa-calendar-alt" style={{position:'absolute', fontSize: 15, marginLeft:'-50px'}}></i>
+                <i className="nav-icon far fa-calendar-alt" style={{position:'absolute', fontSize: 15, marginLeft:'-50px', color:'white'}}></i>
                 <p style={{marginLeft:'-25px'}}>
                   Hoja del Presupuesto
                 </p>
@@ -128,8 +134,8 @@ const Sidebar = () => {
 
             <li className="nav-item">
               <Link to="/modelos" className="nav-link font-12">
-                <i className="nav-icon fas fa-th" style={{fontSize: 15, marginLeft:'-20px'}}></i>
-                <p>
+                <i className="nav-icon fas fa-th" style={{fontSize: 15, marginLeft:'-20px', color:'white'}}></i>
+                <p style={{color:'white'}}>
                   General
                 </p>
               </Link>
@@ -137,7 +143,7 @@ const Sidebar = () => {
             <ul style={{listStyle:'none'}}>
             <li className="nav-item">
               <Link to="/modelos" className="nav-link font-12">
-                <i className="nav-icon far fa-calendar-alt" style={{position:'absolute', fontSize: 15, marginLeft:'-50px'}}></i>
+                <i className="nav-icon far fa-calendar-alt" style={{position:'absolute', fontSize: 15, marginLeft:'-50px', color:'white' }}></i>
                 <p style={{ marginLeft:'-25px'}}>
                   Modelos
                 </p>

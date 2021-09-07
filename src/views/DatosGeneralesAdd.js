@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, Form, Row, Button, Col, InputGroup, FormControl, Dropdown, DropdownButton, Table } from 'react-bootstrap'
 import Moment from 'react-moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { limpiaUbicaciones, selectCLIENTES, selectMODELOS, selectMONEDAS, selectUBICACIONES } from '../actions/proyects.actions';
+import { agregaGrupo1, agregaSub1, guardarGrupo, guardarPresupuesto, limpiaUbicaciones, selectCLIENTES, selectMODELOS, selectMONEDAS, selectUBICACIONES } from '../actions/proyects.actions';
 import Button1 from 'devextreme-react/button';
 import BuscaCliente from '../components/BuscaCliente';
 import BuscaUbicacion from '../components/BuscaUbicacion';
@@ -31,41 +31,49 @@ import {
 const tiempoTranscurrido = Date.now();
 const hoy = new Date(tiempoTranscurrido);
 
-const initialP={
-    CodPresupuesto: '',
-    CodAlterno: '',
-    Descripcion:'',
-    CodCliente:'',
-    Cliente:'',
-    CodLugar:'',
-    UbicacionGeografica:'',
-    Fecha:hoy,
-    HistoricoPrecios:'',
-    Plazo:'0.00',
-    Jornada:'0.00',
-    JornadaSemana:'0.00',
-    JornadaMes:'0.00',
-    JornadaAno:'0.00',
-    CodMoneda:'',
-    Moneda:'',
-    SimboloMoneda:'',
-    CostoDirectoBase1:'0.00',
-    CostoIndirectoBase1:'0.00',
-    CostoBase1:'0.00',
-    CostoDirectoOferta1:'0.00',
-    CostoIndirectoOferta1:'0.00',
-    CostoOferta1:'0.00'
-}
 
 
 
 
-const DatosGeneralesAdd = ({itemSelected}) => {
+
+const DatosGeneralesAdd = ({itemSelected, setNuevoPres}) => {
 
     /*const [ItemSub, setItemSub] = useState({
 
 
     });*/
+
+
+    const initialP={
+        CodPresupuesto: '',
+        CodAlterno: '',
+        Descripcion:'',
+        CodCliente:'',
+        Cliente:'',
+        CodLugar:'',
+        UbicacionGeografica:'',
+        Fecha:hoy,
+        HistoricoPrecios:'',
+        Plazo:'0',
+        Jornada:'8.00',
+        JornadaSemana:'0.00',
+        JornadaMes:'0.00',
+        JornadaAno:'0.00',
+        CodMoneda:'',
+        Moneda:'',
+        SimboloMoneda:'',
+        CostoDirectoBase1:'0.00',
+        CostoIndirectoBase1:'0.00',
+        CostoBase1:'0.00',
+        CostoDirectoOferta1:'0.00',
+        CostoIndirectoOferta1:'0.00',
+        CostoOferta1:'0.00',
+        ERPCode:'',
+        Fila:null,
+        Nivel:null,
+        PhantomId:'',
+        PhantomParentId:''
+    }
 
     const [show, setShow] = useState(false);
     const [showUb, setShowUb] = useState(false);
@@ -118,7 +126,7 @@ const DatosGeneralesAdd = ({itemSelected}) => {
         setShow(true)
     }
 
-    const drawerItems = () => {
+   /* const drawerItems = () => {
         //console.log('datos de subProyectos actualizados')
         //console.log(allLevels1[0])
 
@@ -165,11 +173,11 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                     )
                 }) : ''
         )
-    }
+    }*/
 
 
-    function formatNumber(num) {
-        if (!num || num == 'NaN') return '-';
+   /* function formatNumber(num) {
+        if (!num || num == 'NaN') return '0.00';
         if (num == 'Infinity') return '&#x221e;';
         var num = num.toString().replace(/\$|\,/g, '');
         if (isNaN(num))
@@ -182,8 +190,8 @@ const DatosGeneralesAdd = ({itemSelected}) => {
             cents = "0" + cents;
         for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
             num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
-        return (((sign) ? '' : '-') + num + '.' + cents);
-    }
+        return (((sign) ? '' : '0.00') + num + '.' + cents);
+    }*/
 
     function roundN(num, n) {
         return parseFloat(Math.round(num * Math.pow(10, n)) / Math.pow(10, n)).toFixed(n);
@@ -213,7 +221,7 @@ const DatosGeneralesAdd = ({itemSelected}) => {
 
     }
 
-    const drawerItems1 = () => {
+   /* const drawerItems1 = () => {
         //console.log('datos de subProyectos actualizados')
         //console.log(allLevels1[0])
         return (
@@ -256,7 +264,7 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                     )
                 }) : ''
         )
-    }
+    }*/
 
 
 
@@ -344,9 +352,65 @@ const DatosGeneralesAdd = ({itemSelected}) => {
         }
 
 
+        console.log('MIS DATOS DE ARBOLLLLLL');
+        console.log(proyects.treePartyControl);
+        
+
+        const filtro = proyects.treePartyControl.filter((filtro1) => filtro1.PhantomParentId === itemSelected);
+        //alert(filtro.length)
+        let toca=0;
+        if (filtro.length!==0)
+        {
+            toca= parseInt(filtro[filtro.length-1].CodPresupuesto.substring(4,7),10)+1;
+
+        }else
+            toca=1;
+
+        let concat='00';
+        if (toca>=10)
+            concat='0';
+        if (toca>=100)
+            concat='';
+
+        setPresupuestoN( (state) => ({...state,CodPresupuesto:concat+toca}));
+
+            //alert(toca)
+		//var Sumatoria = 0.00;
+		/*for (let i = 0; i < filtro.length; i++) {
+
+			if (filtro[i].Metrado !== null) {
+				Sumatoria = Sumatoria + parseFloat(filtro[i].Total);				
+			} else {
+				var TotalAux = ObtenerSuma(filtro[i]);
+				Sumatoria = Sumatoria + TotalAux;
+				filtro[i].Total = (TotalAux);
+				filtro[i].Totalf = formatNumber(TotalAux);
+			}
+
+		}*/
+        dispatch(selectMONEDAS(''));
+        dispatch(selectCLIENTES('', ''));
+
+        /*setTimeout(() => {
+            
+            const regm = proyects.DataMonedas.find((filtro1) => filtro1.CodMoneda === '01');
+            if (regm)
+            setPresupuestoN( (state) => ({...state,CodMoneda:'01',Moneda:regm.Descripcion }));
+
+        }, 4500);*/
+
+        setPresupuestoN( (state) => ({...state,ERPCode:itemSelected+presupuestoN.CodPresupuesto, Fila:proyects.treePartyControl.length,Nivel:3,PhantomId:itemSelected+presupuestoN.CodPresupuesto,PhantomParentId:itemSelected}));
+
     }, [])
 
-
+    useEffect(() => {
+ 
+            if (proyects.DataMonedas){
+                const regm = proyects.DataMonedas.find((filtro1) => filtro1.CodMoneda === '01');
+                if (regm)
+                setPresupuestoN( (state) => ({...state,CodMoneda:'01',Moneda:regm.Descripcion }));
+            }
+    }, [proyects.DataMonedas])
 
     useEffect(() => {
         setHistoricos([]);
@@ -375,11 +439,15 @@ const DatosGeneralesAdd = ({itemSelected}) => {
     }
 
     const CambiaDescripcion = (data) => {
-		setPresupuestoN( (state) => ({...state,Descripcion:data.value}));
+        if (data.value.length>250){
+            data.value=data.value.substring(0,250);
+        }
+        setPresupuestoN( (state) => ({...state,Descripcion:data.value}));
 	}
+   
+   
     const CambiaCodigo = (data) => {
-		//console.log(data)
-        
+		//console.log(data)        
         //alert(data.event.keyCode)
         if (data.event)
         if (data.event.keyCode>=65 && data.event.keyCode<=90){
@@ -394,19 +462,298 @@ const DatosGeneralesAdd = ({itemSelected}) => {
         if (data.value.length>3){
             data.value=data.value.substring(0,3);
         }
+
+
+
+
+        const filtro = proyects.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto === itemSelected+data.value);
+        //alert(filtro.length)
+        
+        if (filtro.length!==0)
+        {
+            Swal.fire(
+                'Error!',
+                'Este Codigo ya está ocupado!',
+                'error'
+              )
+
+            //toca= parseInt(filtro[filtro.length-1].CodPresupuesto.substring(4,7),10)+1;
+            data.value='';
+        }
+
+        //setPresupuestoN( (state) => ({...state,CodPresupuesto:concat+toca}));
+
+
         setPresupuestoN( (state) => ({...state,CodPresupuesto:data.value}));
+
+	}
+
+    const CambiaCodigoAlterno = (data) => {
+		//console.log(data)        
+        //alert(data.event.keyCode)
+        if (data.event)
+        if (data.event.keyCode>=65 && data.event.keyCode<=90){
+            if (data.value.length>1)
+                data.value=data.value.substring(0,data.value.length-1);
+            else
+                data.value='';
+        }
+        if (isNaN(data.value)) {
+            data.value='';
+        }
+        if (data.value.length>20){
+            data.value=data.value.substring(0,20);
+        }
+        setPresupuestoN( (state) => ({...state,CodAlterno:data.value}));
+	}
+
+    const CambiaCodigoCliente = (data) => {
+		//console.log(data)        
+        //alert(data.event.keyCode)
+        if (data.event)
+        if (data.event.keyCode>=65 && data.event.keyCode<=90){
+            if (data.value.length>1)
+                data.value=data.value.substring(0,data.value.length-1);
+            else
+                data.value='';
+        }
+        if (isNaN(data.value)) {
+            data.value='';
+        }
+        if (data.value.length>8){
+            data.value=data.value.substring(0,8);
+        }
+
+        const regm = proyects.DataClientes.find((filtro1) => filtro1.CodIdentificador === data.value);
+        if (regm)
+            setPresupuestoN( (state) => ({...state,Cliente:regm.Descripcion }));
+        else
+            setPresupuestoN( (state) => ({...state,Cliente:'' }));
+        
+        setPresupuestoN( (state) => ({...state,CodCliente:data.value}));
+	}
+
+
+    const CambiaPlazo = (data) => {
+       
+        if (data.event)
+        if (data.event.keyCode>=65 && data.event.keyCode<=90){
+            if (data.value.length>1)
+                data.value=data.value.substring(0,data.value.length-1);
+            else
+                data.value='';
+        }
+        if (isNaN(data.value)) {
+            data.value='';
+        }        
+        if (data.value.length>5){
+            data.value=data.value.substring(0,5);
+        }
+        if (data.value!=='')
+            data.value=parseInt(data.value,10)+'';        
+        setPresupuestoN( (state) => ({...state,Plazo:data.value}));
+	}
+
+    const CambiaJornada = (data) => {      
+        if (data.event)
+        if (data.event.keyCode>=65 && data.event.keyCode<=90){
+            if (data.value.length>1)
+                data.value=data.value.substring(0,data.value.length-1);
+            else
+                data.value='';
+        }
+        if (isNaN(data.value)) {
+            data.value='0.00';
+        }
+
+        if (data.value.length>8){
+            data.value=data.value.substring(0,8);
+        }
+        setPresupuestoN( (state) => ({...state,Jornada:data.value}));
+	}
+
+    const CambiaJornadaSemana = (data) => {      
+        if (data.event)
+        if (data.event.keyCode>=65 && data.event.keyCode<=90){
+            if (data.value.length>1)
+                data.value=data.value.substring(0,data.value.length-1);
+            else
+                data.value='';
+        }
+        if (isNaN(data.value)) {
+            data.value='0.00';
+        }
+
+        if (data.value.length>8){
+            data.value=data.value.substring(0,8);
+        }
+        setPresupuestoN( (state) => ({...state,JornadaSemana:data.value}));
+	}
+
+    const CambiaJornadaMes = (data) => {      
+        if (data.event)
+        if (data.event.keyCode>=65 && data.event.keyCode<=90){
+            if (data.value.length>1)
+                data.value=data.value.substring(0,data.value.length-1);
+            else
+                data.value='';
+        }
+        if (isNaN(data.value)) {
+            data.value='0.00';
+        }
+
+        if (data.value.length>8){
+            data.value=data.value.substring(0,8);
+        }
+        setPresupuestoN( (state) => ({...state,JornadaMes:data.value}));
+	}
+
+    const CambiaJornadaAno = (data) => {      
+        if (data.event)
+        if (data.event.keyCode>=65 && data.event.keyCode<=90){
+            if (data.value.length>1)
+                data.value=data.value.substring(0,data.value.length-1);
+            else
+                data.value='';
+        }
+        if (isNaN(data.value)) {
+            data.value='0.00';
+        }
+
+        if (data.value.length>8){
+            data.value=data.value.substring(0,8);
+        }
+        setPresupuestoN( (state) => ({...state,JornadaAno:data.value}));
+	}
+
+    const CambiaCodigoMoneda = (data) => {
+		//console.log(data)        
+        //alert(data.event.keyCode)
+        if (data.event)
+        if (data.event.keyCode>=65 && data.event.keyCode<=90){
+            if (data.value.length>1)
+                data.value=data.value.substring(0,data.value.length-1);
+            else
+                data.value='';
+        }
+        if (isNaN(data.value)) {
+            data.value='';
+        }
+        if (data.value.length>2){
+            data.value=data.value.substring(0,2);
+        }
+
+        const regm = proyects.DataMonedas.find((filtro1) => filtro1.CodMoneda === data.value);
+        if (regm)
+            setPresupuestoN( (state) => ({...state,Moneda:regm.Descripcion }));
+        else
+            setPresupuestoN( (state) => ({...state,Moneda:'' }));
+        
+        setPresupuestoN( (state) => ({...state,CodMoneda:data.value}));
+	}
+
+    const CambiaCDBase = (data) => {      
+        if (data.event)
+        if (data.event.keyCode>=65 && data.event.keyCode<=90){
+            if (data.value.length>1)
+                data.value=data.value.substring(0,data.value.length-1);
+            else
+                data.value='';
+        }
+        if (isNaN(data.value)) {
+            data.value='0.00';
+        }
+
+        if (data.value.length>16){
+            data.value=data.value.substring(0,16);
+        }
+        let total=parseFloat(parseFloat(data.value) + parseFloat(presupuestoN.CostoIndirectoBase1));
+        let total1=roundN(total,2);
+        setPresupuestoN( (state) => ({...state,CostoDirectoBase1:data.value, CostoBase1:total1}));
+	}
+
+    const CambiaCIBase = (data) => {      
+        if (data.event)
+        if (data.event.keyCode>=65 && data.event.keyCode<=90){
+            if (data.value.length>1)
+                data.value=data.value.substring(0,data.value.length-1);
+            else
+                data.value='';
+        }
+        if (isNaN(data.value)) {
+            data.value='0.00';
+        }
+
+        if (data.value.length>16){
+            data.value=data.value.substring(0,16);
+        }
+        let total=parseFloat(parseFloat(data.value) + parseFloat(presupuestoN.CostoDirectoBase1));
+        let total1=roundN(total,2);
+        setPresupuestoN( (state) => ({...state,CostoIndirectoBase1:data.value, CostoBase1:total1}));
 	}
 
 
 
     const valida = (e) => {
+
         
-        Swal.fire({
-            title: 'Error!',
-            text: 'Ingrese todos los campos',
-            icon: 'error',
-            confirmButtonText: 'Ok'
-        })
+
+        //alert(presupuestoN.CostoBase1);
+        //if (presupuestoN.CostoBase1==='-')
+        
+        /*let cbase=presupuestoN.CostoBase1.replace(',', '');
+
+        setPresupuestoN( (state) => ({...state, CostoBase1:cbase}));
+        alert(presupuestoN.CostoBase1);*/
+
+        const Nuevo=[{
+            CodPresupuesto: itemSelected+presupuestoN.CodPresupuesto,
+            Descripcion: presupuestoN.Descripcion,
+            ERPCode: itemSelected+presupuestoN.CodPresupuesto,
+            Fila: presupuestoN.Fila,
+            Nivel: 3,
+            PhantomId: itemSelected+presupuestoN.CodPresupuesto,
+            PhantomParentId: itemSelected
+        }];            
+        
+        
+        let fecha1=new Date(presupuestoN.Fecha);
+        let dia=parseInt(fecha1.getDate(),10)+1;
+        let mes=parseInt(fecha1.getMonth(),10)+1;
+        let fechaStr = dia + "/" + mes + '/' + fecha1.getFullYear();
+        //dispatch(guardarGrupo(itemSelected+presupuestoN.CodPresupuesto, presupuestoN.Descripcion, 3, ''));
+        
+        //dispatch(guardarGrupo(itemSelected+presupuestoN.CodPresupuesto, presupuestoN.Descripcion, 3, ''));
+        dispatch(agregaGrupo1(Nuevo));
+
+        setTimeout(() => {            
+            dispatch(guardarPresupuesto(itemSelected+presupuestoN.CodPresupuesto, presupuestoN.Descripcion, presupuestoN.Plazo,  fechaStr, presupuestoN.Jornada, '0' ,presupuestoN.CostoDirectoBase1,presupuestoN.CostoIndirectoBase1,presupuestoN.CostoBase1,presupuestoN.CostoDirectoOferta1,presupuestoN.CostoIndirectoOferta1,presupuestoN.CostoOferta1,presupuestoN.CodCliente,presupuestoN.CodLugar,presupuestoN.CodMoneda,'',presupuestoN.CodAlterno,presupuestoN.JornadaSemana,presupuestoN.JornadaMes,presupuestoN.JornadaAno,''));                
+        }, 1000);
+        
+
+        const Modificado1=[{
+            CodPresupuesto: itemSelected+presupuestoN.CodPresupuesto,
+            CodSubpresupuesto: '001',
+            Descripcion: presupuestoN.Descripcion,
+        }];   
+        
+        dispatch(agregaSub1(Modificado1));
+
+
+
+        console.log('LOS DATOS QUE SE GUARDARIAN')
+        console.log(itemSelected+presupuestoN.CodPresupuesto, presupuestoN.Descripcion, presupuestoN.Plazo,  fechaStr, presupuestoN.Jornada, '0' ,presupuestoN.CostoDirectoBase1,presupuestoN.CostoIndirectoBase1,presupuestoN.CostoBase1,presupuestoN.CostoDirectoOferta1,presupuestoN.CostoIndirectoOferta1,presupuestoN.CostoOferta1,presupuestoN.CodCliente,presupuestoN.CodLugar,presupuestoN.CodMoneda,'',presupuestoN.CodAlterno,presupuestoN.JornadaSemana,presupuestoN.JornadaMes,presupuestoN.JornadaAno,'')
+
+        Swal.fire(
+            'Bien!',
+            'Los datos de tu nuevo Presupuesto ' + presupuestoN.Descripcion + ' se almacenaron Correctamente!',
+            'success'
+          )
+
+
+          
+          setNuevoPres(false);
+
         /*notify({
             message: 'You have submitted the form',
             position: {
@@ -414,11 +761,13 @@ const DatosGeneralesAdd = ({itemSelected}) => {
               at: 'center top'
             }
           }, 'success', 3000);*/
-      
+          
           e.preventDefault();
     }
     
-  
+    const ReglaNumerica = {
+        X: /[02-9]/
+      };
 
     return (
         <div className="animate__animated animate__fadeIn" style={{ marginLeft: '0px', marginTop: '10px', height: '96%', width: '100%' }}>
@@ -434,7 +783,7 @@ const DatosGeneralesAdd = ({itemSelected}) => {
             <BuscaMoneda tipo="Nuevo" presupuestoN={presupuestoN} setShow={setShowMnd} show={showMnd} />
             {selecOP === 1 ?
                 (<Card className="animate__animated animate__fadeIn" style={{ overflow: 'scroll', marginLeft: '20px', height: '93vh', padding: '15px' }}>
-                    <Card.Header>Datos Generales
+                    <Card.Header style={{fontSize:'1rem'}}>Datos Generales
                             
                     </Card.Header>
                     <Card.Body>
@@ -512,6 +861,9 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                     <TextBox
                                         defaultValue={presupuestoN.CodAlterno}
                                         value={presupuestoN.CodAlterno}
+                                        valueChangeEvent="keyup"
+                                        onValueChanged={CambiaCodigoAlterno}
+                                        //onFocusOut={()=>{alert('saliste')}}
                                     /*valueChangeEvent="keyup"
                                     onValueChanged={(data)=>{
                                         console.log(data.value);
@@ -553,8 +905,14 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                     <TextBox
                                         defaultValue={presupuestoN.CodCliente}
                                         value={presupuestoN.CodCliente}
+                                        valueChangeEvent="keyup"
+                                        onValueChanged={CambiaCodigoCliente}
                                     //readOnly={true}
-                                    />
+                                    >
+                                    <Validator>
+                                        <RequiredRule message="Cliente es requerido" />
+                                    </Validator>
+                                    </TextBox>                                         
                                 </Col>
                                 <Col sm={8}>
                                     {/* <Form.Control type="Input" placeholder="Cliente" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Cliente : ''} onChange={handlerOnChange} /> */}
@@ -562,15 +920,20 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                         defaultValue={presupuestoN.Cliente}
                                         value={presupuestoN.Cliente}
                                         readOnly={true}
-                                    />
+                                    >
+                                    <Validator>
+                                        <RequiredRule message="Cliente es requerido" />
+                                    </Validator>
+                                    </TextBox>                                         
+
 
                                 </Col>
 
                                 <Col sm={1}>
-                                    <Button variant="outline-info" onClick={() => {
+                                    <Button1 variant="outline-info" height="35px" onClick={() => {
                                         //if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
                                             setShow(true);
-                                            dispatch(selectCLIENTES('', ''));
+                                            //dispatch(selectCLIENTES('', ''));
                                         /*} else {
                                             Swal.fire({
                                                 title: 'Error!',
@@ -579,7 +942,7 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                                 confirmButtonText: 'Ok'
                                             })
                                         }*/
-                                    }}>...</Button>
+                                    }}>...</Button1>
                                     {/* <Button variant="outline-info"><i class="fas fa-binoculars"></i></Button> */}
                                 </Col>
 
@@ -595,8 +958,13 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                     <TextBox
                                         defaultValue={presupuestoN.CodLugar}
                                         value={presupuestoN.CodLugar}
-                                    //readOnly={true}
-                                    />
+                                        readOnly={true}
+                                    >
+                                    <Validator>
+                                        <RequiredRule message="Ubicación es requerida" />
+                                    </Validator>
+                                    </TextBox>                                         
+
                                 </Col>
                                 <Col sm={7}>
                                     {/* <Form.Control type="Input" placeholder="Ubicación" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].UbicacionGeografica : ''} onChange={handlerOnChange} /> */}
@@ -604,11 +972,16 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                         defaultValue={presupuestoN.UbicacionGeografica}
                                         value={presupuestoN.UbicacionGeografica}
                                         readOnly={true}
-                                    />
+                                    >
+                                    <Validator>
+                                        <RequiredRule message="Ubicación es requerida" />
+                                    </Validator>
+                                    </TextBox>                                         
+
                                 </Col>
 
                                 <Col sm={1}>
-                                    <Button variant="outline-info" onClick={() => {
+                                    <Button1 variant="outline-info" height="35px" onClick={() => {
                                         //if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
                                             setShowUb(true); /*dispatch(limpiaUbicaciones());*/ dispatch(selectUBICACIONES('','20','1', ''));
                                         /*} else {
@@ -620,7 +993,7 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                             })
                                         }*/
 
-                                    }}>...</Button>
+                                    }}>...</Button1>
                                     {/* <Button variant="outline-info"><i class="fas fa-binoculars"></i></Button> */}
                                 </Col>
 
@@ -653,7 +1026,7 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                 </Col>
                                 <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Histórico
-                            </Form.Label>
+                                    </Form.Label>
 
                                 <Col sm={3}>
 
@@ -697,6 +1070,13 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                         defaultValue={presupuestoN.Plazo}
                                         value={presupuestoN.Plazo}
                                         rtlEnabled={true}
+                                        valueChangeEvent="keyup"
+                                        onValueChanged={CambiaPlazo}
+                                        onFocusOut={()=>{
+                                            if (presupuestoN.Plazo.trim()===''){
+                                                setPresupuestoN( (state) => ({...state,Plazo:'0'}));
+                                            }
+                                        }}
                                     //readOnly={true}
                                     />
                                 </Col>
@@ -715,12 +1095,23 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                 <Col sm={1}>
                                     {/* <Form.Control type="Text" style={{ textAlign: 'right' }} placeholder="0.00" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? formatNumber(proyects.DatosPresupuesto[0].Jornada) : ''} onChange={handlerOnChange} /> */}
                                     <TextBox
-                                        defaultValue={presupuestoN.Jornada}
-                                        value={presupuestoN.Jornada}
-                                        rtlEnabled={true}
+                                            //mask="000.00000"
+                                            /*maskRules={ReglaNumerica}
+                                            maskInvalidMessage="La jornada debe ser numerica"
+                                            useMaskedValue={true}*/
+                                            defaultValue={presupuestoN.Jornada}
+                                            value={presupuestoN.Jornada}
+                                            rtlEnabled={true}
+                                            valueChangeEvent="keyup"
+                                            onValueChanged={CambiaJornada}
+                                            onFocusOut={()=>{
+                                                if (presupuestoN.Jornada.trim()===''){
+                                                    setPresupuestoN( (state) => ({...state,Jornada:'0.00'}));
+                                                }
+                                            }}
                                     //readOnly={true}
-                                    />
-
+                                    >
+                                    </TextBox>
                                 </Col>
                                 <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     días
@@ -737,6 +1128,14 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                         defaultValue={presupuestoN.JornadaSemana}
                                         value={presupuestoN.JornadaSemana}
                                         rtlEnabled={true}
+                                        valueChangeEvent="keyup"
+                                        onValueChanged={CambiaJornadaSemana}
+                                        onFocusOut={()=>{
+                                            if (presupuestoN.JornadaSemana.trim()===''){
+                                                setPresupuestoN( (state) => ({...state,JornadaSemana:'0.00'}));
+                                            }
+                                        }}
+
                                     //readOnly={true}
                                     />
 
@@ -755,6 +1154,14 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                         defaultValue={presupuestoN.JornadaMes}
                                         value={presupuestoN.JornadaMes}
                                         rtlEnabled={true}
+                                        valueChangeEvent="keyup"
+                                        onValueChanged={CambiaJornadaMes}
+                                        onFocusOut={()=>{
+                                            if (presupuestoN.JornadaMes.trim()===''){
+                                                setPresupuestoN( (state) => ({...state,JornadaMes:'0.00'}));
+                                            }
+                                        }}
+
                                     //readOnly={true}
                                     />
                                 </Col>
@@ -771,6 +1178,13 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                         defaultValue={presupuestoN.JornadaAno}
                                         value={presupuestoN.JornadaAno}
                                         rtlEnabled={true}
+                                        valueChangeEvent="keyup"
+                                        onValueChanged={CambiaJornadaAno}
+                                        onFocusOut={()=>{
+                                            if (presupuestoN.JornadaAno.trim()===''){
+                                                setPresupuestoN( (state) => ({...state,JornadaAno:'0.00'}));
+                                            }
+                                        }}
 
                                     //readOnly={true}
                                     />
@@ -792,9 +1206,20 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                     <TextBox
                                         defaultValue={presupuestoN.CodMoneda}
                                         value={presupuestoN.CodMoneda}
-
+                                        valueChangeEvent="keyup"
+                                        onValueChanged={CambiaCodigoMoneda}
+                                        /*onFocusOut={()=>{
+                                            if (presupuestoN.Plazo.trim()===''){
+                                                setPresupuestoN( (state) => ({...state,Plazo:'0'}));
+                                            }
+                                        }}*/
                                     //readOnly={true}
-                                    />
+                                    >
+                                    <Validator>
+                                        <RequiredRule message="Moneda es requerida" />
+                                    </Validator>
+                                    </TextBox>                                         
+
                                 </Col>
                                 <Col sm={4}>
                                     {/* <Form.Control type="Input" placeholder="Modeda" value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Moneda : ''} onChange={handlerOnChange} /> */}
@@ -803,14 +1228,19 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                         value={presupuestoN.Moneda}
                                         //stylingMode={'underlined'}                                    
                                         readOnly={true}
-                                    />
+                                    >
+                                    <Validator>
+                                        <RequiredRule message="Moneda es requerida"/>
+                                    </Validator>
+                                    </TextBox>                                         
+
                                 </Col>
 
                                 <Col sm={1}>
-                                    <Button variant="outline-info" onClick={() => {
+                                    <Button1 variant="outline-info" height="35px" onClick={() => {
                                         //if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
                                             setShowMnd(true);
-                                            dispatch(selectMONEDAS(''));
+                                            //dispatch(selectMONEDAS(''));
                                         /*} else {
                                             Swal.fire({
                                                 title: 'Error!',
@@ -819,7 +1249,7 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                                 confirmButtonText: 'Ok'
                                             })
                                         }*/
-                                    }}>...</Button>
+                                    }}>...</Button1>
                                     {/* <Button variant="outline-info"><i class="fas fa-binoculars"></i></Button> */}
                                 </Col>
 
@@ -851,7 +1281,16 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                                                 defaultValue={presupuestoN.CostoDirectoBase1}
                                                                 value={presupuestoN.CostoDirectoBase1}
                                                                 rtlEnabled={true}
-
+                                                                valueChangeEvent="keyup"
+                                                                onValueChanged={CambiaCDBase}
+                                                                onFocusOut={()=>{
+                                                                    if (presupuestoN.CostoDirectoBase1.trim()===''){
+                                                                        setPresupuestoN( (state) => ({...state,CostoDirectoBase1:'0.00'}));
+                                                                        let total=parseFloat(presupuestoN.CostoIndirectoBase1);
+                                                                        let total1=roundN(total,2);
+                                                                        setPresupuestoN( (state) => ({...state, CostoBase1:total1}));                                                                        
+                                                                    }
+                                                                }}
                                                                 //readOnly={true}
                                                             />
                                                         </Col>
@@ -865,6 +1304,17 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                                                 defaultValue={presupuestoN.CostoIndirectoBase1}
                                                                 value={presupuestoN.CostoIndirectoBase1}
                                                                 rtlEnabled={true}
+                                                                valueChangeEvent="keyup"
+                                                                onValueChanged={CambiaCIBase}
+                                                                onFocusOut={()=>{
+                                                                    if (presupuestoN.CostoIndirectoBase1.trim()===''){
+                                                                        setPresupuestoN( (state) => ({...state,CostoIndirectoBase1:'0.00'}));
+                                                                        let total=parseFloat(presupuestoN.CostoDirectoBase1);
+                                                                        let total1=roundN(total,2);
+                                                                        setPresupuestoN( (state) => ({...state, CostoBase1:total1}));                                                                        
+
+                                                                    }
+                                                                }}
 
                                                                // readOnly={true}
                                                             />
@@ -955,15 +1405,21 @@ const DatosGeneralesAdd = ({itemSelected}) => {
                                                             />
 
                                                         </Col>
+                                                        
+
                                                     </Form.Group>
+                                                    
                                                 </Card.Body>
+                                                
                                             </Card>
                                         </Col>
-
+                                        
                                     </Form.Group>
+                                    
                                 </Card.Body>
+                                
                             </Card>
-
+                           
 
 
                             {/* <Card style={{ height: '100%', width: '100%' }}>
@@ -1012,10 +1468,7 @@ const DatosGeneralesAdd = ({itemSelected}) => {
 
 
                             <Form.Group as={Row} className="mb-3">
-                                <Col sm={{ span: 10, offset: 2 }}>
-                                    {/* <Button type="submit">Sign in</Button> */}
-
-                                </Col>
+                                    <ValidationSummary id="summary" style={{ position:'relative', marginLeft:'45%'}}></ValidationSummary>                               
                             </Form.Group>
                         </Form>
 

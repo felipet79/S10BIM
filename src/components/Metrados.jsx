@@ -301,11 +301,15 @@ const Metrados = ({levelStart=1, idProject}) => {
         defaultExpandedRowKeys={[1, 2, 3, 5]}
 		columnAutoWidth={false}
 		rootValue={-1}
+		showRowLines={true}
+		showColumnLines={true}
+
 		//selectedRowKeys={selectedRowKeys}
 
 		//onSelectionChanged={() => {alert('hola')}}
 		//onRowClick={() => {alert(this)}}
 		onFocusedRowChanged={onSelectionChanged}
+		
 		wordWrapEnabled={true}
       >
         <Editing

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import 'devextreme/dist/css/dx.light.css';
 import { selectCompany } from '../actions/auth.action';
 import { useHistory } from 'react-router-dom';
+import Button1 from 'devextreme-react/button';
 import TreeList, {
 	Pager,
 	Paging,
@@ -37,14 +38,14 @@ const BuscaCliente = ({ tipo='',presupuestoN, show, setShow }) => {
 			//mensaje de error 
 			return;
 		}
-		if (tipo===''){
+		/*if (tipo===''){
 			proyects.DatosPresupuesto[0].CodCliente=clienteSel.Codigo;
 			proyects.DatosPresupuesto[0].Cliente=clienteSel.Descripcion;
 		}else
-		{
+		{*/
 			presupuestoN.CodCliente=clienteSel.Codigo;
 			presupuestoN.Cliente=clienteSel.Descripcion;
-		}
+		//}
 		//proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodCliente
 		//proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].Cliente
 			//console.log('Este va a guardar');
@@ -66,11 +67,12 @@ const BuscaCliente = ({ tipo='',presupuestoN, show, setShow }) => {
 		<>
 
 			<Modal centered show={show} onHide={handleClose}>
-				<Modal.Header closeButton style={{ /*background: '#3c8dbc',*/ color: 'white', height: '50px',
-				background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
+				<Modal.Header closeButton style={{ /*background: '#3c8dbc',*/ color: 'white', height: '42px',
+				/*background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
 				background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
 				background: 'linear-gradient(to bottom, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
-				filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'			
+				filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'			*/
+				background:'#398bf7'
 			
 			}}>
 					<Modal.Title closeButton style={{ fontSize: '0.95rem' }}>Selecciona un cliente</Modal.Title>
@@ -121,8 +123,8 @@ const BuscaCliente = ({ tipo='',presupuestoN, show, setShow }) => {
 
 
 
-					<div className="" style={{background:'#3c8dbc', width:'100%', height:'2px' }}>
-					</div>
+					{/* <div className="" style={{background:'#3c8dbc', width:'100%', height:'2px' }}>
+					</div> */}
 
 
 
@@ -234,8 +236,8 @@ const BuscaCliente = ({ tipo='',presupuestoN, show, setShow }) => {
 						/>
 					</TreeList>
 
-					<div className="" style={{background:'#3c8dbc', width:'100%', height:'2px' }}>
-						</div>
+					{/* <div className="" style={{background:'#3c8dbc', width:'100%', height:'2px' }}>
+						</div> */}
 					{/* <ListGroup>
 						{
 							proyects.DataClientes ? proyects.DataClientes.map(cliente => (
@@ -252,26 +254,28 @@ const BuscaCliente = ({ tipo='',presupuestoN, show, setShow }) => {
 				<Modal.Footer>
 				<strong style={{ fontSize: '0.6rem', position: 'absolute', left: '5px', marginLeft: '20px', }}> {clienteSel.Descripcion}</strong>
 					
-					<Button
+					<Button1
 						variant="primary"
 						onClick={seleccionar}
 						style={{
-							background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
+							/*background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
 							background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
 							background: 'linear-gradient(to bottom, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'	
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'	*/
 
 						}}
 					>
+						<ion-icon name="checkmark-done-outline"></ion-icon>
 						Seleccionar
-					</Button>
+					</Button1>
 
-					<Button
+					<Button1
 						variant="secondary"
 						onClick={handleClose}
 					>
+						<ion-icon name="close-outline"></ion-icon>
 						Cancelar
-					</Button>
+					</Button1>
 				</Modal.Footer>
 			</Modal>
 		</>
