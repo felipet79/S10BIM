@@ -9,7 +9,7 @@
 body {
     /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;*/
     font-family: 'Roboto', sans-serif !important;
-    font-weight: 400;
+    font-weight: 700;
     font-size: 12px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -79,15 +79,15 @@ a{
 }
 
 ::-webkit-scrollbar{
-    width: 8px;
-    height: 8px;
+    width: 0px;
+    height: 0px;
     }
     ::-webkit-scrollbar-thumb{
-    background: linear-gradient(39deg, #826ABD 14%,#6DAFDB 64%);
+    background: linear-gradient(39deg,rgba(255,255,255,0.8) 14%, rgba(0,0,0,0.1) 64%);
     border-radius: 10px;
     }
     ::-webkit-scrollbar-thumb:hover{
-    background: linear-gradient(10deg, #A090C7 14%,#99C1DB 64%);
+    background: linear-gradient(10deg, rgba(0,0,0,0.2) 14%,rgba(0,0,0,0.1) 64%);
     }
     ::-webkit-scrollbar-track{
     background: #FFFFFF;
@@ -280,6 +280,7 @@ a{
     
     background: rgb(255, 255, 255);
     color: black;
+    font-weight: 600 !important;
     /*background: rgb(242,245,246);
     background: -moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%) !important;
     background: -webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%) !important;
@@ -356,23 +357,29 @@ element.style {
 .name {
     display: inline-block;
     vertical-align: middle;
+   
 }
 .img {
     height: 25px;
     width: 25px;
-    margin-right: 5px;
+    margin-right: 0px;
+    
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-    border-radius: 25px;
-    border: 0.2px solid lightgray;
-    background-color: #fff;
+    /*border-radius: 5px;*/
+    /*border: 0.1px solid lightgray;*/
+    
+    /*background-color: #fff;*/
+    background-color:transparent;
+    background-size: 10px 10px;
     /*background: rgb(242,246,248); /* Old browsers */
     /*background: -moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 18%, rgba(216,225,231,1) 18%, rgba(181,198,208,1) 54%, rgba(224,239,249,1) 100%); /* FF3.6-15 */
     /*background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 18%,rgba(216,225,231,1) 18%,rgba(181,198,208,1) 54%,rgba(224,239,249,1) 100%); /* Chrome10-25,Safari5.1-6 */
     /*background: linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 18%,rgba(216,225,231,1) 18%,rgba(181,198,208,1) 54%,rgba(224,239,249,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#e0eff9',GradientType=0 );    */
-    background: white;
+    /*background: white;*/
+    background: transparent;
 }
 
 
@@ -434,7 +441,7 @@ element.style {
 .dx-treelist-rowsview .dx-row {
  
     /*color: rgb(165, 160, 160);*/
-    color:#9e9e9b;
+    color:black;
 }
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
@@ -481,9 +488,15 @@ element.style {
     border-bottom: 4px solid #6ac5b1;
 }
 .MuiTreeItem-root {
-    margin-top: 2px;
-    margin-bottom: 2px;
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+    
 }
+
+
+/*.MuiTreeItem-label {
+    height: 20px !important;
+}*/
 
 .dx-widget input, .dx-widget textarea {
     font-family: 'Roboto', sans-serif !important;
@@ -518,4 +531,8 @@ element.style {
     font-family: 'Roboto', sans-serif !important;
     background: #161616;
 
+}
+
+.dx-texteditor-input {
+    min-height: 24px !important;
 }

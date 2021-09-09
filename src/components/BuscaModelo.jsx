@@ -27,7 +27,7 @@ import { Template, TextBox } from 'devextreme-react';
 import EmployeeCell from './EmployeeCell';
 
 
-const BuscaModelo = ({ show, setShow, subseleccionado, setSubSeleccionado ,item, CodPresupuesto }) => {
+const BuscaModelo = ({ show, setShow, subseleccionado, setSubSeleccionado ,item, CodPresupuesto, tipo='99', setSubPresupuestoN }) => {
 	const dispatch = useDispatch();
 	const handleClose = () => setShow(false);
 	const auth = useSelector(state => state.auth);
@@ -451,14 +451,6 @@ const BuscaModelo = ({ show, setShow, subseleccionado, setSubSeleccionado ,item,
 
 
 
-
-	
-
-	
-
-
-	
-	 
 	function getRandomString(length) {
 		var s = '';
 		do { s += Math.random().toString(36).substr(2); } while (s.length < length);
@@ -471,91 +463,214 @@ const BuscaModelo = ({ show, setShow, subseleccionado, setSubSeleccionado ,item,
 
 	const Selecciona = () => {
 		
-		if (!proyects.DataModelos) {
+
+		if (tipo==='3'){
+
+			//alert('estoy por aqui '+ modeloSel.nombre + ' ' + modeloSel.urnaddin + ' ' +  modeloSel.urnweb );
+			if (modeloSel.nombre && modeloSel.nombre!==''){
+		
+				let buscado = proyects.DataModelos.find(item => item.UrnWeb === modeloSel.urnweb);
+				let uid='';
+				let nombre='';
+				if (buscado){
+					//SI EXISTE EN MI TABLA DEBO COGER LOS DATOS DE ID NOMBRE Y MODIFICAR EL REGISTRO DE SUBPRESUPUESTO	
+					uid = buscado.CodPlano;
+					nombre = buscado.NombreArchivoRvt;
+				
+				}else{
+					
+					uid = getRandomString(24);
+					//console.log("llamando a guardar modelos");
+					//alert(uid + );
+		
+					const resp = dispatch(guardarModelo(uid, modeloSel.nombre, '',  modeloSel.urnaddin,  modeloSel.urnweb, ''));
+					nombre = modeloSel.nombre;
+					setTimeout(() => {
+						dispatch(selectMODELOS(''));
+					}, 1000);
+					setTimeout(() => {
+						console.log("AHORA LOS MODELOS DESPUES DE GUARDAR");
+						console.log(proyects.DataModelos);
+					}, 3800);
+		
+		
+				}
+		
+				
+				//subseleccionado.CodModelo=uid;
+				//subseleccionado.NombreModelo=nombre;
+
+
+				/*console.log("EL SELECCIONADO despues de modificar");
+				console.log(subseleccionado);
+		
+				console.log("el codigo del presupuesto");
+				console.log(CodPresupuesto);*/
+		
+				//CodSubpresupuesto
+				//ModificarSubPresupuesto = (CodPresupuesto, CodSubPresupuesto, Descripcion,  CodModelo, userId) =>{
+					//dispatch(ModificarSubPresupuesto(CodPresupuesto, subseleccionado.CodSubpresupuesto, subseleccionado.Descripcion,  subseleccionado.CodModelo,  ''));
+					//console.log("DISPATCH");
+					//console.log(CodPresupuesto, subseleccionado.CodSubpresupuesto, subseleccionado.Descripcion,  subseleccionado.CodModelo,  '');
+		
+/*
+					const initialP={    
+						Cantidad: 1,
+						CodAlterno: "",
+						CodModelo: null,
+						CodSubpresupuesto: "001",
+						CostoOferta1: 0,
+						CostoOferta2: 0,
+						Descripcion: "",
+						NombreModelo: null,
+						UrnWeb:'',
+						}
+*/
+					setSubPresupuestoN( (state) => ({...state,CodModelo:uid, NombreModelo:nombre, UrnWeb:modeloSel.urnweb}));
+
+
+				}else{
+					Swal.fire({
+						title: 'Error!',
+						text: 'No ha seleccionado un Modelo',
+						icon: 'error',
+						confirmButtonText: 'Ok'
+					})
+		
+				}
+	
+			
+
+
+
+		}else
+		{
+
+			
+			
+			if (modeloSel.nombre && modeloSel.nombre!==''){
+			//console.log('Este va a guardar');
+			//console.log(modeloSel);
+			//console.log("LOS SUBPRESUPUESTOS AHORA SON");
+			//console.log(proyects.treeSubControl);
+			//console.log("ACTUALMENTE LOS MODELOS");
+			//console.log(proyects.DataModelos);
+	
+			let buscado = proyects.DataModelos.find(item => item.UrnWeb === modeloSel.urnweb);
+	
+			let uid='';
+			let nombre='';
+			if (buscado){
+	
+				//SI EXISTE EN MI TABLA DEBO COGER LOS DATOS DE ID NOMBRE Y MODIFICAR EL REGISTRO DE SUBPRESUPUESTO	
+				uid = buscado.CodPlano;
+				nombre = buscado.NombreArchivoRvt;
+			
+			}else{
+				
+				//NO EXISTE DEBO INGRESAR PRIMERO EN LA TABLA DE MODELOS GENERANDO UN NUEVO ID
+				//let guid = createGuid(); 
+				//let encoded = base64_encode(guid);
+				//let encoded = btoa(guid);
+				//let encoded =b64EncodeUnicode(guid); 
+				uid = getRandomString(24);
+				console.log("llamando a guardar modelos");
+				//alert(uid + );
+	
+				const resp = dispatch(guardarModelo(uid, modeloSel.nombre, '',  modeloSel.urnaddin,  modeloSel.urnweb, ''));
+				nombre = modeloSel.nombre;
+				setTimeout(() => {
+					dispatch(selectMODELOS(''));
+				}, 1000);
+				/*setTimeout(() => {
+					//console.log("AHORA LOS MODELOS DESPUES DE GUARDAR");
+					//console.log(proyects.DataModelos);
+				}, 3800);*/
+	
+	
+			}
+	
+			/*setSubSeleccionado((state)=>{
+				return ({...state,
+						 //CodModelo:uid,
+						 CodModelo:'8888888',
+						 NombreModelo:'blablabla',
+						 //NombreModelo:nombre
+						})
+			});*/
+			subseleccionado.CodModelo=uid;
+			subseleccionado.NombreModelo=nombre;
+			/*console.log("EL SELECCIONADO despues de modificar");
+			console.log(subseleccionado);
+	
+			console.log("el codigo del presupuesto");
+			console.log(CodPresupuesto);*/
+	
+			//CodSubpresupuesto
+			//ModificarSubPresupuesto = (CodPresupuesto, CodSubPresupuesto, Descripcion,  CodModelo, userId) =>{
+				dispatch(ModificarSubPresupuesto(CodPresupuesto, subseleccionado.CodSubpresupuesto, subseleccionado.Descripcion,  subseleccionado.CodModelo,  ''));
+				//console.log("DISPATCH");
+				//console.log(CodPresupuesto, subseleccionado.CodSubpresupuesto, subseleccionado.Descripcion,  subseleccionado.CodModelo,  '');
+	
+
+				
+	
+				//console.log("este es el estado de mi subpressss");
+				//console.log(proyects.treeSubControl)
+				for (let i=0;i<proyects.treeSubControl.length;i++)
+				{
+					if(proyects.treeSubControl[i].CodSubpresupuesto === subseleccionado.CodSubpresupuesto){
+						proyects.treeSubControl[i].CodModelo=uid;
+						proyects.treeSubControl[i].NombreModelo=modeloSel.nombre;
+						proyects.treeSubControl[i].UrnWeb=modeloSel.urnweb;
+					}
+	
+	
+				}
+
+				if (proyects.seleccionado===2){
+
+					//alert('estoy en sub')
+					dispatch(SelectUrn(modeloSel.urnweb))
+				}
+
+			}else{
+				Swal.fire({
+					title: 'Error!',
+					text: 'No ha seleccionado un Modelo',
+					icon: 'error',
+					confirmButtonText: 'Ok'
+				})
+	
+			}
+
+			
+			
+
+		/*Cantidad: 1
+		CodAlterno: null
+		CodModelo: "p308ni946vk6irew7bow3g5v"
+		CodSubpresupuesto: "001"
+		CostoOferta1: null
+		CostoOferta2: null
+		Descripcion: "PRESUPUESTO 88"
+		NombreModelo: "Estructuras.rvt"
+		UrnWeb: "<dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLkw1TEp></dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLkw1TEp>*/
 
 
 
 		}
-		if (modeloSel.nombre && modeloSel.nombre!==''){
 
-		console.log('Este va a guardar');
-		console.log(modeloSel);
 
-        //console.log("LOS SUBPRESUPUESTOS AHORA SON");
-        //console.log(proyects.treeSubControl);
-        console.log("ACTUALMENTE LOS MODELOS");
-        console.log(proyects.DataModelos);
 
 
 		
 
-		let buscado = proyects.DataModelos.find(item => item.UrnWeb === modeloSel.urnweb);
-
-		let uid='';
-		let nombre='';
-		if (buscado){
-
-			//SI EXISTE EN MI TABLA DEBO COGER LOS DATOS DE ID NOMBRE Y MODIFICAR EL REGISTRO DE SUBPRESUPUESTO	
-			uid = buscado.CodPlano;
-			nombre = buscado.NombreArchivoRvt;
-			
-			
-
-		}else{
-			
-			//NO EXISTE DEBO INGRESAR PRIMERO EN LA TABLA DE MODELOS GENERANDO UN NUEVO ID
-			//let guid = createGuid(); 
-			//let encoded = base64_encode(guid);
-			//let encoded = btoa(guid);
-			//let encoded =b64EncodeUnicode(guid); 
-			uid = getRandomString(24);
-			console.log("llamando a guardar modelos");
-			//alert(uid + );
-
-			const resp = dispatch(guardarModelo(uid, modeloSel.nombre, '',  modeloSel.urnaddin,  modeloSel.urnweb, ''));
-			nombre = modeloSel.nombre;
-			setTimeout(() => {
-				dispatch(selectMODELOS(''));
-			}, 1000);
-			setTimeout(() => {
-				console.log("AHORA LOS MODELOS DESPUES DE GUARDAR");
-				console.log(proyects.DataModelos);
-			}, 3800);
 
 
-		}
 
-		/*setSubSeleccionado((state)=>{
-			return ({...state,
-				     //CodModelo:uid,
-					 CodModelo:'8888888',
-					 NombreModelo:'blablabla',
-					 //NombreModelo:nombre
-					})
-		});*/
-		subseleccionado.CodModelo=uid;
-		subseleccionado.NombreModelo=nombre;
-        console.log("EL SELECCIONADO despues de modificar");
-        console.log(subseleccionado);
 
-        console.log("el codigo del presupuesto");
-        console.log(CodPresupuesto);
 
-		//CodSubpresupuesto
-		//ModificarSubPresupuesto = (CodPresupuesto, CodSubPresupuesto, Descripcion,  CodModelo, userId) =>{
-			dispatch(ModificarSubPresupuesto(CodPresupuesto, subseleccionado.CodSubpresupuesto, subseleccionado.Descripcion,  subseleccionado.CodModelo,  ''));
-			console.log("DISPATCH");
-			console.log(CodPresupuesto, subseleccionado.CodSubpresupuesto, subseleccionado.Descripcion,  subseleccionado.CodModelo,  '');
-
-		}else{
-			Swal.fire({
-				title: 'Error!',
-				text: 'No ha seleccionado un Modelo',
-				icon: 'error',
-				confirmButtonText: 'Ok'
-			})
-
-		}
 
 		//proyects.AuxModelo = modeloSel.nombre;
 		setShow(false);
@@ -747,41 +862,7 @@ const BuscaModelo = ({ show, setShow, subseleccionado, setSubSeleccionado ,item,
 									caption="Mi Catálogo (BIM360docs)"
 									cellTemplate="employeeTemplate"
 									/>
-								{/*<Column
-							width={'10%'}
-							dataField="Cantidad"
-							alignment={'right'}
-						/>
-						<Column
-							width={'10%'}
-							dataField="Longitud"
-							caption="Longitud"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'10%'}
-							dataField="Ancho"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'10%'}
-							dataField="Alto"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'10%'}
-							dataField="Total"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'20%'}
-							dataField="Detalle" 
-							alignment={'center'}
-						/>*/}
+								
 
 
 

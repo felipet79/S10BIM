@@ -44,10 +44,15 @@ import {
 	MODIFICA_SUB1,
 	AGREGA_SUB1,
 	ACT_PRESUPUESTO,
+	LIMPIA_PARTY_CONTROL,
+	LIMPIAR_SUBS,
+	PONER_PROPS,
+	CAMBIAR_FILA_ASOCIADO,
 } from '../constants';
 
 const initialState = {
 	TreeProyects: [],
+	treeSubControl: [],
 	TreeCount: [],
 	DataCards: [],
 	DataPc: [],
@@ -71,10 +76,13 @@ const initialState = {
 	DataAsociado: [],
 	Dataestructura: [],
 	Datacalculo: [],
+	subPres: [],
 	DataCategorias: null,
 	DataTipo: null,
 	DataFamilia: null,
 	DataElementos: null,
+	Propiedades: [],
+	filaAsociadoSel: {Fila: null, Categoria: "", Familia: "", Tipo: ""},
 };
 
 
@@ -217,7 +225,7 @@ export default (state = initialState, { type, payload }) => {
 			/*console.log('este es mi dato');
 			console.log(...state.DatosPresupuesto);
 
-		    console.log('este es mi nuevo dato');
+			console.log('este es mi nuevo dato');
 			console.log(payload);*/
 			return {
 				...state,
@@ -294,8 +302,16 @@ export default (state = initialState, { type, payload }) => {
 		case PARTY_CONTROL:
 			return {
 				...state,
+				treePartyControl: [...state.treePartyControl, ...payload].sort((a, b) => a.Fila - b.Fila)
+			};
+
+		case LIMPIA_PARTY_CONTROL:
+			return {
+				...state,
 				treePartyControl: payload
 			};
+
+
 
 		case AGREGA_GRUPO:
 			return {
@@ -312,9 +328,14 @@ export default (state = initialState, { type, payload }) => {
 				//treePartyControl: [...state.treePartyControl.filter( (filtro1) => filtro1.CodPresupuesto !== '1504' ), ...payload]
 			};
 		case ELIMINA_GRUPO:
+			/*console.log('En eliminar Grupo');
+			console.log(payload);*/
+
+
 			return {
 				...state,
-				treePartyControl: [...state.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto)]
+				//treePartyControl: [...state.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto)].sort((a, b) => a.Fila - b.Fila)
+				treePartyControl: [...state.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto !== payload)].sort((a, b) => a.Fila - b.Fila)
 			};
 
 
@@ -363,9 +384,22 @@ export default (state = initialState, { type, payload }) => {
 		case LISTAR_SUBS:
 			return {
 				...state,
+				//subPres: payload
+				subPres: [...state.subPres, ...payload]
+			};
+		case LIMPIAR_SUBS:
+			return {
+				...state,
 				subPres: payload
 			};
 
+
+		/*case LISTAR_SUBS:
+			return {
+				...state,
+					//subPres: payload
+					subPres: [...state.subPres, ...payload]
+				};			*/
 
 		case PARTY_CONTROL1:
 			return {
@@ -435,6 +469,16 @@ export default (state = initialState, { type, payload }) => {
 				DataElementos: payload,
 			};
 
+		case PONER_PROPS:
+			return {
+				...state,
+				Propiedades: payload,
+			};
+		case CAMBIAR_FILA_ASOCIADO:
+			return {
+				...state,
+				filaAsociadoSel: payload,
+			};
 
 		default:
 			return state

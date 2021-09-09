@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, Form, Row, Button, Col, InputGroup, FormControl, Dropdown, DropdownButton, Table } from 'react-bootstrap'
 import Moment from 'react-moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { actPresupuesto, cambiaSeleccion, limpiaUbicaciones, modificaGrupo1, modificarPresupuesto, ModificarSubPresupuesto, modificaSub, modificaSub1, selectCLIENTES, selectMODELOS, selectMONEDAS, selectUBICACIONES } from '../actions/proyects.actions';
+import { actPresupuesto, cambiaSeleccion, limpiaUbicaciones, modificaGrupo1, modificarPresupuesto, ModificarSubPresupuesto, modificaSub, modificaSub1, selectCLIENTES, selectMODELOS, selectMONEDAS, selectUBICACIONES, SelectUrn } from '../actions/proyects.actions';
 import BuscaCliente from '../components/BuscaCliente';
 import BuscaUbicacion from '../components/BuscaUbicacion';
 import { ViewerSc } from './ViewerSc';
@@ -306,7 +306,7 @@ const DatosGenerales = ({ setCambioSub }) => {
                 setTimeout(() => {
                     setShowMdl(false);
                 }, 20);
-
+                dispatch(SelectUrn(''));
                 //drawerItems();
 
             }
@@ -768,11 +768,18 @@ const DatosGenerales = ({ setCambioSub }) => {
 
         
 
-        let fecha1=new Date(presupuestoN.Fecha);
-        let dia=parseInt(fecha1.getDate(),10)+1;
-        let mes=parseInt(fecha1.getMonth(),10)+1;
-        let fechaStr =dia + "/" + mes + '/' + fecha1.getFullYear();
 
+
+        /*alert(presupuestoN.Fecha.substring(0,4));
+        alert(presupuestoN.Fecha.substring(5,7));
+        alert(presupuestoN.Fecha.substring(8,10));*/
+        
+        
+        /*let dia=parseInt(fecha1.getDate(),10)+1;
+        let mes=parseInt(fecha1.getMonth(),10)+1;*/
+        //let fechaStr = dia + "/" + mes + '/' + fecha1.getFullYear();
+
+        let fechaStr = presupuestoN.Fecha.substring(8,10) + "/" + presupuestoN.Fecha.substring(5,7) + '/' + presupuestoN.Fecha.substring(0,4);
         dispatch(modificarPresupuesto(presupuestoN.CodPresupuesto, presupuestoN.Descripcion, presupuestoN.Plazo,  fechaStr, presupuestoN.Jornada, '0' ,presupuestoN.CostoDirectoBase1,presupuestoN.CostoIndirectoBase1,presupuestoN.CostoBase1,presupuestoN.CostoDirectoOferta1,presupuestoN.CostoIndirectoOferta1,presupuestoN.CostoOferta1,presupuestoN.CodCliente,presupuestoN.CodLugar,presupuestoN.CodMoneda,'',presupuestoN.CodAlterno,presupuestoN.JornadaSemana,presupuestoN.JornadaMes,presupuestoN.JornadaAno,''));                
         dispatch(actPresupuesto(presupuestoN));
         
@@ -855,7 +862,7 @@ const DatosGenerales = ({ setCambioSub }) => {
 
 
     return (
-        <div className="animate__animated animate__fadeIn" style={{ marginLeft: '0px', marginTop: '10px', height: '96%', width: '100%' }}>
+        <div className="animate__animated animate__fadeIn" style={{ marginLeft: '0px', marginTop: '10px', height: '96%', width: '98%' }}>
             <BuscaCliente tipo="Modificar" presupuestoN={presupuestoN} setShow={setShow} show={show} />
             <BuscaUbicacion tipo="Modificar" presupuestoN={presupuestoN} setShow={setShowUb} show={showUb} />
             <BuscaModelo
@@ -867,12 +874,12 @@ const DatosGenerales = ({ setCambioSub }) => {
             />
             <BuscaMoneda tipo="Modificar" presupuestoN={presupuestoN} setShow={setShowMnd} show={showMnd} />
             {selecOP === 1 ?
-                (<Card className="animate__animated animate__fadeIn" style={{ overflow: 'scroll', marginLeft: '20px', height: '93vh', padding: '15px' }}>
-                    <Card.Header style={{fontSize:'1rem'}}>Datos Generales</Card.Header>
+                (<Card className="animate__animated animate__fadeIn" style={{ overflow: 'scroll', marginLeft: '20px', height: '92vh', padding: '15px' }}>
+                    <Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white' }}>Datos Generales</Card.Header>
                     <Card.Body>
 
                     <Form onSubmit={valida}>
-                        <Button1 useSubmitBehavior={true} type="Submit" variant="outline-info" style={{ position: 'absolute', left: '210px', top: '13px' }} ><i class="far fa-save"></i>   Actualizar</Button1>
+                        <Button1 useSubmitBehavior={true} type="Submit" variant="outline-info" style={{ position: 'absolute', left: '210px', top: '25px' }} ><i class="far fa-save"></i>   Actualizar</Button1>
                             <Form.Group as={Row} className="mb-1" controlId="formCodigo">
                                 <Form.Label column sm={1} style={{ fontSize: titulos }}>
                                     Codigo
@@ -1486,7 +1493,7 @@ const DatosGenerales = ({ setCambioSub }) => {
                 :
                 (
                     <Card className="animate__animated animate__fadeInUp" style={{ overflow: 'hidden', height: '100%', padding: '15px' }}>
-                        <Card.Header className="">Datos de SubPresupuesto</Card.Header>
+                        <Card.Header className="" style={{ fontSize:'1rem', background:'#398bf7', color:'white'}}>Datos de SubPresupuesto</Card.Header>
                         <Card.Body>
 
                             <Form>

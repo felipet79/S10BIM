@@ -239,7 +239,10 @@ const Metrados = ({levelStart=1, idProject}) => {
 		if (filtro2)
 		if (filtro2.UrnWeb !== proyects.Urn){
 			//alert(filtro2.UrnWeb + ' ' + proyects.Urn);
-			dispatch(SelectUrn(filtro2.UrnWeb));
+			
+			
+			
+			/*dispatch(SelectUrn(filtro2.UrnWeb));*/
 		}
 		
 		var cadenaMostrar="";

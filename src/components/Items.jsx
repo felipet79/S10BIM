@@ -39,6 +39,7 @@ import { Tooltip } from 'devextreme-react/tooltip';
 import { Width } from "devextreme-react/chart";
 import zIndex from "@material-ui/core/styles/zIndex";
 import { red } from "@material-ui/core/colors";
+import BuscaModelo from "./BuscaModelo";
 
 const animationConfig = {
 	show: {
@@ -106,6 +107,8 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 
 
+	const [showMdl, setShowMdl] = useState(false);
+	const [subseleccionado, setSubSeleccionado] = useState(null);
 
 
 
@@ -607,6 +610,16 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 			{/* <div style={{ overflow: 'scroll', marginTop: '0px', height: '100%' }}> */}
 
+
+			<BuscaModelo
+				setShow={setShowMdl}
+				subseleccionado={subseleccionado}
+				setSubSeleccionado={setSubSeleccionado}
+				CodPresupuesto={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}
+				show={showMdl}
+			/>
+
+
 			<div id="ContenedorTotal1" className="d-flex flex-wrap justify-content-between overflow-hidden h-100" style={{ height: height - 20, fontSize: '0.8rem !important' }}>
 				<Resizable
 					id="RPrincipal"
@@ -725,7 +738,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 						}}>
 
 							<Card.Header style={{ fontSize: '1rem' }}>Hoja de presupuestos
-							<ion-icon title="" id="tt1" name="information-circle" style={{ marginLeft: '5px',  }}
+							<ion-icon title="" id="tt1" name="information-circle" style={{ marginLeft: '5px', }}
 									onMouseEnter={toggleWithAnimation}
 									onMouseLeave={toggleWithAnimation}
 
@@ -737,9 +750,9 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 									animation={animationConfig}
 									visible={toltip.withAnimationVisible}
 									closeOnOutsideClick={false}
-									
+
 								>
-									<div style={{fontFamily: 'Roboto'}}>Hoja del presupuesto </div>
+									<div style={{ fontFamily: 'Roboto' }}>Hoja del presupuesto </div>
 								</Tooltip>
 
 								{/* <ion-icon id="tt2" name="information-circle-outline" style={{ marginLeft: '5px' }}
@@ -748,7 +761,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 
 
-								
+
 								<div className="dx-field-value" style={{ position: 'relative', right: '0px', top: '0px', width: '180px' }}>
 									<DropDownButton
 										splitButton={true}
@@ -1112,9 +1125,9 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 								style={{ background: 'transparent', zIndex: '1', width: '80px' }}
 							>
 								{open ? (
-									<ion-icon name="chevron-back-outline" style={{ cursor: "pointer", color: '#c6c7d0', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px', }}></ion-icon>
+									<ion-icon name="chevron-back-outline" style={{ cursor: "pointer", color: 'black', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px', }}></ion-icon>
 								) : (
-									<ion-icon name="chevron-forward-outline" style={{ cursor: "pointer", color: '#c6c7d0', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px' }}></ion-icon>
+									<ion-icon name="chevron-forward-outline" style={{ cursor: "pointer", color: 'black', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px' }}></ion-icon>
 								)}
 							</div>
 						</div>
@@ -1265,9 +1278,9 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 						>
 							{open1 ? (
-								<ion-icon name="chevron-down-outline" style={{ cursor: 'pointer', marginTop: '4px', color: '#c6c7d0', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px', }}></ion-icon>
+								<ion-icon name="chevron-down-outline" style={{ cursor: 'pointer', marginTop: '4px', color: 'black', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px', }}></ion-icon>
 							) : (
-								<ion-icon name="chevron-up-outline" style={{ cursor: 'pointer', color: '#c6c7d0', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px' }}></ion-icon>
+								<ion-icon name="chevron-up-outline" style={{ cursor: 'pointer', color: 'black', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px' }}></ion-icon>
 							)}
 
 							{/*open1 ? (
@@ -1426,7 +1439,21 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 									<>
 										<p style={{ position: 'absolute', left: '45%', top: '42%' }}>No tiene modelo asignado</p>
 										<Button1 variant="outline-info" style={{ position: 'absolute', left: '47%', top: '48%' }} onClick={() => {
-											if (true) {
+											//alert(proyects.Sub_sel)
+
+											for (let i = 0; i < proyects.treeSubControl.length; i++) {
+												if (proyects.treeSubControl[i].CodSubpresupuesto === proyects.Sub_sel) {
+													setSubSeleccionado(proyects.treeSubControl[i])
+												}
+
+											}
+
+
+											setShowMdl(true);
+
+
+
+											/*if (true) {
 
 											} else {
 												Swal.fire({
@@ -1435,7 +1462,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 													icon: 'error',
 													confirmButtonText: 'Ok'
 												})
-											}
+											}*/
 										}}><i class="fas fa-sign-in-alt"></i>   Asignar un modelo</Button1>
 
 									</>
@@ -1503,7 +1530,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 									}}
 								>
 									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
-									APU PARTIDA
+									APU Partida
 								</Nav.Link>
 							</Nav.Item>
 
@@ -1525,8 +1552,8 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 										}
 									}}
 								>
-									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
-									METRADO
+									<i class="fas fa-table" style={{ marginRight: '10px', fontWeight: 'bold' }}></i>
+									Metrado
 								</Nav.Link>
 							</Nav.Item>
 
@@ -1563,7 +1590,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 									}}
 								>
 									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
-									ELEMENTOS ASOCIADOS
+									Elementos asociados
 								</Nav.Link>
 							</Nav.Item>
 
@@ -1600,7 +1627,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 								>
 									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
-									ESTRUCTURA DE METRADO
+									Estructura de metrado
 								</Nav.Link>
 							</Nav.Item>
 
@@ -1640,7 +1667,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 									}}
 								>
 									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
-									DETALLE DE CALCULO
+									Detalle de cálculo
 								</Nav.Link>
 							</Nav.Item>
 

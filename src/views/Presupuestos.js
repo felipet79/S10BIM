@@ -6,7 +6,7 @@ import { Route } from "react-router-dom";
 import IdProyect from "./IdProyect";
 import { Resizable } from "re-resizable";
 import "../styles/project.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TreeCP from "../components/TreeCP";
 import IdPc from "./IdPc";
 import $ from 'jquery';
@@ -15,12 +15,13 @@ import Items from "../components/Items";
 import axios from "../config/axios";
 import { TextBox } from "devextreme-react";
 import { Search } from "@material-ui/icons";
+import { limpiaSubs, limpiaTree } from "../actions/proyects.actions";
 
 
 const Presupuestos = ({ match }) => {
 
 	const auth = useSelector((state) => state.auth);
-	
+	const dispatch = useDispatch();
 	
 	const codProject = match.params.codProject;
 
@@ -85,6 +86,12 @@ const Presupuestos = ({ match }) => {
 
 	}*/
 
+
+	useEffect(() => {
+		dispatch(limpiaTree());
+		dispatch(limpiaSubs());
+		//alert();
+	}, []);
 	
 	useEffect(() => {
 		async function init() {
@@ -97,8 +104,8 @@ const Presupuestos = ({ match }) => {
 					"",
 					{
 						HasOutputParam: false,
-						//ObjectName: `dbo.S10_01_Presupuesto_ListarArbol 'ncortez@s10peru.com'`,
-						ObjectName: `dbo.S10_01_Presupuesto_ListarArbol 'ctorres@s10peru.com'`,
+						ObjectName: `dbo.S10_01_Presupuesto_ListarArbol 'ncortez@s10peru.com'`,
+						//ObjectName: `dbo.S10_01_Presupuesto_ListarArbol 'ctorres@s10peru.com'`,
 						RequestId: "PARTY_CONTROL",
 						SignalRConnectionID: connectId,
 						SecurityUserId: auth.User.UserId, // SecurityUserId obtenido al logear
@@ -207,7 +214,7 @@ const Presupuestos = ({ match }) => {
 					<Collapse in={open}>
 
 
-						<div id="Conte1" className="p-0 h-100 w-100" style={{ overflow: 'scroll',
+						<div id="Conte1" className="p-2 h-100 w-100" style={{ overflow: 'scroll',
 							/*background: 'rgb(242,245,246)',
 							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
 							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
@@ -383,9 +390,9 @@ const Presupuestos = ({ match }) => {
 							style={{background:'transparent', zIndex:'1', width:'80px'}}
 						>
 							{open ? (
-								<ion-icon name="chevron-back-outline" style={{ cursor: "pointer", color:'#c6c7d0', borderColor:'#c6c7d0', marginLeft:'4px', background:'white', zIndex:'2', width:'20px', height:'20px',borderRadius:'20px', borderStyle: 'solid', borderWidth:'0.5px', }}></ion-icon>
+								<ion-icon name="chevron-back-outline" style={{ cursor: "pointer", color:'black', borderColor:'#c6c7d0', marginLeft:'4px', background:'white', zIndex:'2', width:'20px', height:'20px',borderRadius:'20px', borderStyle: 'solid', borderWidth:'0.5px', }}></ion-icon>
 							) : (
-								<ion-icon name="chevron-forward-outline" style={{ cursor: "pointer", color:'#c6c7d0', borderColor:'#c6c7d0', marginLeft:'4px', background:'white', zIndex:'2', width:'20px', height:'20px',borderRadius:'20px', borderStyle: 'solid', borderWidth:'0.5px' }}></ion-icon>
+								<ion-icon name="chevron-forward-outline" style={{ cursor: "pointer", color:'black', borderColor:'#c6c7d0', marginLeft:'4px', background:'white', zIndex:'2', width:'20px', height:'20px',borderRadius:'20px', borderStyle: 'solid', borderWidth:'0.5px' }}></ion-icon>
 							)}
 						</div>
 					</div>

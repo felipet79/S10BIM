@@ -11,7 +11,7 @@ import queryString from 'query-string';
 import * as THREE from 'three';
 import { useDispatch, useSelector } from 'react-redux';
 import { relativeTimeRounding } from 'moment';
-import { agregaCategoria, agregaElementos, agregaFamilia, agregaTipo, selectParidas } from '../actions/proyects.actions';
+import { agregaCategoria, agregaElementos, agregaFamilia, agregaTipo, ponerPropiedades, selectParidas } from '../actions/proyects.actions';
 /*import { Timeline } from 'react-svg-timeline'
 import { now } from 'moment';
 import Tooltip from "@material-ui/core/Tooltip";*/
@@ -72,11 +72,11 @@ const devices = [
 
 ];
 
-var ponerdato=true;
+var ponerdato = true;
 const viewerLibaryURL1 = '//cdn.jsdelivr.net/gh/autodesk-forge/forge-extensions/public/extensions/NestedViewerExtension/contents/main.js';
 const viewerStylesheetURL1 = '//cdn.jsdelivr.net/gh/autodesk-forge/forge-extensions/public/extensions/NestedViewerExtension/contents/main.css';
 
-var seleccionados="", seleccionadosCat="", seleccionadosFamilia="", seleccionadosTipo=""; 
+var seleccionados = "", seleccionadosCat = "", seleccionadosFamilia = "", seleccionadosTipo = "";
 const viewerLibaryURL2 = 'js/three.js';
 
 
@@ -84,7 +84,7 @@ var T_uniqueIds = [];
 var T_categorias = [];
 var T_NombreT = [];
 var T_TipoT = [];
-var T_cantidad_elementos=0;
+var T_cantidad_elementos = 0;
 
 
 //URN=dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLi02VW9rWXRDUVZXVDdiWDFZeXRZUHc/dmVyc2lvbj0x
@@ -103,27 +103,29 @@ let viewerLoading = false;
 //const viewerLibaryURL1 = 'js/ForgeViewer.js';
 
 
-var viewer ;
+var viewer;
 //export const Viewer1=null;
 
 
 
 //export const CambiardeModelo = async (NuevoModelo) => {
-    //setModelURL(NuevoModelo);
-    //await launchViewer(modelURL);
+//setModelURL(NuevoModelo);
+//await launchViewer(modelURL);
 
 //}
 
 
 export const MostarModelo = (idelem) => {
     //alert("refresca");
-   //viewer.resize();
-   //viewer.showAll();
-   //viewer.refresh(false);
-   //viewer.refresh(true);
-   //var urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlk1YXg4MUthUWZ1OUppZlU1b0M0M0E/dmVyc2lvbj0x';
-   //await ViewScreen1.launchViewer(urn);
-   highlightRevit(idelem);
+    //viewer.resize();
+    //viewer.showAll();
+    //viewer.refresh(false);
+    //viewer.refresh(true);
+    //var urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlk1YXg4MUthUWZ1OUppZlU1b0M0M0E/dmVyc2lvbj0x';
+    //await ViewScreen1.launchViewer(urn);
+    //console.log('ESTOS SON MI IDS');
+    //console.log(idelem);
+    highlightRevit(idelem);
 }
 
 
@@ -132,9 +134,9 @@ function highlightRevit(idsRevit) {
     // this mapping is an object that has as keys the
     if (viewer)
         if (viewer.model)
-    viewer.model.getExternalIdMapping((mapping) => {
-        configureElementByUniqueIdAndMapping(idsRevit, mapping);
-    });
+            viewer.model.getExternalIdMapping((mapping) => {
+                configureElementByUniqueIdAndMapping(idsRevit, mapping);
+            });
 }
 function configureElementByUniqueIdAndMapping(idsRevit, mapping) {
     var elementsDbId = [];
@@ -150,48 +152,48 @@ function configureElementByUniqueIdAndMapping(idsRevit, mapping) {
 }
 
 
-    export const RefrescarV = async() => {
-        //alert("refresca");
-       if (viewer)
+export const RefrescarV = async () => {
+    //alert("refresca");
+    if (viewer)
         viewer.resize();
-       //viewer.showAll();
-       //viewer.refresh(false);
-       //viewer.refresh(true);
-       //var urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlk1YXg4MUthUWZ1OUppZlU1b0M0M0E/dmVyc2lvbj0x';
-       //await ViewScreen1.launchViewer(urn);
+    //viewer.showAll();
+    //viewer.refresh(false);
+    //viewer.refresh(true);
+    //var urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlk1YXg4MUthUWZ1OUppZlU1b0M0M0E/dmVyc2lvbj0x';
+    //await ViewScreen1.launchViewer(urn);
 
-    }
+}
 
 
-var UniquesSel=null;
+var UniquesSel = null;
 
-  
+
 export const ViewerSc = (props) => {
 
 
-	const dispatch = useDispatch();
-	// const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+    // const [loading, setLoading] = useState(true);
 
-	//const auth = useSelector((state) => state.auth);
-	const proyects = useSelector((state:any) => state.proyects);
+    //const auth = useSelector((state) => state.auth);
+    const proyects = useSelector((state: any) => state.proyects);
 
 
 
 
 
     useEffect(() => {
-		//console.log('datos de items en Forge')
-		//console.log(proyects.DataUnique)
-        UniquesSel=proyects.DataUnique;
-		//orderTree(proyects.DataPc);
-		//alert('ejecutó la primera carga');
-			// console.log(result);
-		// }
-		 // eslint-disable-next-line
-	}, [proyects.DataUnique])
+        //console.log('datos de items en Forge')
+        //console.log(proyects.DataUnique)
+        UniquesSel = proyects.DataUnique;
+        //orderTree(proyects.DataPc);
+        //alert('ejecutó la primera carga');
+        // console.log(result);
+        // }
+        // eslint-disable-next-line
+    }, [proyects.DataUnique])
 
-    
-    const [ modelURL, setModelURL ] = useState('dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmktWmdsQkg4UnRXRWI1Zi1CWnZnQ0E/dmVyc2lvbj0x');
+
+    const [modelURL, setModelURL] = useState('dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmktWmdsQkg4UnRXRWI1Zi1CWnZnQ0E/dmVyc2lvbj0x');
     //'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmktWmdsQkg4UnRXRWI1Zi1CWnZnQ0E/dmVyc2lvbj0x'
     //const [Viewer1, setViewer1] = useState(null);
 
@@ -355,10 +357,10 @@ export const ViewerSc = (props) => {
 
 
 
-    
+
     //return tasks;
-  
-    
+
+
 
     //const { env, docUrn, adapterType, api } = props.appData;
     /*if (props.appData.dataStart && props.appData.dataEnd) {
@@ -404,9 +406,9 @@ export const ViewerSc = (props) => {
     const [loadViewerLibrary, setLoadViewerLibrary] = useState(false);
     const [loadViewerLibrary1, setLoadViewerLibrary1] = useState(false);
 
-    const handleStyleLoad = async() => {
+    const handleStyleLoad = async () => {
         viewerStyleLoaded = true;
-        if (cargado1 && cargado2){
+        if (cargado1 && cargado2) {
             //urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlk1YXg4MUthUWZ1OUppZlU1b0M0M0E/dmVyc2lvbj0x';
             await launchViewer(modelURL);
             //alert(urn);
@@ -418,23 +420,23 @@ export const ViewerSc = (props) => {
 
         }
     }
-    var cargado1=false;
-    var cargado2=false;
+    var cargado1 = false;
+    var cargado2 = false;
 
- 
+
 
 
     const handleScriptLoad1 = async () => {
         //alert('ya cargo');
 
-        cargado2=true;
-        if (cargado1 && cargado2){
+        cargado2 = true;
+        if (cargado1 && cargado2) {
             //urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlk1YXg4MUthUWZ1OUppZlU1b0M0M0E/dmVyc2lvbj0x';
             await launchViewer(modelURL);
             //alert(urn);
         }
 
-        
+
 
         /*viewerLibraryLoaded1 = true;
         setTimeout(() => {
@@ -494,8 +496,8 @@ export const ViewerSc = (props) => {
 
         //viewerStyleLoaded && loadViewer(modelURL)
         //urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmhxbTRIV0ZmUm82VGtzand2MjZQSlE_dmVyc2lvbj0x';
-        cargado1=true;
-        if (cargado1 && cargado2){
+        cargado1 = true;
+        if (cargado1 && cargado2) {
             //urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlk1YXg4MUthUWZ1OUppZlU1b0M0M0E/dmVyc2lvbj0x';
             await launchViewer(modelURL);
         }
@@ -527,7 +529,7 @@ export const ViewerSc = (props) => {
     function carga2() {
 
         //var urn = getParameterByName('urn');
-        
+
         //alert('esta es la funcion');
         //seleccionados='c884ae1b-61e7-4f9d-0001-719e20b22d0b-006f9464';
         //var cadena = '5c069bcb-62a6-44a8-a199-48eb6d184f17-000546cc';
@@ -555,10 +557,10 @@ export const ViewerSc = (props) => {
         }*/
         //alert('hola');
         //viewer.impl.scene.add(sphereMesh);
-        
+
         scene.background = new THREE.Color(0x2a3b4c);
         alert('carga2');
-        viewer.overlays.addMesh( sphereMesh, scene);
+        viewer.overlays.addMesh(sphereMesh, scene);
         sphereMesh.position.set(1, 2, 3);
         viewer.refresh();
         //alert('mostrado');
@@ -738,6 +740,7 @@ export const ViewerSc = (props) => {
     function highlightRevit(idsRevit) {
         // Every Forge Viewer model has an ‘ExternalId Mapping’
         // this mapping is an object that has as keys the
+        if (viewer && viewer.model)
         viewer.model.getExternalIdMapping((mapping) => {
             configureElementByUniqueIdAndMapping(idsRevit, mapping);
         });
@@ -761,7 +764,7 @@ export const ViewerSc = (props) => {
     // @viewablesId which viewables to show, applies to BIM 360 Plans folder
     function launchViewer(urn, viewableId = '') {
         //alert(viewerLibraryLoaded1);
-        
+
         console.log('RENDERIZANDO EL VIEWER  ***********************');
         var options = {
             env: 'AutodeskProduction',
@@ -770,7 +773,7 @@ export const ViewerSc = (props) => {
         };
         //alert('se cargo'+'urn= '+urn+' acces token=');
         //if (!Autodesk) return;
-            Autodesk.Viewing.Initializer(options, () => {
+        Autodesk.Viewing.Initializer(options, () => {
             const config = {
                 extensions: ['Autodesk.VisualClusters', 'Autodesk.DocumentBrowser', 'Autodesk.BIM360.Minimap', 'Autodesk.ViewCubeUi', 'Autodesk.AEC.Minimap3DExtension', 'Autodesk.AEC.Minimap3DExtension', 'MenuContextual', /*'Botones', */'Autodesk.DataVisualization']
             };
@@ -816,20 +819,35 @@ export const ViewerSc = (props) => {
 
             var viewables = (viewableId ? doc.getRoot().findByGuid(viewableId) : doc.getRoot().getDefaultGeometry());
             //var items = doc.getRoot().find({ role: '3d', type: 'geometry' });
-            
-            var arrg=[];
-            var selectedItems=[];
+
+            var arrg = [];
+            var selectedItems = [];
             const employees = [];
             const employees1 = [];
             const employees2 = [];
             var elementos = [];
 
-            var E_Id='',E_cat='',E_fam='',E_tip='',E_ext='';
+            employees1.push({
+                'ID': '',
+                'Name': ''
+            });
+
+            employees.push({
+                'ID': '',
+                'Name': ''
+            });
+            employees2.push({
+                'ID': '',
+                'Name': ''
+            });
+
+
+            var E_Id = '', E_cat = '', E_fam = '', E_tip = '', E_ext = '';
 
             if (!viewer) return;
 
             viewer.loadDocumentNode(doc, viewables).then(i => {
-                console.log('estas son las vistas',i);
+                console.log('estas son las vistas', i);
 
                 viewer.getObjectTree(function (objTree) {
                     objTree.enumNodeChildren(
@@ -843,10 +861,10 @@ export const ViewerSc = (props) => {
 
                             var uniqueIds = [];
                             var categorias = [];
-                            
+
                             var NombreT = [];
                             var TipoT = [];
-                            T_cantidad_elementos=0;
+                            T_cantidad_elementos = 0;
 
                             T_uniqueIds = [];
                             T_NombreT = [];
@@ -855,141 +873,141 @@ export const ViewerSc = (props) => {
 
                             var DBids = viewer.getSelection();
                             var n = 0;
-                           
-                                //var objSelected = viewer.getSelection()[n];
-                                var objSelected = dbId;
-                                E_Id=objSelected;
-                                n = n + 1;
-                                viewer.getProperties(objSelected, (props) => {
-                                    
-                                    uniqueIds.push(props.externalId);
-                                    T_uniqueIds.push(props.externalId);
-                                    E_ext=props.externalId;
-                                    
 
-                                    if (props.name.substring(props.name.length-1,props.name.length)===']'){
+                            //var objSelected = viewer.getSelection()[n];
+                            var objSelected = dbId;
+                            E_Id = objSelected;
+                            n = n + 1;
+                            viewer.getProperties(objSelected, (props) => {
 
-                                        let reg2=null;
-                                        if (employees2){
-                                           reg2 = employees2.find((filtro1) => filtro1.Name === props.name.substring(0,props.name.length-9));
-                                        }
-                                        
-                                        if (!reg2){
-                                           employees2.push({
-                                               'ID': props.name.substring(0,props.name.length-9),
-                                               'Name': props.name.substring(0,props.name.length-9)
-                                             })
-                                           //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
-                                           E_fam=props.name.substring(0,props.name.length-9);
-                                        }
-                                        
-                                        
-                                    }else{
+                                uniqueIds.push(props.externalId);
+                                T_uniqueIds.push(props.externalId);
+                                E_ext = props.externalId;
 
 
-                                        /*let reg2=null;
-                                        if (employees2){
-                                           reg2 = employees2.find((filtro1) => filtro1.Name === props.name);
-                                        }
-                                        
-                                        if (!reg2){
-                                           employees2.push({
-                                               'ID': props.name,
-                                               'Name': props.name
-                                             })
-                                           //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
-                                        }*/
+                                if (props.name.substring(props.name.length - 1, props.name.length) === ']') {
 
-
-
-
+                                    let reg2 = null;
+                                    if (employees2) {
+                                        reg2 = employees2.find((filtro1) => filtro1.Name === props.name.substring(0, props.name.length - 9));
                                     }
 
-
-
-                                     //alert(props.name+" "+props.properties[0].displayValue+" "+props.properties[45].displayValue);   
-                                     let indice=0;
-                                     if (props.properties[0].displayName==="Category") indice=0;
-                                     if (props.properties[1].displayName==="Category") indice=1;
-                                     
-                                     
-                                     T_NombreT.push(props.name);
-                                     T_categorias.push(props.properties[indice].displayValue);
-                                     
-                                     let reg=null;
-                                     if (employees){
-                                        reg = employees.find((filtro1) => filtro1.Name === props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length));
-                                     }
-                                     
-                                     if (!reg){
-                                        employees.push({
-                                            'ID': props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length),
-                                            'Name': props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length)
-                                          })
-
-                                          E_cat=props.properties[indice].displayValue.substring(6,props.properties[indice].displayValue.length);
-
-                                          
+                                    if (!reg2) {
+                                        employees2.push({
+                                            'ID': props.name.substring(0, props.name.length - 9),
+                                            'Name': props.name.substring(0, props.name.length - 9)
+                                        })
                                         //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
-                                     }
-
-                                     //proyects.DataCategorias.find()
-
-                                     selectedItems.push(props.properties[indice].displayValue);
-
-                                    // Buscar en el arreglo la proiedad "Nombre de tipo"
-                                     //var T_TipoT = [];
-                                     T_cantidad_elementos++;
-                                     var enc=0;
-                                     for (var Propiedad of props.properties) {
-                                        if (Propiedad.displayName === 'Nombre de tipo'){
-                                            T_TipoT.push(Propiedad.displayValue);
-
-                                            let reg1=null;
-                                            if (employees1){
-                                               reg1= employees1.find((filtro1) => filtro1.Name === Propiedad.displayValue);
-                                            }
-                                            
-                                            if (!reg1){
-                                               employees1.push({
-                                                   'ID': Propiedad.displayValue,
-                                                   'Name': Propiedad.displayValue
-                                                 });
-                                                 E_tip=Propiedad.displayValue;
-                                               //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
-                                            }
-                                                   
-
-                                            enc=1;
-                                        }
-                                     }
-                                     if (!enc){
-                                        E_tip='sin tipo';
-                                        T_TipoT.push('sin tipo');
-                                     }
-
-                                     elementos.push({
-                                        'Id': E_Id,
-                                        'Categoria': E_cat,
-                                        'Familia': E_fam,
-                                        'Tipo': E_tip,
-                                        'UniqueId': E_ext,
-                                      });
-                                     //console.log('Estas son las props', props);
-                                    if (n == DBids.length) {
-                                        //callbackObj.showMessage(uniqueIds);
-                                        //callbackObj.returnex(uniqueIds);
-                                        //alert(uniqueIds);
-                                        seleccionados=uniqueIds.toString();
-                                        //seleccionadosCat="", seleccionadosFamilia="", seleccionadosTipo=""; 
-
-                                       // console.log('Estas son las props', props);
-                                        //9c9538fd-af40-4b3d-bd89-f8e4acac1fd8-000525ae
+                                        E_fam = props.name.substring(0, props.name.length - 9);
                                     }
-                                })
-                            
 
-                                
+
+                                } else {
+
+
+                                    /*let reg2=null;
+                                    if (employees2){
+                                       reg2 = employees2.find((filtro1) => filtro1.Name === props.name);
+                                    }
+                                    
+                                    if (!reg2){
+                                       employees2.push({
+                                           'ID': props.name,
+                                           'Name': props.name
+                                         })
+                                       //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
+                                    }*/
+
+
+
+
+                                }
+
+
+
+                                //alert(props.name+" "+props.properties[0].displayValue+" "+props.properties[45].displayValue);   
+                                let indice = 0;
+                                if (props.properties[0].displayName === "Category") indice = 0;
+                                if (props.properties[1].displayName === "Category") indice = 1;
+
+
+                                T_NombreT.push(props.name);
+                                T_categorias.push(props.properties[indice].displayValue);
+
+                                let reg = null;
+                                if (employees) {
+                                    reg = employees.find((filtro1) => filtro1.Name === props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length));
+                                }
+
+                                if (!reg) {
+                                    employees.push({
+                                        'ID': props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length),
+                                        'Name': props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length)
+                                    })
+
+                                    E_cat = props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length);
+
+
+                                    //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
+                                }
+
+                                //proyects.DataCategorias.find()
+
+                                selectedItems.push(props.properties[indice].displayValue);
+
+                                // Buscar en el arreglo la proiedad "Nombre de tipo"
+                                //var T_TipoT = [];
+                                T_cantidad_elementos++;
+                                var enc = 0;
+                                for (var Propiedad of props.properties) {
+                                    if (Propiedad.displayName === 'Nombre de tipo') {
+                                        T_TipoT.push(Propiedad.displayValue);
+
+                                        let reg1 = null;
+                                        if (employees1) {
+                                            reg1 = employees1.find((filtro1) => filtro1.Name === Propiedad.displayValue);
+                                        }
+
+                                        if (!reg1) {
+                                            employees1.push({
+                                                'ID': Propiedad.displayValue,
+                                                'Name': Propiedad.displayValue
+                                            });
+                                            E_tip = Propiedad.displayValue;
+                                            //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
+                                        }
+
+
+                                        enc = 1;
+                                    }
+                                }
+                                if (!enc) {
+                                    E_tip = 'sin tipo';
+                                    T_TipoT.push('sin tipo');
+                                }
+
+                                elementos.push({
+                                    'Id': E_Id,
+                                    'Categoria': E_cat,
+                                    'Familia': E_fam,
+                                    'Tipo': E_tip,
+                                    'UniqueId': E_ext,
+                                });
+                                //console.log('Estas son las props', props);
+                                if (n == DBids.length) {
+                                    //callbackObj.showMessage(uniqueIds);
+                                    //callbackObj.returnex(uniqueIds);
+                                    //alert(uniqueIds);
+                                    seleccionados = uniqueIds.toString();
+                                    //seleccionadosCat="", seleccionadosFamilia="", seleccionadosTipo=""; 
+
+                                    // console.log('Estas son las props', props);
+                                    //9c9538fd-af40-4b3d-bd89-f8e4acac1fd8-000525ae
+                                }
+                            })
+
+
+
 
 
 
@@ -1017,19 +1035,19 @@ export const ViewerSc = (props) => {
 
 
 
-                        },true);
+                        }, true);
                 });
                 //alert('');
                 dispatch(agregaCategoria(employees));
-                
+
                 dispatch(agregaTipo(employees1));
 
                 dispatch(agregaFamilia(employees2));
 
                 dispatch(agregaElementos(elementos));
 
-                console.log('TODOS LOS ELEMENTOS');
-                console.log(elementos);
+                //console.log('TODOS LOS ELEMENTOS');
+                //console.log(elementos);
 
 
                 /*console.log('datos cargados de GetROOOOOT');
@@ -1048,12 +1066,12 @@ export const ViewerSc = (props) => {
 
             //viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, onSelectionBinded);
             //viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, PonerProps);
-            
+
             //viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, PonerProps);
 
 
 
-           // onModelLoaded1(viewer);
+            // onModelLoaded1(viewer);
 
             //init22();
 
@@ -1208,7 +1226,7 @@ export const ViewerSc = (props) => {
 
             //console.log('Este es el evento', event);
             onModelLoaded1(viewer);
-  
+
 
         }
 
@@ -1337,7 +1355,7 @@ export const ViewerSc = (props) => {
                 // const currAppState = appStateRef.current;
 
                 div.style.display = 'none';
-                
+
 
                 posX = event.originalEvent.normalizedX;
                 posY = event.originalEvent.normalizedY;
@@ -1360,34 +1378,34 @@ export const ViewerSc = (props) => {
                     app.id = "app"; // <div id="app"></div>
                     app.appendChild(div);*/
 
-                    
+
                     //var ClientRect = div.getBoundingClientRect();
                     /*var ClientRect = elemento.getBoundingClientRect();
-	                return { //objeto
-	                x: Math.round(evt.clientX - ClientRect.left),
-	                y: Math.round(evt.clientY - ClientRect.top)
+                    return { //objeto
+                    x: Math.round(evt.clientX - ClientRect.left),
+                    y: Math.round(evt.clientY - ClientRect.top)
                         }*/
                     div.appendChild(div1);
-                    
-                    
-    
-                    div1.textContent = 'Ejemplo '+event.dbId ;  
-                    div1.style.textAlign = 'center';  
+
+
+
+                    div1.textContent = 'Ejemplo ' + event.dbId;
+                    div1.style.textAlign = 'center';
                     //div.textContent = "Ejemplo "+ event.dbId;                // <div>Ejemplo</div>
-                    div2.innerHTML = 'Otro dato';  
+                    div2.innerHTML = 'Otro dato';
                     div1.classList.add('card');
                     //div1.classList.add('card-header');
-                    
+
                     div2.classList.add('card-title');
                     //div3.classList.add('card-header');
 
 
                     div1.style.fontSize = '0.8rem';
                     //div1.style.border = '1px 1px 1px 2px rgba(255,255,255,0.95)';
-                    
+
                     div1.style.backgroundColor = 'rgba(1,1,1,0.85)';
                     div1.style.width = '100%';
-                    
+
                     div.appendChild(div2);
                     div2.style.fontSize = '0.7rem';
 
@@ -1399,13 +1417,13 @@ export const ViewerSc = (props) => {
                     div.style.fontSize = '0.7rem';
                     div.style.width = '150px';
                     div.style.height = '110px';
-                    
-                    
+
+
                     //div.style.top = event.originalEvent.pageY;
                     //div.style.left = event.originalEvent.pageX;
                     //div.style.top = event.originalEvent.pageY+'px';
-                    div.style.top = (event.originalEvent.pageY-120)+'px';
-                    div.style.left = (event.originalEvent.pageX-65)+'px';
+                    div.style.top = (event.originalEvent.pageY - 120) + 'px';
+                    div.style.left = (event.originalEvent.pageX - 65) + 'px';
                     //div.style.left = posX+'px';
                     div.style.display = 'block';
                     //div.style.visibility = 'block';
@@ -1413,12 +1431,12 @@ export const ViewerSc = (props) => {
                     //determina un margen de pixels del div al raton
                     //div.insertAdjacentElement("beforebegin", div1);
                     //div.insertAdjacentElement("beforebegin", div2);
-                   /* window.currentMouseX = e.pageX;
-                    window.currentMouseY = e.pageY;*/
+                    /* window.currentMouseX = e.pageX;
+                     window.currentMouseY = e.pageY;*/
                     //La variable IE determina si estamos utilizando IE
-                    
+
                     //Si no utilizamos IE capturamos el evento del mouse
-                    
+
 
                     /*var tempX = 0;
                     var tempY = 0;
@@ -1507,10 +1525,10 @@ export const ViewerSc = (props) => {
             }
 
             const DataVizCore = Autodesk.DataVisualization.Core;
-           // viewer.addEventListener(DataVizCore.MOUSE_CLICK, onItemClick);
-           
-           
-           
+            // viewer.addEventListener(DataVizCore.MOUSE_CLICK, onItemClick);
+
+
+
             //viewer.addEventListener(DataVizCore.MOUSE_HOVERING, onItemHovering);
 
 
@@ -1552,7 +1570,7 @@ export const ViewerSc = (props) => {
                 }
             });
         }
-        
+
         function onMouseClick(event) {
             /*if (ponerdato){
 
@@ -1617,7 +1635,7 @@ export const ViewerSc = (props) => {
 
 
 
-        const CargarPartidas = ()=>{
+        const CargarPartidas = () => {
 
             var DBids = viewer.getSelection();
             var n = 0;
@@ -1630,7 +1648,7 @@ export const ViewerSc = (props) => {
                     //alert(Idunico);
                     dispatch(selectParidas(Idunico));
                     setTimeout(() => {
-                        
+
                         console.log('Datos de Uniques en mi function');
                         console.log(UniquesSel);
 
@@ -1646,16 +1664,16 @@ export const ViewerSc = (props) => {
                         }
                         var div1 = document.getElementById('ContenidoBIM');
                         if (div1 != null) {
-                            var html='<h2>'+Idunico+'<h2>';
+                            var html = '<h2>' + Idunico + '<h2>';
 
-                            for (let i=0;i<UniquesSel.length;i++){
-                                html= html+'<h2>Pres: '+UniquesSel[i].CodPresupuesto+'<h2>';
-                                html= html+'<h2>Sub :'+UniquesSel[i].CodSubpresupuesto+'<h2>';
-                                html= html+'<h2>Item :'+UniquesSel[i].Item+'<h2>';
+                            for (let i = 0; i < UniquesSel.length; i++) {
+                                html = html + '<h2>Pres: ' + UniquesSel[i].CodPresupuesto + '<h2>';
+                                html = html + '<h2>Sub :' + UniquesSel[i].CodSubpresupuesto + '<h2>';
+                                html = html + '<h2>Item :' + UniquesSel[i].Item + '<h2>';
                             }
-                            div1.innerHTML = html;                            
+                            div1.innerHTML = html;
                         }
-                            
+
 
                     }, 500);
 
@@ -1723,7 +1741,7 @@ export const ViewerSc = (props) => {
                                     var categorias = [];
                                     var NombreT = [];
                                     var TipoT = [];
-                                    T_cantidad_elementos=0;
+                                    T_cantidad_elementos = 0;
 
                                     T_uniqueIds = [];
                                     T_NombreT = [];
@@ -1739,34 +1757,34 @@ export const ViewerSc = (props) => {
                                         this.viewer.getProperties(objSelected, (props) => {
                                             uniqueIds.push(props.externalId);
                                             T_uniqueIds.push(props.externalId);
-                                            
-                                             //alert(props.name+" "+props.properties[0].displayValue+" "+props.properties[45].displayValue);   
 
-                                             T_NombreT.push(props.name);
-                                             T_categorias.push(props.properties[0].displayValue);
-                                             
+                                            //alert(props.name+" "+props.properties[0].displayValue+" "+props.properties[45].displayValue);   
+
+                                            T_NombreT.push(props.name);
+                                            T_categorias.push(props.properties[0].displayValue);
+
 
                                             // Buscar en el arreglo la proiedad "Nombre de tipo"
-                                             //var T_TipoT = [];
-                                             T_cantidad_elementos++;
-                                             var enc=0;
-                                             for (var Propiedad of props.properties) {
-                                                if (Propiedad.displayName === 'Nombre de tipo'){
+                                            //var T_TipoT = [];
+                                            T_cantidad_elementos++;
+                                            var enc = 0;
+                                            for (var Propiedad of props.properties) {
+                                                if (Propiedad.displayName === 'Nombre de tipo') {
                                                     T_TipoT.push(Propiedad.displayValue);
-                                                    enc=1;
+                                                    enc = 1;
                                                 }
-                                             }
-                                             if (!enc){
+                                            }
+                                            if (!enc) {
                                                 T_TipoT.push('sin tipo');
-                                             }
+                                            }
 
- 
+
 
                                             if (n == DBids.length) {
                                                 //callbackObj.showMessage(uniqueIds);
                                                 //callbackObj.returnex(uniqueIds);
                                                 //alert(uniqueIds);
-                                                seleccionados=uniqueIds.toString();
+                                                seleccionados = uniqueIds.toString();
                                                 //seleccionadosCat="", seleccionadosFamilia="", seleccionadosTipo=""; 
 
                                                 console.log('Estas son las props', props);
@@ -1968,7 +1986,7 @@ export const ViewerSc = (props) => {
         function createPanelButton(ctrl) {
             var buttonVerMapa = new Autodesk.Viewing.UI.Button('MostrarMapa');
             buttonVerMapa.onClick = function (e) {
-                ponerdato=!ponerdato;
+                ponerdato = !ponerdato;
                 carga2();
                 //MostrarMapa('Mapa1.jpg');
             };
@@ -2030,7 +2048,7 @@ export const ViewerSc = (props) => {
         }
 
 
-        function seleccionar_btn(){
+        function seleccionar_btn() {
             //btn.addClass();
             alert('hola');
 
@@ -2067,184 +2085,184 @@ export const ViewerSc = (props) => {
                 '<span data-i18n="Environment">Programación</span></a>' +
                 '</li>' +
                 '</ul>' +
-                '</div>'+
-                '<div class="docking-panel-scroll docking-panel-container-solid-color-a right"id="ViewerSettingsPanel0-1-scroll-container" style="height: calc(100% - 110px);">'+
-                '<div class="settings-tabs-tables-container">'+
-                '<table id="ViewerSettingsPanel0-1-performancetab-table" class="settings-table adsk-lmv-tftable performance settings-selected-table">'+
-                '<tbody style="display: table; width: 100%;">'+
+                '</div>' +
+                '<div class="docking-panel-scroll docking-panel-container-solid-color-a right"id="ViewerSettingsPanel0-1-scroll-container" style="height: calc(100% - 110px);">' +
+                '<div class="settings-tabs-tables-container">' +
+                '<table id="ViewerSettingsPanel0-1-performancetab-table" class="settings-table adsk-lmv-tftable performance settings-selected-table">' +
+                '<tbody style="display: table; width: 100%;">' +
 
-                '<tr class="logical-group">'+
-                        '<td colspan="3">'+
-                            '<div data-i18n="Performance Optimization" style="margin-top:20px;">Opcion 1'+
-                            '</div>'+
-                        '</td>'+
-                    '</tr>'+
-
-
-                '<div class="btn-group" style="margin-top:30px;">'+
-                    '<button type="button" class="btn btn-outline-default">Principal 3D</button>'+
-                    '<button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown">'+
-                        '<span class="sr-only">Toggle Dropdown</span>'+
-                    '</button>'+
-                    '<div class="dropdown-menu" role="menu">'+
-                        '<a class="dropdown-item" href="#">Action</a>'+
-                        '<a class="dropdown-item" href="#">Another action</a>'+
-                        '<a class="dropdown-item" href="#">Something else here</a>'+
-                        '<div class="dropdown-divider"></div>'+
-                        '<a class="dropdown-item" href="#">Separated link</a>'+
-                    '</div>'+
-                '</div>'+
+                '<tr class="logical-group">' +
+                '<td colspan="3">' +
+                '<div data-i18n="Performance Optimization" style="margin-top:20px;">Opcion 1' +
+                '</div>' +
+                '</td>' +
+                '</tr>' +
 
 
+                '<div class="btn-group" style="margin-top:30px;">' +
+                '<button type="button" class="btn btn-outline-default">Principal 3D</button>' +
+                '<button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown">' +
+                '<span class="sr-only">Toggle Dropdown</span>' +
+                '</button>' +
+                '<div class="dropdown-menu" role="menu">' +
+                '<a class="dropdown-item" href="#">Action</a>' +
+                '<a class="dropdown-item" href="#">Another action</a>' +
+                '<a class="dropdown-item" href="#">Something else here</a>' +
+                '<div class="dropdown-divider"></div>' +
+                '<a class="dropdown-item" href="#">Separated link</a>' +
+                '</div>' +
+                '</div>' +
 
 
 
 
 
-                '</tbody>'+
-                '</table>'+
 
-                '<table id="ViewerSettingsPanel0-1-navigationtab-table" class="settings-table adsk-lmv-tftable navigation">'+
-                
-                '<tbody style="display: table; width: 100%;">'+
-                    '<tr class="logical-group">'+
-                        '<td colspan="3">'+
-                            '<div data-i18n="ViewCube">Opcion 2</div>'+
-                        '</td>'+
-                    '</tr>'+
 
-                '</tbody>'+
-                '</table>'+
-    
+                '</tbody>' +
+                '</table>' +
 
-                '</div>'+                
+                '<table id="ViewerSettingsPanel0-1-navigationtab-table" class="settings-table adsk-lmv-tftable navigation">' +
+
+                '<tbody style="display: table; width: 100%;">' +
+                '<tr class="logical-group">' +
+                '<td colspan="3">' +
+                '<div data-i18n="ViewCube">Opcion 2</div>' +
+                '</td>' +
+                '</tr>' +
+
+                '</tbody>' +
+                '</table>' +
+
+
+                '</div>' +
                 '</div>';
-                var cont=0;
-                var cadenaaux ="";
-                
-                var cadenaaux1 ="";
+            var cont = 0;
+            var cadenaaux = "";
+
+            var cadenaaux1 = "";
 
 
-                for (var elem of T_NombreT) {
+            for (var elem of T_NombreT) {
                 var separador = "[",
                     arregloDeSubCadenas = elem.split(separador);
                 var separador1 = "Revit",
-                    arregloDeSubCadenas1 = T_categorias[cont].replace('Revit ','');
-                    cadenaaux=cadenaaux+'<a class="claseElemento list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home" style="width:90%;">'+cont+'. '+arregloDeSubCadenas1+' - '+arregloDeSubCadenas[0]+' '+T_TipoT[cont]+'</a>';
-                    cont++;
-                }
+                    arregloDeSubCadenas1 = T_categorias[cont].replace('Revit ', '');
+                cadenaaux = cadenaaux + '<a class="claseElemento list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home" style="width:90%;">' + cont + '. ' + arregloDeSubCadenas1 + ' - ' + arregloDeSubCadenas[0] + ' ' + T_TipoT[cont] + '</a>';
+                cont++;
+            }
 
-                
-                
-                
-                
-                
-                var procesadosCat = [];                
-                var contar_procesados=0, Indicador=0;
-                var cont1=0;                
 
-                for (var elem1 of T_NombreT) {
-                    var arregloDeSubCadenas1 = T_categorias[cont1].replace('Revit ','');                        
-                    Indicador=0;
-                    for (var elem2 of procesadosCat) {
-                        if (elem2 === arregloDeSubCadenas1){
-                            Indicador=1;
-                        }
+
+
+
+
+            var procesadosCat = [];
+            var contar_procesados = 0, Indicador = 0;
+            var cont1 = 0;
+
+            for (var elem1 of T_NombreT) {
+                var arregloDeSubCadenas1 = T_categorias[cont1].replace('Revit ', '');
+                Indicador = 0;
+                for (var elem2 of procesadosCat) {
+                    if (elem2 === arregloDeSubCadenas1) {
+                        Indicador = 1;
                     }
-                    if (!Indicador){
-                        cadenaaux1=cadenaaux1+'<a class="clase1 list-group-item list-group-item-action active" id="list-home-list2" data-bs-toggle="list" role="tab" aria-controls="list-home" style="width:75%;">'+arregloDeSubCadenas1+'</a>';
-                        procesadosCat.push(arregloDeSubCadenas1);
-                        contar_procesados++;
-                    }
-                    cont1++;
                 }
-    
+                if (!Indicador) {
+                    cadenaaux1 = cadenaaux1 + '<a class="clase1 list-group-item list-group-item-action active" id="list-home-list2" data-bs-toggle="list" role="tab" aria-controls="list-home" style="width:75%;">' + arregloDeSubCadenas1 + '</a>';
+                    procesadosCat.push(arregloDeSubCadenas1);
+                    contar_procesados++;
+                }
+                cont1++;
+            }
 
 
-                html =
-                '<nav>'+
-                '<div class="nav nav-tabs" id="nav-tab" role="tablist" style="background:rgba(0,0,0,0.5); color:white;">'+
-                    '<button class="nav-link" id="nav-seleccion-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true" style="background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6);">Elementos</button>'+
-                    '<button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" style="background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6);">Clasificados</button>'+
-                    '<button class="nav-link" id="nav-contact-tab" onclick="alert("hola")" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false" style="background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6);">Vinculos</button>'+
-                '</div>'+
-                '</nav>'+
-                '<div class="tab-content" id="nav-tabContent">'+
-                
-                
-                '<div class="tab-pane fade" id="nav-seleccion" role="tabpanel" aria-labelledby="nav-home-tab">Listado de elementos seleccionados'+
 
-                    '<div class="row">'+
-                    '<div class="col-11">'+
-                        '<div class="list-group" id="list-tab" role="tablist" style="height:450px; overflow:scroll;font-size:0.8rem;">'+
-                        
-                        cadenaaux+
-                        //'<a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">Nombre </a>'+
-                        
-                        
-                        
-                        //'<a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" role="tab" aria-controls="list-profile">Profile</a>'+
-                        //'<a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" role="tab" aria-controls="list-messages">Messages</a>'+
-                        //'<a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" role="tab" aria-controls="list-settings">Settings</a>'+
-                        '</div>'+
+            html =
+                '<nav>' +
+                '<div class="nav nav-tabs" id="nav-tab" role="tablist" style="background:rgba(0,0,0,0.5); color:white;">' +
+                '<button class="nav-link" id="nav-seleccion-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true" style="background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6);">Elementos</button>' +
+                '<button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" style="background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6);">Clasificados</button>' +
+                '<button class="nav-link" id="nav-contact-tab" onclick="alert("hola")" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false" style="background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6);">Vinculos</button>' +
+                '</div>' +
+                '</nav>' +
+                '<div class="tab-content" id="nav-tabContent">' +
+
+
+                '<div class="tab-pane fade" id="nav-seleccion" role="tabpanel" aria-labelledby="nav-home-tab">Listado de elementos seleccionados' +
+
+                '<div class="row">' +
+                '<div class="col-11">' +
+                '<div class="list-group" id="list-tab" role="tablist" style="height:450px; overflow:scroll;font-size:0.8rem;">' +
+
+                cadenaaux +
+                //'<a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">Nombre </a>'+
+
+
+
+                //'<a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" role="tab" aria-controls="list-profile">Profile</a>'+
+                //'<a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" role="tab" aria-controls="list-messages">Messages</a>'+
+                //'<a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" role="tab" aria-controls="list-settings">Settings</a>'+
+                '</div>' +
+                '</div>' +
+                /*'<div class="col-8">'+
+                    '<div class="tab-content" id="nav-tabContent">'+
+                    '<div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">...</div>'+
+                    '<div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>'+
+                    '<div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>'+
+                    '<div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>'+
                     '</div>'+
-                    /*'<div class="col-8">'+
-                        '<div class="tab-content" id="nav-tabContent">'+
-                        '<div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">...</div>'+
-                        '<div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>'+
-                        '<div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>'+
-                        '<div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>'+
-                        '</div>'+
-                    '</div>'+*/
-                    '</div>'+
+                '</div>'+*/
+                '</div>' +
 
-                '</div>'+
+                '</div>' +
 
-                '<div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Categorías, Familias y tipos seleccionadas'+
-                
-                
-                '<div class="row">'+
-                '<div class="col-4">'+
-                    '<div class="list-group" id="list-tab" role="tablist" style="height:400px; overflow:scroll;font-size:0.7rem;">'+
-                    
-                    cadenaaux1+
-                    //'<a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">Nombre </a>'+
-                    
-                    
-                    
-                    //'<a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" role="tab" aria-controls="list-profile">Profile</a>'+
-                    //'<a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" role="tab" aria-controls="list-messages">Messages</a>'+
-                    //'<a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" role="tab" aria-controls="list-settings">Settings</a>'+
-                    '</div>'+
-                '</div>'+
+                '<div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Categorías, Familias y tipos seleccionadas' +
 
-                '<div class="col-4">'+
-                    '<div class="list-group" id="lista-tipos" role="tablist" style="height:400px; overflow:scroll;font-size:0.6rem;">'+
-                    
-                    //cadenaaux1+
-                    //'<a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">Nombre </a>'+
-                    
-                    
-                    
-                    //'<a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" role="tab" aria-controls="list-profile">Profile</a>'+
-                    //'<a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" role="tab" aria-controls="list-messages">Messages</a>'+
-                    //'<a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" role="tab" aria-controls="list-settings">Settings</a>'+
-                    '</div>'+
-                '</div>'+
 
-                '<div class="col-3">'+
-                    '<div class="list-group" id="lista-tipos1" role="tablist" style="height:400px; overflow:scroll;">'+
-                    
-                    //cadenaaux1+
-                    //'<a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">Nombre </a>'+
-                    
-                    
-                    
-                    //'<a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" role="tab" aria-controls="list-profile">Profile</a>'+
-                    //'<a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" role="tab" aria-controls="list-messages">Messages</a>'+
-                    //'<a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" role="tab" aria-controls="list-settings">Settings</a>'+
-                    '</div>'+
-                '</div>'+
+                '<div class="row">' +
+                '<div class="col-4">' +
+                '<div class="list-group" id="list-tab" role="tablist" style="height:400px; overflow:scroll;font-size:0.7rem;">' +
+
+                cadenaaux1 +
+                //'<a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">Nombre </a>'+
+
+
+
+                //'<a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" role="tab" aria-controls="list-profile">Profile</a>'+
+                //'<a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" role="tab" aria-controls="list-messages">Messages</a>'+
+                //'<a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" role="tab" aria-controls="list-settings">Settings</a>'+
+                '</div>' +
+                '</div>' +
+
+                '<div class="col-4">' +
+                '<div class="list-group" id="lista-tipos" role="tablist" style="height:400px; overflow:scroll;font-size:0.6rem;">' +
+
+                //cadenaaux1+
+                //'<a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">Nombre </a>'+
+
+
+
+                //'<a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" role="tab" aria-controls="list-profile">Profile</a>'+
+                //'<a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" role="tab" aria-controls="list-messages">Messages</a>'+
+                //'<a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" role="tab" aria-controls="list-settings">Settings</a>'+
+                '</div>' +
+                '</div>' +
+
+                '<div class="col-3">' +
+                '<div class="list-group" id="lista-tipos1" role="tablist" style="height:400px; overflow:scroll;">' +
+
+                //cadenaaux1+
+                //'<a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">Nombre </a>'+
+
+
+
+                //'<a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" role="tab" aria-controls="list-profile">Profile</a>'+
+                //'<a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" role="tab" aria-controls="list-messages">Messages</a>'+
+                //'<a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" role="tab" aria-controls="list-settings">Settings</a>'+
+                '</div>' +
+                '</div>' +
 
                 /*'<div class="col-8">'+
                     '<div class="tab-content" id="nav-tabContent">'+
@@ -2254,91 +2272,91 @@ export const ViewerSc = (props) => {
                     '<div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>'+
                     '</div>'+
                 '</div>'+*/
-                
-                
-                '</div>'+
-                '<div class="row" style="height:15px;">'+
 
-                '</div>'+
-                '<div class="row">'+
-                
+
+                '</div>' +
+                '<div class="row" style="height:15px;">' +
+
+                '</div>' +
+                '<div class="row">' +
+
                 //BOTONES
-                '<div class="col-9">'+
-                    '<button id="sel_cat" type="button" class="btn btn-primary" style="font-size:0.6rem;"></button>'+
-                    '<button id="sel_familia" type="button" class="btn btn-secondary" style="font-size:0.6rem;"></button>'+
+                '<div class="col-9">' +
+                '<button id="sel_cat" type="button" class="btn btn-primary" style="font-size:0.6rem;"></button>' +
+                '<button id="sel_familia" type="button" class="btn btn-secondary" style="font-size:0.6rem;"></button>' +
 
-                '</div>'+
-                
-                '<div class="col-2">'+
-                    '<button type="button" id="btn-siguiente-tipo" class="btn btn-danger" style="margin-left:20px;">Siguiente</button>'+
+                '</div>' +
 
-                '</div>'+
-                
-                
-                '</div>'+
+                '<div class="col-2">' +
+                '<button type="button" id="btn-siguiente-tipo" class="btn btn-danger" style="margin-left:20px;">Siguiente</button>' +
 
-                
-                '</div>'+
+                '</div>' +
 
-                
+
+                '</div>' +
+
+
+                '</div>' +
+
+
                 //DIV PARA SELECCIONAR UNA ASOCIACION
-                '<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">Asociar elementos para generación de cantidades '+
-                    '<div class="row">'+
-                        '<div class="col-11">'+
-                            '<button id="sel_cat1" type="button" class="btn btn-primary" style="font-size:0.7rem;">Categoria seleccionada</button>'+
-                            '<button id="sel_familia1" type="button" class="btn btn-secondary" style="font-size:0.6rem;">Tipo seleccionado</button>'+
-                        '</div>'+
-                    '</div>'+
+                '<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">Asociar elementos para generación de cantidades ' +
+                '<div class="row">' +
+                '<div class="col-11">' +
+                '<button id="sel_cat1" type="button" class="btn btn-primary" style="font-size:0.7rem;">Categoria seleccionada</button>' +
+                '<button id="sel_familia1" type="button" class="btn btn-secondary" style="font-size:0.6rem;">Tipo seleccionado</button>' +
+                '</div>' +
+                '</div>' +
 
-                    '<div class="row" style="height:20px;">'+
-                    '</div>'+
-                    
+                '<div class="row" style="height:20px;">' +
+                '</div>' +
 
-                    '<div class="row">'+
-                        '<div class="col-3">'+
-                            '<ul class="list-group">'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Contenedores</button></li>'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Unidad</button></li>'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Cantidad</button></li>'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Longitud</button></li>'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Ancho</button></li>'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Alto</button></li>'+                            
-                            '</ul>'+
 
-                        '</div>'+
-                        //'<div class="col-1">'+
-                        //'</div>'+
+                '<div class="row">' +
+                '<div class="col-3">' +
+                '<ul class="list-group">' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Contenedores</button></li>' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Unidad</button></li>' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Cantidad</button></li>' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Longitud</button></li>' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Ancho</button></li>' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-outline-secondary btn-sm">Alto</button></li>' +
+                '</ul>' +
 
-                        '<div class="col-8">'+
-                            '<ul class="list-group">'+
-                                '<li class="list-group-item"><button id="Mas_contenedores" type="button" class="btn btn-secondary btn-sm">+</button></li>'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-secondary btn-sm">+</button></li>'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-secondary btn-sm">+</button></li>'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-secondary btn-sm">+</button></li>'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-secondary btn-sm">+</button></li>'+
-                                '<li class="list-group-item"><button id="" type="button" class="btn btn-secondary btn-sm">+</button></li>'+                            
-                            '</ul>'+
-                        '</div>'+
+                '</div>' +
+                //'<div class="col-1">'+
+                //'</div>'+
 
-                    '</div>'+
+                '<div class="col-8">' +
+                '<ul class="list-group">' +
+                '<li class="list-group-item"><button id="Mas_contenedores" type="button" class="btn btn-secondary btn-sm">+</button></li>' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-secondary btn-sm">+</button></li>' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-secondary btn-sm">+</button></li>' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-secondary btn-sm">+</button></li>' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-secondary btn-sm">+</button></li>' +
+                '<li class="list-group-item"><button id="" type="button" class="btn btn-secondary btn-sm">+</button></li>' +
+                '</ul>' +
+                '</div>' +
 
-                    '<div class="row" style="height:15px;">'+//separacion del boton
-                    '</div>'+
+                '</div>' +
 
-                    '<div class="row">'+
-                    '<div class="col-9">'+                            
-                    '</div>'+                    
-                    '<div class="col-2">'+
-                        '<button type="button" id="btn-siguiente-tipo" class="btn btn-danger" style="margin-left:20px;">Siguiente</button>'+    
-                    '</div>'+
-                    
-                    
-                    '</div>'+
-    
-                
-                '</div>'+
+                '<div class="row" style="height:15px;">' +//separacion del boton
+                '</div>' +
+
+                '<div class="row">' +
+                '<div class="col-9">' +
+                '</div>' +
+                '<div class="col-2">' +
+                '<button type="button" id="btn-siguiente-tipo" class="btn btn-danger" style="margin-left:20px;">Siguiente</button>' +
+                '</div>' +
+
+
+                '</div>' +
+
+
+                '</div>' +
                 '</div>';
-                
+
 
             var ficheroJPG_a_txt = [""];
             //var html = '<div class="uicomponent-panel-controls-container" >hola Mundo' + '</div>'
@@ -2347,192 +2365,192 @@ export const ViewerSc = (props) => {
             if (div1 != null) {
                 div1.innerHTML = html;
             }
-            
 
-            $("#Mas_contenedores").on( "click", function() {
-               // alert('abro mas');
 
-               //var panel1 = itemMenuContextual.panel;
-               //if (panel == null) {
-               var panel1 = new PanelIngresoDatosBIM(viewer, viewer.container, 'PanelIngresoBIM', 'Agregar contenedor');
-               //itemMenuContextual.panel = panel;
-               //}
-               var panelId = document.getElementById('PanelIngresoBIM');
-               if (panelId != null) {
-                   panelId.style.display = "block";
-               }
-   
-   
-               var html1 = '<div class="docking-panel-container-solid-color-b settings-tabs docking-panel-delimiter-shadow">Seleccione una propiedad</div>';
-               var div11 = document.getElementById('ContenidoIngresoBIM');
+            $("#Mas_contenedores").on("click", function () {
+                // alert('abro mas');
+
+                //var panel1 = itemMenuContextual.panel;
+                //if (panel == null) {
+                var panel1 = new PanelIngresoDatosBIM(viewer, viewer.container, 'PanelIngresoBIM', 'Agregar contenedor');
+                //itemMenuContextual.panel = panel;
+                //}
+                var panelId = document.getElementById('PanelIngresoBIM');
+                if (panelId != null) {
+                    panelId.style.display = "block";
+                }
+
+
+                var html1 = '<div class="docking-panel-container-solid-color-b settings-tabs docking-panel-delimiter-shadow">Seleccione una propiedad</div>';
+                var div11 = document.getElementById('ContenidoIngresoBIM');
                 if (div11 != null) {
-                div11.innerHTML = html1;
+                    div11.innerHTML = html1;
 
 
-            }
+                }
 
 
             });
 
-            $(".clase1").on( "click", function() {
+            $(".clase1").on("click", function () {
                 //alert($( this ).text());
                 //alert($("#sel_cat").text());
                 //$("#sel_cat").prop('value', $( this ).text());
-                $("#sel_cat").html($( this ).text());
+                $("#sel_cat").html($(this).text());
                 $("#sel_familia").html('');
 
 
-                $("#sel_cat1").html($( this ).text());
+                $("#sel_cat1").html($(this).text());
                 $("#sel_familia1").html('');
 
                 //$("#sel_cat").text=$( this ).text();
 
                 //alert($( this ).text());
-               var estesel=$( this ).text();
-               //$('#lista-tipos').text="hola";
-               $(".item_tipo").remove();
-               $(".item_tipodet").remove();
+                var estesel = $(this).text();
+                //$('#lista-tipos').text="hola";
+                $(".item_tipo").remove();
+                $(".item_tipodet").remove();
 
-               var procesadosTipo = [];
-               var contar_procesadosTip=0, IndicadorTip=0;
-               var cont2=0; 
-               var auxcadenamuestra="";
+                var procesadosTipo = [];
+                var contar_procesadosTip = 0, IndicadorTip = 0;
+                var cont2 = 0;
+                var auxcadenamuestra = "";
 
-               for (var elem1 of T_NombreT) {
-                var arregloDeSubCadenas1 = T_categorias[cont2].replace('Revit ',''); 
+                for (var elem1 of T_NombreT) {
+                    var arregloDeSubCadenas1 = T_categorias[cont2].replace('Revit ', '');
 
-                var separador = "[",
-                arregloDeSubCadenas = elem1.split(separador);
+                    var separador = "[",
+                        arregloDeSubCadenas = elem1.split(separador);
 
-                var este=arregloDeSubCadenas[0]+' '+T_TipoT[cont2];
-                //cadenaaux=cadenaaux+'<a class="claseElemento list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">'+cont+'. '+arregloDeSubCadenas1+' - '+arregloDeSubCadenas[0]+' '+T_TipoT[cont]+'</a>';
-                //cont++;
-                //que pertenezca a la categoría
-                if (estesel === arregloDeSubCadenas1){                   
-                    //alert(estesel+'==='+arregloDeSubCadenas1);    
-                    
-                    if (auxcadenamuestra==""){
-                        auxcadenamuestra=T_uniqueIds[cont2];
-                    }else{
-                        auxcadenamuestra=auxcadenamuestra+','+T_uniqueIds[cont2];
-                    }
+                    var este = arregloDeSubCadenas[0] + ' ' + T_TipoT[cont2];
+                    //cadenaaux=cadenaaux+'<a class="claseElemento list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">'+cont+'. '+arregloDeSubCadenas1+' - '+arregloDeSubCadenas[0]+' '+T_TipoT[cont]+'</a>';
+                    //cont++;
+                    //que pertenezca a la categoría
+                    if (estesel === arregloDeSubCadenas1) {
+                        //alert(estesel+'==='+arregloDeSubCadenas1);    
 
-                    IndicadorTip=0;
-                    for (var elem2 of procesadosTipo) {
-                        if (elem2 === este){
-                            IndicadorTip=1;
+                        if (auxcadenamuestra == "") {
+                            auxcadenamuestra = T_uniqueIds[cont2];
+                        } else {
+                            auxcadenamuestra = auxcadenamuestra + ',' + T_uniqueIds[cont2];
+                        }
+
+                        IndicadorTip = 0;
+                        for (var elem2 of procesadosTipo) {
+                            if (elem2 === este) {
+                                IndicadorTip = 1;
+                            }
+                        }
+                        if (!IndicadorTip) {
+                            //cadenaaux1=cadenaaux1+'<a class="clase1 list-group-item list-group-item-action active" id="list-home-list2" data-bs-toggle="list" role="tab" aria-controls="list-home">'+este+'</a>';
+                            $('#lista-tipos').append('<a class="item_tipo list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home" style="width:70%;">' + este + ' </a>');
+                            procesadosTipo.push(este);
+                            contar_procesadosTip++;
                         }
                     }
-                    if (!IndicadorTip){
-                        //cadenaaux1=cadenaaux1+'<a class="clase1 list-group-item list-group-item-action active" id="list-home-list2" data-bs-toggle="list" role="tab" aria-controls="list-home">'+este+'</a>';
-                        $('#lista-tipos').append('<a class="item_tipo list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home" style="width:70%;">'+este+' </a>');
-                        procesadosTipo.push(este);
-                        contar_procesadosTip++;
-                    }
-                 }
-                   cont2++;
-               }
-
-               //$('#lista-tipos').append('<a class="item_tipo list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">'+$( this ).text()+' </a>');
-
-               if (viewer && auxcadenamuestra!="")
-                    highlightRevit(auxcadenamuestra);
-              
-
-
-
-               $(".item_tipo").on( "click", function() {
-                //alert($( this ).text());
-
-
-                $("#sel_familia").html($( this ).text());
-                $("#sel_familia1").html($( this ).text());
-
-
-                var estesel1=$( this ).text();
-                //$('#lista-tipos').text="hola";
-                $(".item_tipodet").remove();
- 
-                //var procesadosTipodet = [];
-                var contar_procesadosTipdet=0, IndicadorTipdet=0;
-                var cont3=0; 
-                var cadenamostrar="";
- 
-                for (var elem1 of T_NombreT) {
-                 var arregloDeSubCadenas1 = T_categorias[cont3].replace('Revit ',''); 
- 
-                 var separador = "[", arregloDeSubCadenas = elem1.split(separador);
-                 var este=arregloDeSubCadenas[0]+' '+T_TipoT[cont3];
-
-                 //que pertenezca a la categoría y al mismo tipo
-                 //alert(este+'=='+estesel1);
-                 if (este.trim() == estesel1.trim()){
-                        
-                         //cadenaaux1=cadenaaux1+'<a class="clase1 list-group-item list-group-item-action active" id="list-home-list2" data-bs-toggle="list" role="tab" aria-controls="list-home">'+este+'</a>';
-                         $('#lista-tipos1').append('<a class="item_tipodet list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home" style="width:60%;">'+cont3+' </a>');
-                         //procesadosTipo.push(este);
-                         //contar_procesadosTipdet++;
-                         if (cadenamostrar===""){
-                            cadenamostrar=T_uniqueIds[cont3];
-                         }else{
-                            cadenamostrar=cadenamostrar+','+T_uniqueIds[cont3];
-                         }
-                        
-
-                  }
-                    cont3++;
+                    cont2++;
                 }
- 
-                if (viewer && cadenamostrar!="")
-                highlightRevit(cadenamostrar);
 
                 //$('#lista-tipos').append('<a class="item_tipo list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">'+$( this ).text()+' </a>');
- 
-                
-                $(".item_tipodet").on( "click", function() {
+
+                if (viewer && auxcadenamuestra != "")
+                    highlightRevit(auxcadenamuestra);
+
+
+
+
+                $(".item_tipo").on("click", function () {
                     //alert($( this ).text());
-                    var indice=parseInt($( this ).text());
 
+
+                    $("#sel_familia").html($(this).text());
+                    $("#sel_familia1").html($(this).text());
+
+
+                    var estesel1 = $(this).text();
+                    //$('#lista-tipos').text="hola";
+                    $(".item_tipodet").remove();
+
+                    //var procesadosTipodet = [];
+                    var contar_procesadosTipdet = 0, IndicadorTipdet = 0;
+                    var cont3 = 0;
+                    var cadenamostrar = "";
+
+                    for (var elem1 of T_NombreT) {
+                        var arregloDeSubCadenas1 = T_categorias[cont3].replace('Revit ', '');
+
+                        var separador = "[", arregloDeSubCadenas = elem1.split(separador);
+                        var este = arregloDeSubCadenas[0] + ' ' + T_TipoT[cont3];
+
+                        //que pertenezca a la categoría y al mismo tipo
+                        //alert(este+'=='+estesel1);
+                        if (este.trim() == estesel1.trim()) {
+
+                            //cadenaaux1=cadenaaux1+'<a class="clase1 list-group-item list-group-item-action active" id="list-home-list2" data-bs-toggle="list" role="tab" aria-controls="list-home">'+este+'</a>';
+                            $('#lista-tipos1').append('<a class="item_tipodet list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home" style="width:60%;">' + cont3 + ' </a>');
+                            //procesadosTipo.push(este);
+                            //contar_procesadosTipdet++;
+                            if (cadenamostrar === "") {
+                                cadenamostrar = T_uniqueIds[cont3];
+                            } else {
+                                cadenamostrar = cadenamostrar + ',' + T_uniqueIds[cont3];
+                            }
+
+
+                        }
+                        cont3++;
+                    }
+
+                    if (viewer && cadenamostrar != "")
+                        highlightRevit(cadenamostrar);
+
+                    //$('#lista-tipos').append('<a class="item_tipo list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" role="tab" aria-controls="list-home">'+$( this ).text()+' </a>');
+
+
+                    $(".item_tipodet").on("click", function () {
+                        //alert($( this ).text());
+                        var indice = parseInt($(this).text());
+
+                        if (viewer)
+                            highlightRevit(T_uniqueIds[indice]);
+
+
+
+                    });
+
+
+
+
+
+
+
+
+
+                    //var estesel=$( this ).text();
+                    //$(".item_tipo").remove();
+                });
+
+
+                /* var separador = ".",
+                     arregloDeSubCadenas = $( this ).text().split(separador);
+                 var indice=parseInt(arregloDeSubCadenas[0]);
+ 
                  if (viewer)
-                 highlightRevit(T_uniqueIds[indice]);
-
-
-
-              });
-
-
-
-
-
-
-
-
-
-                //var estesel=$( this ).text();
-                //$(".item_tipo").remove();
-             });
-                
-               
-               /* var separador = ".",
-                    arregloDeSubCadenas = $( this ).text().split(separador);
-                var indice=parseInt(arregloDeSubCadenas[0]);
-
-                if (viewer)
-                    highlightRevit(T_uniqueIds[indice]);*/
+                     highlightRevit(T_uniqueIds[indice]);*/
 
                 //alert('hola');
             });
 
-            
 
 
-            $(".claseElemento").on( "click", function() {
+
+            $(".claseElemento").on("click", function () {
                 //alert($( this ).text());
-               // alert($( this ).text());
+                // alert($( this ).text());
 
                 var separador = ".",
-                    arregloDeSubCadenas = $( this ).text().split(separador);
-                var indice=parseInt(arregloDeSubCadenas[0]);
+                    arregloDeSubCadenas = $(this).text().split(separador);
+                var indice = parseInt(arregloDeSubCadenas[0]);
 
                 if (viewer)
                     highlightRevit(T_uniqueIds[indice]);
@@ -2540,18 +2558,18 @@ export const ViewerSc = (props) => {
                 //alert('hola');
             });
 
-            $("#nav-seleccion-tab").on( "click", function() {
+            $("#nav-seleccion-tab").on("click", function () {
                 //console.log( $( this ).text() );
                 //alert('holaa');
-                              
+
                 $("#nav-seleccion-tab").addClass('active');
                 $("#nav-contact-tab").removeClass('active');
                 $("#nav-profile-tab").removeClass('active');
-                
-                
+
+
                 $("#nav-seleccion").addClass('show');
                 $("#nav-seleccion").addClass('active');
-                
+
                 $("#nav-profile").removeClass('active');
                 $("#nav-profile").removeClass('show');
 
@@ -2559,7 +2577,7 @@ export const ViewerSc = (props) => {
                 $("#nav-contact").removeClass('show');
             });
 
-            $("#nav-profile-tab").on( "click", function() {
+            $("#nav-profile-tab").on("click", function () {
                 //console.log( $( this ).text() );
                 //alert('holaa');
                 $("#nav-profile-tab").addClass('active');
@@ -2569,7 +2587,7 @@ export const ViewerSc = (props) => {
 
                 $("#nav-seleccion").removeClass('show');
                 $("#nav-seleccion").removeClass('active');
-                
+
                 $("#nav-profile").addClass('active');
                 $("#nav-profile").addClass('show');
 
@@ -2578,26 +2596,26 @@ export const ViewerSc = (props) => {
 
             });
 
-            $("#nav-contact-tab").on( "click", function() {
+            $("#nav-contact-tab").on("click", function () {
                 //console.log( $( this ).text() );
                 //alert('holaa');
-               /* $("#nav-profile-tab").removeClass('active');
-                $("#nav-seleccion-tab").removeClass('active');
-                $("#nav-contact-tab").addClass('active');
-
-
-                $("#nav-seleccion").removeClass('show');
-                $("#nav-seleccion").removeClass('active');
-                
-                $("#nav-profile").removeClass('active');
-                $("#nav-profile").removeClass('show');
-
-                $("#nav-contact").addClass('active');
-                $("#nav-contact").addClass('show');*/
+                /* $("#nav-profile-tab").removeClass('active');
+                 $("#nav-seleccion-tab").removeClass('active');
+                 $("#nav-contact-tab").addClass('active');
+ 
+ 
+                 $("#nav-seleccion").removeClass('show');
+                 $("#nav-seleccion").removeClass('active');
+                 
+                 $("#nav-profile").removeClass('active');
+                 $("#nav-profile").removeClass('show');
+ 
+                 $("#nav-contact").addClass('active');
+                 $("#nav-contact").addClass('show');*/
 
             });
-            
-            $("#btn-siguiente-tipo").on( "click", function() {
+
+            $("#btn-siguiente-tipo").on("click", function () {
                 //console.log( $( this ).text() );
                 //alert('holaa');
                 $("#nav-profile-tab").removeClass('active');
@@ -2607,7 +2625,7 @@ export const ViewerSc = (props) => {
 
                 $("#nav-seleccion").removeClass('show');
                 $("#nav-seleccion").removeClass('active');
-                
+
                 $("#nav-profile").removeClass('active');
                 $("#nav-profile").removeClass('show');
 
@@ -2615,15 +2633,15 @@ export const ViewerSc = (props) => {
                 $("#nav-contact").addClass('show');
 
 
-               
-    
+
+
 
 
             });
 
 
 
-            
+
 
 
 
@@ -2702,7 +2720,7 @@ export const ViewerSc = (props) => {
 
     const loadViewer = (svfUrl: string) => {
 
-      
+
         launchViewer(modelURL);
         //launchViewer(modelURL);
 
@@ -2712,42 +2730,42 @@ export const ViewerSc = (props) => {
 
 
     const cargar = async () => {
-            if (viewer){
-                //viewer.uninitialize();
-                viewer.finish();
-            }
-     
-            launchViewer(proyects.Urn);
-            //alert(urn);
+        if (viewer) {
+            //viewer.uninitialize();
+            viewer.finish();
+        }
+
+        launchViewer(proyects.Urn);
+        //alert(urn);
 
     }
 
-	useEffect(() => {
-		//console.log('datos de subProyectos actualizados')
-		//if (proyects.treeSubControl==undefined) return;
-		//console.log(proyects.treeSubControl)
+    useEffect(() => {
+        //console.log('datos de subProyectos actualizados')
+        //if (proyects.treeSubControl==undefined) return;
+        //console.log(proyects.treeSubControl)
         //alert(proyects.Urn);
-        if (proyects.Urn===''){
-            if (viewer){
+        if (proyects.Urn === '') {
+            if (viewer) {
                 //viewer.uninitialize();
                 viewer.finish();
-                viewer=null;
+                viewer = null;
                 return;
             }
 
             //return;
         }
 
-        if (proyects.Urn){
+        if (proyects.Urn) {
 
             setModelURL(proyects.Urn);
             //alert(modelURL);
             //alert(proyects.Urn);
             cargar();
-    
+
         }
-  
-	}, [proyects.Urn])
+
+    }, [proyects.Urn])
 
 
 
@@ -2802,7 +2820,7 @@ export const ViewerSc = (props) => {
 
 
 
-    
+
     const loadStyleSheet = (href: string) => {
         const styles = document.createElement('link');
         styles.rel = 'stylesheet';
@@ -2829,22 +2847,155 @@ export const ViewerSc = (props) => {
         /*return ()=> {
            if (window.NOP_VIEWER) window.NOP_VIEWER.finish() //terminate Viewer when unmounting
         }*/
-    },[]);
+    }, []);
 
 
     useEffect(() => {
-        if (proyects.agregandoReg){
+        if (proyects.agregandoReg) {
 
-            if (proyects.agregandoReg==='Asociado'){
+            if (proyects.agregandoReg === 'Asociado') {
                 alert('Agregando Registro de asociado');
             }
 
         }
-       
-    },[proyects.agregandoReg]);
-    
+
+    }, [proyects.agregandoReg]);
 
 
+    useEffect(() => {
+        //alert('cambio la fila en viewer sc')
+        //console.log('LOS DATOS DE MI FILA SELECCIONADA');
+        //console.log(proyects.filaAsociadoSel);
+        var Propies = [];
+        if (proyects.filaAsociadoSel) {
+            if (proyects.filaAsociadoSel.Familia === undefined) proyects.filaAsociadoSel.Familia='';
+            if (proyects.filaAsociadoSel.Tipo === undefined) proyects.filaAsociadoSel.Tipo='';
+            if (proyects.filaAsociadoSel.Categoria === undefined) proyects.filaAsociadoSel.Categoria='';
+
+
+            if (proyects.filaAsociadoSel.Tipo !== '') {
+
+                const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Tipo === proyects.filaAsociadoSel.Tipo);
+                if (filtr) {
+                    //console.log('este es el filtro')
+                    //console.log(filtr)
+                    if (viewer){
+
+                        viewer.getProperties(filtr[0].Id, (props) => {
+                            for (var Propiedad of props.properties) {
+                                Propies.push({
+                                    'ID': Propiedad.displayName,
+                                    'Name': Propiedad.displayName,
+                                });    
+                               
+                            }
+                        })
+                        let ids='';
+                        for (let i=0;i<filtr.length;i++)
+                        {
+                            ids=ids+filtr[i].UniqueId+',';
+                        }
+                        //console.log('estos son los ids')
+                        //console.log(ids)
+                        highlightRevit(ids);
+                    }
+
+                   /* console.log('Esta es mi data ') 
+                    console.log(proyects.filaAsociadoSel.Data) 
+                    console.log('Este es mi codigo ') 
+                    console.log(proyects.filaAsociadoSel.Data.CodAsociado) 
+
+                    console.log(proyects.DataAsociado) */
+
+
+
+                }
+
+            }
+            if (proyects.filaAsociadoSel.Tipo === '' && proyects.filaAsociadoSel.Familia !== '') {
+
+
+
+                const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Familia === proyects.filaAsociadoSel.Familia);
+                if (filtr) {
+                    //console.log('este es el filtro')
+                    //console.log(filtr)
+                    if (viewer){
+
+                        viewer.getProperties(filtr[0].Id, (props) => {
+                            for (var Propiedad of props.properties) {
+                                Propies.push({
+                                    'ID': Propiedad.displayName,
+                                    'Name': Propiedad.displayName,
+                                });    
+                                /* if (Propiedad.displayName === 'Nombre de tipo'){
+                                     T_TipoT.push(Propiedad.displayValue);
+                                     //enc=1;
+                                 }*/
+                            }
+                        })
+                        let ids='';
+                        for (let i=0;i<filtr.length;i++)
+                        {
+                            ids=ids+filtr[i].UniqueId+',';
+                        }
+                        //console.log('estos son los ids')
+                        //console.log(ids)
+                        highlightRevit(ids);
+                    }
+
+                }
+
+
+            }
+            
+
+            
+            //console.log('antes antes del filtro')
+            //console.log(proyects.filaAsociadoSel)
+
+            if (proyects.filaAsociadoSel.Tipo === '' && proyects.filaAsociadoSel.Familia === '' && proyects.filaAsociadoSel.Categoria !== '') {
+               // console.log('antes del filtro')
+                //console.log(proyects.filaAsociadoSel)
+
+                const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Categoria === proyects.filaAsociadoSel.Categoria);
+                if (filtr && filtr[0]) {
+                    //console.log('este es el filtro')
+                    //console.log(filtr)
+                    if (viewer){
+
+                        viewer.getProperties(filtr[0].Id, (props) => {
+                            for (var Propiedad of props.properties) {
+                                Propies.push({
+                                    'ID': Propiedad.displayName,
+                                    'Name': Propiedad.displayName,
+                                });    
+                                /* if (Propiedad.displayName === 'Nombre de tipo'){
+                                     T_TipoT.push(Propiedad.displayValue);
+                                     //enc=1;
+                                 }*/
+                            }
+                        })
+                        let ids='';
+                        for (let i=0;i<filtr.length;i++)
+                        {
+                            ids=ids+filtr[i].UniqueId+',';
+                        }
+                        //console.log('estos son los ids')
+                        //console.log(ids)
+                        highlightRevit(ids);
+                    }
+
+                }
+
+            }
+            //console.log('estas son las propies')
+            //console.log(Propies)
+            dispatch(ponerPropiedades(Propies));
+        }
+
+
+    }, [proyects.filaAsociadoSel]);
 
     const laneId = 'demo-lane'
     const lanes = [
@@ -2896,23 +3047,24 @@ export const ViewerSc = (props) => {
 
 
 
-    
-    
+
+
 
     return (
         <>
-            <div className="card" id="forgeViewer" style={{ height: "100%", width: '100%',
-            /*background: 'rgb(242,246,248)', 
-            background: '-moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 55%, rgba(181,198,208,1) 82%, rgba(224,239,249,1) 100%)',
-            background: '-webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',*/
-            /*background: 'linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
-            filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f6f8", endColorstr="#e0eff9",GradientType=0 )',            */
-            background:'white'
-            
+            <div className="card" id="forgeViewer" style={{
+                height: "100%", width: '100%',
+                /*background: 'rgb(242,246,248)', 
+                background: '-moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 55%, rgba(181,198,208,1) 82%, rgba(224,239,249,1) 100%)',
+                background: '-webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',*/
+                /*background: 'linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 55%,rgba(181,198,208,1) 82%,rgba(224,239,249,1) 100%)',
+                filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f6f8", endColorstr="#e0eff9",GradientType=0 )',            */
+                background: 'white'
+
             }}></div>
             {/* <div style={{ fontSize:'0.7rem', top:'10px', position:'absolute', zIndex:1 }}>Items seleccionados: <span id="MySelectionValue">0</span></div> */}
 
- 
+
             {/* </div> */}
 
             {/* {loadViewerLibrary1 ? <Script url={viewerLibaryURL1} onLoad={handleScriptLoad1}></Script> : null} */}

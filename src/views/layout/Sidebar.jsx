@@ -105,7 +105,7 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link to="/presupuesto" className="nav-link font-12">
                 <i className="nav-icon fas fa-th" style={{fontSize: 15, marginLeft:'-20px', color:'white'}}></i>
-                <p style={{color:'white'}}>
+                <p style={{color:'white',fontWeight:'550'}}>
                   Presupuesto
                 </p>
               </Link>
@@ -123,7 +123,7 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link to="/presupuesto" className="nav-link font-12">
                 <i className="nav-icon far fa-calendar-alt" style={{position:'absolute', fontSize: 15, marginLeft:'-50px', color:'white'}}></i>
-                <p style={{marginLeft:'-25px'}}>
+                <p style={{marginLeft:'-25px', fontWeight:'550'}}>
                   Hoja del Presupuesto
                 </p>
               </Link>
@@ -135,7 +135,7 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link to="/modelos" className="nav-link font-12">
                 <i className="nav-icon fas fa-th" style={{fontSize: 15, marginLeft:'-20px', color:'white'}}></i>
-                <p style={{color:'white'}}>
+                <p style={{color:'white',fontWeight:'550'}}>
                   General
                 </p>
               </Link>
@@ -144,7 +144,7 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link to="/modelos" className="nav-link font-12">
                 <i className="nav-icon far fa-calendar-alt" style={{position:'absolute', fontSize: 15, marginLeft:'-50px', color:'white' }}></i>
-                <p style={{ marginLeft:'-25px'}}>
+                <p style={{ marginLeft:'-25px',fontWeight:'550'}}>
                   Modelos
                 </p>
               </Link>

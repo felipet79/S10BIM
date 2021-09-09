@@ -250,6 +250,32 @@ export const connectSignalr = (token) => {
 					});*/
 					break;
 
+
+				case 'IngGrupo':
+					console.log('Respuesta de ingreso de Grupo');
+					console.log(data);
+					/*dispatch({
+						//type: PROJECT_LIST_DETAILS,
+						
+						payload: JSON.parse(data.Data),
+					});*/
+					break;
+
+				case 'EliminaGrupo':
+					console.log('Respuesta de Eliminar Grupo');
+					console.log(JSON.parse(data.Data));
+					let resp=JSON.parse(data.Data);
+					/*console.log('Respuesta de Eliminar Grupo Respuesta');
+					console.log(resp);*/
+					localStorage.setItem("EliminadoSuccess", resp[0].Success);
+					localStorage.setItem("EliminadoResp", resp[0].Response);
+					/*dispatch({
+						//type: PROJECT_LIST_DETAILS,
+						
+						payload: JSON.parse(data.Data),
+					});*/
+					break;
+
 				case PROJECT_LIST_DETAILS:
 					dispatch({
 						type: PROJECT_LIST_DETAILS,

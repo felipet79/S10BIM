@@ -3,7 +3,7 @@ import { Table } from "react-bootstrap";
 //import Bar from "./Charts/Bar";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { agregaRegistro, cleanDataChartAPU, selectAPUS } from "../actions/proyects.actions";
+import { agregaRegistro, cleanDataChartAPU, seleccionarFilaAsociado, selectAPUS } from "../actions/proyects.actions";
 import TreeList, {
 	Pager,
 	Paging,
@@ -21,6 +21,7 @@ import TreeList, {
 import { ContextMenu } from "devextreme-react";
 import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2'
+import { randomInt } from "crypto";
 
 const opcMenuInicio = [
 	{ text: 'Agregar' },
@@ -40,6 +41,9 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 	const dispatch = useDispatch();
 	// const [loading, setLoading] = useState(true);
 	const [allLevels, setAllLevels] = useState(null)
+
+	const [filaAct, setFilaAct] = useState(0)
+
 	const [itemSelected, setItemSelected] = useState('')
 	const [lastLevel, setLastLevel] = useState(0);
 
@@ -116,6 +120,13 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 
 	}
 
+	function getRandomString(length) {
+		var s = '';
+		do { s += Math.random().toString(36).substr(2); } while (s.length < length);
+		s = s.substr(0, length);
+		
+		return s;
+	  }
 
 
 	const drawerItems1 = (nivelact) => {
@@ -237,7 +248,7 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 				keyExpr="CodAsociado"
 				//parentIdExpr="PhantomParentId"
 				showBorders={true}
-				//focusedRowEnabled={true}
+				focusedRowEnabled={true}
 				//defaultExpandedRowKeys={[1, 2, 3, 5]}
 				columnAutoWidth={false}
 				//rootValue={-1}
@@ -245,17 +256,134 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 
 				//onSelectionChanged={() => {alert('hola')}}
 				//onRowClick={() => {alert(this)}}
-				onCellClick={(e) => {console.log('OncellClick');console.log(e)}}
+				onCellClick={(e) => {
+					//console.log('OncellClick');console.log(e)
+					//alert(e.rowIndex);
+					if (filaAct!==e.rowIndex){
+						setFilaAct(e.rowIndex);
+
+						
+						
+						//si tengo tipo = todos
+						if (e.data.Tipo!==''){
+							dispatch(seleccionarFilaAsociado({Fila:e.rowIndex, Categoria:e.data.Categoria, Familia:e.data.Familia, Tipo:e.data.Tipo, Data:e.data}));
+
+						}
+
+						if (e.data.Tipo==='' && e.data.Familia!==''){
+							dispatch(seleccionarFilaAsociado({Fila:e.rowIndex, Categoria:e.data.Categoria, Familia:e.data.Familia, Tipo:'' , Data:e.data}));
+
+						}
+
+						if (e.data.Tipo==='' && e.data.Familia==='' && e.data.Categoria!==''){
+							dispatch(seleccionarFilaAsociado({Fila:e.rowIndex, Categoria:e.data.Categoria, Familia:'', Tipo:'', Data:e.data}));
+
+						}
+
+						//si tengo familia = familia y cat
+						//si tengo categoria = solo cat
+
+
+
+/* e.data
+ActualizacionFecha: "2021-07-26T16:09:24.607"
+ActualizacionUsuario: "ctorres@s10peru.com"
+CampoFiltro: ""
+Categoria: "Armazón estructural"
+CodAsociado: "wiVAgMNMPk+YqyEtuR2kow=="
+CodPresupuesto: "0501001"
+CodSubpresupuesto: "001"
+CreacionFecha: "2021-07-26T16:09:24.607"
+CreacionUsuario: "ctorres@s10peru.com"
+Familia: ""
+Item: "000000000000034"
+Tipo: ""
+Valor: ""*/
+
+						
+					}
+					
+				}}
 				
 				//onFocusedRowChanged={(e)=>{ console.log('Cambiando de fila');console.log(e) } }
 				
 				onEditCanceling={(e)=>{ console.log('Editando celda y cancelando');console.log(e) } }
 				
-				onInitNewRow={(e)=>{ console.log('InitNewRow');console.log(e) } }
+				onInitNewRow={(e)=>{ 
+					console.log('InitNewRow');
+					console.log(e) 
+					//e.data.Categoria='Suelos';
+					//GENERAR NUEVO CODIGO
+					
+					
+					e.data.CodAsociado=getRandomString(24);
+					/*ActualizacionFecha: "2021-08-09T08:08:08.783"
+					ActualizacionUsuario: "ctorres@s10peru.com"
+					CampoFiltro: ""
+					Categoria: "Escaleras"
+					CodAsociado: "VVmhDaL4IEW6bv8IbeKbcA=="
+					CodPresupuesto: "0501001"
+					CodSubpresupuesto: "001"
+					CreacionFecha: "2021-08-06T18:19:33.91"
+					CreacionUsuario: "ctorres@s10peru.com"
+					Familia: ""
+					Item: "000000000000039"
+					Tipo: ""
+					Valor: ""*/
+					
+					
+					//console.log(proyects.DataAsociado) 
+					
+				} }
 
 				//onEditingChange={(e)=>{ console.log('EditChange');console.log(e) } }
 				//onEditingStart={(e)=>{ console.log('EditChange');console.log(e) } }
-				onRowUpdated={(e)=>{ console.log('Actualizando row');console.log(e) } } ///aqui actualizo
+				onRowUpdated={(e)=>{ 
+					console.log('Actualizando row');console.log(e) 
+				
+				                   /* console.log('Esta es mi data ') 
+                    console.log(proyects.filaAsociadoSel.Data) 
+                    console.log('Este es mi codigo ') 
+                    console.log(proyects.filaAsociadoSel.Data.CodAsociado) 
+
+                    console.log(proyects.DataAsociado) */
+					if (e.data.Tipo===undefined) e.data.Tipo='';
+					if (e.data.Categoria===undefined) e.data.Categoria='';
+					if (e.data.Familia===undefined) e.data.Familia='';
+
+					if (e.data.Tipo!==''){
+						//dispatch(seleccionarFilaAsociado({Fila:e.rowIndex, Categoria:e.data.Categoria, Familia:e.data.Familia, Tipo:e.data.Tipo, Data:e.data}));
+
+						const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Tipo === e.data.Tipo);
+						if (filtr) {
+							
+							e.data.Categoria=filtr[0].Categoria;
+							e.data.Familia=filtr[0].Familia;		
+						}
+
+
+					}
+
+					if (e.data.Tipo==='' && e.data.Familia!==''){
+						//dispatch(seleccionarFilaAsociado({Fila:e.rowIndex, Categoria:e.data.Categoria, Familia:e.data.Familia, Tipo:'' , Data:e.data}));
+
+						const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Familia === e.data.Familia);
+						if (filtr) {
+							e.data.Categoria=filtr[0].Categoria;
+							//e.data.Familia=filtr[0].Familia;		
+						}
+
+
+					}
+
+					if (e.data.Tipo==='' && e.data.Familia==='' && e.data.Categoria!==''){
+						//dispatch(seleccionarFilaAsociado({Fila:e.rowIndex, Categoria:e.data.Categoria, Familia:'', Tipo:'', Data:e.data}));
+
+					}
+
+				
+				
+				} } ///aqui actualizo
 
 				//onEditingChange={(e)=>{ console.log('cambiando valor de celda');console.log(e) } }
 				//onOptionChanged={(e)=>{ console.log('Option chaged');console.log(e) } }
@@ -324,7 +452,16 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 					dataField="CampoFiltro"
 					caption="Campo"
 					alignment={'right'}
-				/>
+				
+				>
+				<Lookup
+					//dataSource={employees}
+					dataSource={proyects.Propiedades}
+					valueExpr="Name"
+					displayExpr="Name"/>
+				{/* <RequiredRule/>	 */}
+				</Column>
+
 
 				<Column
 					width={'10%'}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { cleanDataChart, cleanDataChart1, selectPc, navigationTree, navigationTreePC, selectItems, cambiaSeleccion, SeleccionaSub, selectMODELOS, LimpiarSubPres, SelectUrn, cleanDataChart22, cleanDataChartAPU, eliminaGrupo1 } from '../actions/proyects.actions';
+import { cleanDataChart, cleanDataChart1, selectPc, navigationTree, navigationTreePC, selectItems, cambiaSeleccion, SeleccionaSub, selectMODELOS, LimpiarSubPres, SelectUrn, cleanDataChart22, cleanDataChartAPU, eliminaGrupo1, eliminarGrupo } from '../actions/proyects.actions';
 import { alpha, makeStyles, withStyles } from "@material-ui/core/styles";
 import TreeView from "@material-ui/lab/TreeView";
 import TreeItem from "@material-ui/lab/TreeItem";
@@ -9,6 +9,10 @@ import Button1 from 'devextreme-react/button';
 
 import subprojectIcon from '../assets/img/icons/subproject.png';
 import projectIcon from '../assets/img/icons/project.png';
+//import projectIcon44 from '../assets/img/icons/project4.gif';
+import projectIcon44 from '../assets/img/icons/project1.png';
+//import projectIcon1 from '../assets/img/icons/project.png';
+import projectIcon1 from '../assets/img/icons/aproject.png';
 
 import Swal from 'sweetalert2'
 import { useSelector, useDispatch } from "react-redux";
@@ -17,6 +21,7 @@ import { ContextMenu } from "devextreme-react";
 import notify from 'devextreme/ui/notify';
 import DatosGenerales from "../views/DatosGenerales";
 import DatosGrupoAdd from "../views/DatosGrupoAdd";
+import DatosSubAdd from "../views/DatosSubAdd";
 import { Button } from "react-bootstrap";
 import BuscaModelo from "./BuscaModelo";
 import DatosGeneralesAdd from "../views/DatosGeneralesAdd";
@@ -34,12 +39,36 @@ const opcMenuInicio = [
 ];
 
 
+function MinusSquare1(props) {
+	return (
+		<div className="d-flex">
+			{/* <ion-icon name="chevron-down-outline"></ion-icon> */}
+			{/* <ion-icon name="caret-down-outline" style={{width:'12px', color: '#333337'}}></ion-icon> */}
+			<ion-icon name="add-outline" style={{width:'12px', color: '#333337'}}></ion-icon>
+			<img src={projectIcon44} alt="icons" width="18" style={{ marginRight: 10 }} {...props} />
+		</div>
+	);
+}
+
+function PlusSquare1(props) {
+	return (
+		<div className="d-flex">
+			{/* <ion-icon name="chevron-forward-outline"></ion-icon> */}
+			<ion-icon name="caret-forward-outline" style={{width:'12px', color: '#333337'}}></ion-icon>
+			<img src={projectIcon44} alt="icons" width="18" style={{ marginRight: 12 }} {...props} />
+
+		</div>
+	);
+}
+
+
+
 function MinusSquare(props) {
 	return (
 		<div className="d-flex">
 			{/* <ion-icon name="chevron-down-outline"></ion-icon> */}
 			<ion-icon name="caret-down-outline" style={{width:'12px', color: '#333337'}}></ion-icon>
-			<img src={projectIcon} alt="icons" width="18" style={{ marginRight: 20 }} {...props} />
+			<img src={projectIcon1} alt="icons" width="18" style={{ marginRight: 15 }} {...props} />
 		</div>
 	);
 }
@@ -49,7 +78,7 @@ function PlusSquare(props) {
 		<div className="d-flex">
 			{/* <ion-icon name="chevron-forward-outline"></ion-icon> */}
 			<ion-icon name="caret-forward-outline" style={{width:'12px', color: '#333337'}}></ion-icon>
-			<img src={projectIcon} alt="icons" width="18" style={{ marginRight: 20 }} {...props} />
+			<img src={projectIcon} alt="icons" width="18" style={{ marginRight: 15 }} {...props} />
 
 		</div>
 	);
@@ -57,7 +86,7 @@ function PlusSquare(props) {
 
 function CloseSquare(props) {
 	return (
-		<img src={subprojectIcon} width="18" alt="icons" style={{ marginRight: 20 }} {...props} />
+		<img src={subprojectIcon} width="18" alt="icons" style={{ marginRight: 5 }} {...props} />
 	);
 }
 
@@ -71,9 +100,9 @@ const StyledTreeItem = withStyles((theme) => ({
 		//font: "16px roboto, sans-serif",
 		font: "12px Roboto, sans-serif !important",
 		color:'#333337',
-		marginLeft: 15,
-		paddingLeft: 0,
-		// borderLeft: `0.02px dashed ${alpha(theme.palette.text.primary, 0.1)}`,
+		marginLeft: 12,
+		paddingLeft: 3,
+		borderLeft: `0.01px dashed ${alpha(theme.palette.text.primary, 0.1)}`,
 	},
 }))((props) => <TreeItem {...props} />);
 
@@ -83,7 +112,7 @@ const useStyles = makeStyles({
 		font: "10px Roboto, sans-serif !important",
 		color:'#333337',
 		marginTop: 10,
-		marginLeft: 15,
+		marginLeft: 12,
 		height: 264,
 		flexGrow: 1,
 		maxWidth: 700,
@@ -120,6 +149,12 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 	const [lastLevel1, setLastLevel1] = useState(0);
 
 
+	const [arbolseleccionado, SetArbolSeleccionado] = useState({
+		CodPresupuesto:'',
+		Descripcion:'',
+		Nivel:0,
+	});
+
 	const [loading, setLoading] = useState(true);
 	const [accion, setAccion] = useState(1);
 
@@ -128,6 +163,8 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 	const [nuevoPres, setNuevoPres] = useState(false);
 	const [nuevoGrupo, setNuevoGrupo] = useState(false);
+
+	const [nuevoSubPres, setNuevoSubPres] = useState(false);
 
 	const auth = useSelector((state) => state.auth);
 	const proyects = useSelector((state) => state.proyects);
@@ -183,8 +220,8 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 		dispatch(selectMODELOS(''));
 
 
-		console.log('MIS NUEVOS DATOS DE ARBOLLLLLL');
-		console.log(proyects.treePartyControl);		
+		/*console.log('MIS NUEVOS DATOS DE ARBOLLLLLL');
+		console.log(proyects.treePartyControl);		*/
 		// console.log(result);
 		// }
 		// eslint-disable-next-line
@@ -217,8 +254,22 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 	const changeItem = (pc, newTitle) => {
 
-
-		
+		//console.log('ESTE ES EL SELECCIONADO');
+		//console.log(pc);
+/*
+		CodPresupuesto: "18"
+Descripcion: "BIM4"
+ERPCode: "18"
+Fila: 108
+Nivel: 1
+PhantomId: "18"
+PhantomParentId: null
+*/
+		SetArbolSeleccionado({
+			CodPresupuesto:pc.CodPresupuesto,
+			Descripcion:pc.Descripcion,
+			Nivel:pc.Nivel,
+		})
 
 		if (pc.Nivel === 1 || pc.Nivel === 2) {
 		dispatch(cleanDataChart());
@@ -268,7 +319,7 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 				},
 
 				{ text: 'Datos Generales' },
-
+				{ text: 'Eliminar' },
 			])
 
 
@@ -295,8 +346,6 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 			//alert(pc.CodPresupuesto);
 
 			SubPresupuestos(pc.CodPresupuesto);
-
-
 			dispatch(LimpiarSubPres());
 
 			setCambioSub(false);
@@ -603,13 +652,14 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 		}
 		if (tipoSeleccion==='SubPresupuesto' && encontro===0)
 			dispatch(SelectUrn(''));
-		console.log('DATOS DE SUBPRESUPUESTOS');
-		console.log(proyects.treeSubControl);
+		/*console.log('DATOS DE SUBPRESUPUESTOS');
+		console.log(proyects.treeSubControl);*/
 
 	}, [proyects.treeSubControl])
 
 
 	const SubPresupuestos = async (codigoP) => {
+		
 		//alert(codigoP);		
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let connectId = await localStorage.getItem("connectionId");
@@ -689,11 +739,15 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 				.filter(item => parentId === '' || item.PhantomParentId === parentId)
 				.map(filter => {
 					const newTitle = level === 1 ? '' : `${parentName}${filter.Descripcion}`;
-					return (
-
+					return (						
+						filter.Nivel !== 3 ?
 						<StyledTreeItem
+							//icon={<IconoProjecto />}
+							//icon={<MinusSquare1 />}
+							//defaultExpandIcon={<PlusSquare1 />}
+							
 							nodeId={filter.CodPresupuesto}
-							label={filter.Descripcion}
+							label={filter.Descripcion}							
 							key={filter.CodPresupuesto}
 							onLabelClick={() => changeItem(filter, newTitle)}
 						>
@@ -712,6 +766,7 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 									// >
 
 									<StyledTreeItem
+										icon={<MinusSquare1 />}
 										nodeId={grupo3.CodPresupuesto}
 										label={grupo3.Descripcion}
 										onLabelClick={() => changeItem(grupo3, `${newTitle} ≫ ${grupo3.Descripcion}`)}
@@ -722,7 +777,45 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 							)}
 
-						</StyledTreeItem>
+						</StyledTreeItem> :
+						<StyledTreeItem
+						//icon={<IconoProjecto />}
+						icon={<MinusSquare1 />}
+						//defaultExpandIcon={<PlusSquare1 />}
+						
+						nodeId={filter.CodPresupuesto}
+						label={filter.Descripcion}							
+						key={filter.CodPresupuesto}
+						onLabelClick={() => changeItem(filter, newTitle)}
+					>
+						{(nextLevel === lastLevel
+							? allLevels[nextLevel].filter(item => filter.CodPresupuesto === item.PhantomParentId).map(grupo3 => (
+								// <Link 
+								// 	to={`/projects/id-pc/${grupo3.CodPartidaDeControl}`}
+								// 	onLabelClick={() => {
+								// 		dispatch(navigationTree(newTitle, grupo3.Descripcion))
+								// 		dispatch(cleanDataChart());
+								// 		dispatch(selectPc(proyects.idCard, grupo3.CodPartidaDeControl,  auth.User.UserId))
+
+								// 	}} 
+								// 	key={grupo3.CodPartidaDeControl}
+								// 	style={{background: '#000'}}
+								// >
+
+								<StyledTreeItem
+									icon={<MinusSquare1 />}
+									nodeId={grupo3.CodPresupuesto}
+									label={grupo3.Descripcion}
+									onLabelClick={() => changeItem(grupo3, `${newTitle} ≫ ${grupo3.Descripcion}`)}
+								/>
+								// </Link>
+							))
+							: drawerItems(nextLevel, filtro, filter.CodPresupuesto, (level === 1 ? '' : `${newTitle} ≫ `))
+
+						)}
+
+					</StyledTreeItem>
+					
 					)
 				})
 			: (<>
@@ -731,9 +824,12 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 						proyects.subPres.filter(item => item.CodPresupuesto === parentId).map(data => {
 							return (
 								<StyledTreeItem
+									//defaultCollapseIcon={<MinusSquare />}
+									//icon={<CloseSquare />}
 									//nodeId={parentId}
-									nodeId={parentId + data.CodSubpresupuesto}
+									nodeId={parentId + data.CodSubpresupuesto}									
 									label={data.Descripcion}
+									//labelIcon={projectIcon44} 
 									key={parentId + data.CodSubpresupuesto}
 									//onLabelClick={( ) => changeItem1('', `${''} / ${''}`)}
 									onLabelClick={() => changeItem1(data, `${/*newTitle*/''} ${parentName}  ${data.Descripcion}`, parentId)}
@@ -807,6 +903,12 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 				//alert('Agregar Presupuesto');
 			}			
 
+			if (e.itemData.text === 'SubPresupuesto') {
+				//setAccion(1);
+				setNuevoSubPres(true);
+				//alert('Agregar Presupuesto');
+			}
+
 			if (e.itemData.text === 'Item de Nivel1' || e.itemData.text === 'Item de Nivel2') {
 				setAccion(1);
 				if (e.itemData.text === 'Item de Nivel1')
@@ -839,7 +941,7 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 				  })
 				  
 				  swalWithBootstrapButtons.fire({
-					title: 'Estas Seguro?',
+					title: 'Estas Seguro de eliminar ' + arbolseleccionado.Descripcion + ' ?',
 					text: "Esta acción no podrá ser revertida!",
 					icon: 'warning',
 					showCancelButton: true,
@@ -849,14 +951,41 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 				  }).then((result) => {
 					if (result.isConfirmed) {
 
-						//dispatch(eliminaGrupo1())
+						dispatch(eliminarGrupo(arbolseleccionado.CodPresupuesto,arbolseleccionado.Descripcion,arbolseleccionado.Nivel,''))
 
+						setTimeout(() => {
+							if (localStorage.getItem("EliminadoSuccess")){
 
-					  swalWithBootstrapButtons.fire(
-						'Borrado!',
-						'Su registro ha sido eliminado.',
-						'success'
-					  )
+								let res = localStorage.getItem("EliminadoSuccess");
+								//alert(res);
+								console.log(res);
+								if (res==='1'){
+									
+									dispatch(eliminaGrupo1(arbolseleccionado.CodPresupuesto));
+									
+									swalWithBootstrapButtons.fire(
+										'Borrado!',
+										'Su registro ha sido eliminado.',
+										'success'
+									  )
+									  
+
+								}else{
+									swalWithBootstrapButtons.fire(
+										'Accion cancelada',
+										localStorage.getItem("EliminadoResp"),
+										'error'
+									  )
+	
+								}
+	
+
+							}
+		
+						}, 1400);
+						
+						//localStorage.setItem("EliminadoResp", resp[0].Response);
+	
 					} else if (
 					  /* Read more about handling dismissals below */
 					  result.dismiss === Swal.DismissReason.cancel
@@ -904,8 +1033,7 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 				defaultCollapseIcon={<MinusSquare />}
 				defaultExpandIcon={<PlusSquare />}
 				defaultEndIcon={<CloseSquare />}
-				multiSelect={false}
-				
+				multiSelect={false}				
 			>
 
 				{
@@ -925,12 +1053,13 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 			{nuevoPres &&
 				<>
-					<div className="" style={{ position: 'absolute', height: '92vh', width: ancho, marginTop: '-5px', top: '-5px', left: '-20px', zIndex: '9' }}>
+				<div className="" style={{ position: 'absolute', height: '100vh', width: ancho, marginTop: '0px', top: '0px', left: '0px', zIndex: '9', background:'rgba(0, 0, 0, 0.3)'  }}>
+					<div className="" style={{ position: 'absolute', height: '92vh', width: ancho, marginTop: '15px', top: '15px', left: '-20px', zIndex: '9' }}>
 						<DatosGeneralesAdd 
 						itemSelected={itemSelected}
 						setNuevoPres={setNuevoPres}
 						/>
-						<Button1 variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '32px', top: '32px', background:'#398bf7', color:'white'  }} onClick={() => {
 							setNuevoPres(false);
 						}
 						}><i class="fas fa-times"></i></Button1>
@@ -938,39 +1067,62 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 					<i className="far fa-window-close fa-3x" style={{position:'absolute', top:'-2px', left:'-3px'}}></i>
 				</div> */}
 					</div>
-
+					</div>	
 			</>}
 
 
 			{nuevoGrupo &&
 				<>
-					<div className="" style={{ position: 'absolute', height: '20vh', width: ancho, marginTop: '25%', top: '25%', left: '-20px', zIndex: '9' }}>
+				<div className="" style={{ position: 'absolute', height: '100vh', width: ancho, marginTop: '0px', top: '0px', left: '0px', zIndex: '9', background:'rgba(0, 0, 0, 0.3)'  }}>
+					
 						<DatosGrupoAdd
 						nivel={nivel}
 						itemSelected={itemSelected}
 						setNuevoGrupo={setNuevoGrupo}
 						accion={accion}
 						/>
-						<Button1 variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '78px', top: '42vh' , background:'#398bf7', color:'white' }} onClick={() => {
 							setNuevoGrupo(false);
 						}
 						}><i class="fas fa-times"></i></Button1>
 						{/* <div className="btn btn-outline-dark" style={{position: 'absolute', height:'35px', width:'35px', top:'10px', right:'10px', color:'#CDCDCD' }} onClick={ () => { setDatosGenerales(false) }}>
 					<i className="far fa-window-close fa-3x" style={{position:'absolute', top:'-2px', left:'-3px'}}></i>
 				</div> */}
+					
 					</div>
-
 			</>}
 
-
+			{nuevoSubPres &&
+				<>
+				<div className="" style={{ position: 'absolute', height: '100vh', width: ancho, marginTop: '0px', top: '0px', left: '0px', zIndex: '9', background:'rgba(0, 0, 0, 0.3)'  }}>
+					
+						<DatosSubAdd
+						nivel={nivel}
+						itemSelected={itemSelected}
+						setNuevoSubPres={setNuevoSubPres}
+						accion={accion}
+						SubPresupuestos={SubPresupuestos}
+						//dispatch(LimpiarSubPres());
+			
+						/>
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '78px', top: '37vh' , background:'#398bf7', color:'white' }} onClick={() => {
+							setNuevoSubPres(false);
+						}
+						}><i class="fas fa-times"></i></Button1>
+						{/* <div className="btn btn-outline-dark" style={{position: 'absolute', height:'35px', width:'35px', top:'10px', right:'10px', color:'#CDCDCD' }} onClick={ () => { setDatosGenerales(false) }}>
+					<i className="far fa-window-close fa-3x" style={{position:'absolute', top:'-2px', left:'-3px'}}></i>
+				</div> */}
+					
+					</div>
+			</>}
 
 			{datosgenerales &&
 				<>
-					<div className="" style={{ position: 'absolute', height: '92vh', width: ancho, marginTop: '-5px', top: '-5px', left: '-20px', zIndex: '9' }}>
+					<div className="" style={{ position: 'absolute', height: '100vh', width: ancho, marginTop: '0px', top: '0px', left: '0px', zIndex: '9', background:'rgba(0, 0, 0, 0.3)'  }}>
 						<DatosGenerales 
 							setCambioSub={setCambioSub}
 						/>
-						<Button1 variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '55px', top: '32px', background:'#398bf7', color:'white' }} onClick={() => {
 							setDatosGenerales(false)
 							
 							//dispatch(cleanDataChart22());
@@ -1030,14 +1182,16 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 			{datosgeneralessub &&
 				<>
-					<div className="" style={{ position: 'absolute', height: '25vh', width: ancho, marginTop: '30wh', top: '30vh', left: '6px', zIndex: '9' }}>
+				
+				<div className="" style={{ position: 'absolute', height: '100vh', width: ancho, marginTop: '0px', top: '0px', left: '0px', zIndex: '9', background:'rgba(0, 0, 0, 0.3)'  }}>
+					<div className="" style={{ position: 'absolute', height: '25vh', width: ancho, marginTop: '30wh', top: '30vh', left: '6px', zIndex: '9'   }}>
 
 						<DatosGenerales 
 						setCambioSub={setCambioSub}
 						setDatosGeneralesSub={setDatosGeneralesSub}
 						/>
 
-						<Button1 variant="outline-info" style={{ position: 'absolute', right: '18px', top: '20px' }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '55px', top: '35px',background:'#398bf7', color:'white' }} onClick={() => {
 							setDatosGeneralesSub(false)
 						}
 						}><i class="fas fa-times"></i></Button1>
@@ -1048,7 +1202,8 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 
 					</div>
-
+				</div>
+				
 				</>}
 
 

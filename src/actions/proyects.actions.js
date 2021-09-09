@@ -1,5 +1,5 @@
 import axios from '../config/axios';
-import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB,URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES, PARTY_CONTROL1, AGREGA_REGISTRO, AGREGA_CATEGORIA, AGREGA_TIPO, AGREGA_FAMILIA, AGREGA_GRUPO, MODIFICA_GRUPO, ELIMINA_GRUPO, AGREGA_ELEMENTOS, MODIFICA_SUB, MODIFICA_SUB1, AGREGA_SUB1, ACT_PRESUPUESTO} from '../constants';
+import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB,URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES, PARTY_CONTROL1, AGREGA_REGISTRO, AGREGA_CATEGORIA, AGREGA_TIPO, AGREGA_FAMILIA, AGREGA_GRUPO, MODIFICA_GRUPO, ELIMINA_GRUPO, AGREGA_ELEMENTOS, MODIFICA_SUB, MODIFICA_SUB1, AGREGA_SUB1, ACT_PRESUPUESTO, LIMPIA_PARTY_CONTROL, LIMPIAR_SUBS, PONER_PROPS, CAMBIAR_FILA_ASOCIADO} from '../constants';
 
 export const selectProyect = (idCod, userName, userId) =>{
 	return async (dispatch) =>{
@@ -282,6 +282,23 @@ export const guardarPresupuesto = (CodPresupuesto, Descripcion, Plazo,  Fecha,  
 }
 
 export const modificarPresupuesto = (CodPresupuesto, Descripcion, Plazo,  Fecha,  Jornada, DobleMoneda ,CostoDirectoBase1,CostoIndirectoBase1,CostoBase1,CostoDirectoBase2,CostoIndirectoBase2,CostoBase2,CodIdentificador,CodLugar,CodMoneda1,CodMoneda2,CodigoAlterno,JornadaSemana,JornadaMes,JornadaAno,userId) =>{
+	
+	CostoDirectoBase1 = CostoDirectoBase1.replace(/,/g,'');
+	CostoIndirectoBase1 = CostoIndirectoBase1.replace(/,/g,'');
+	CostoBase1 = CostoBase1.replace(/,/g,'');
+	CostoDirectoBase2 = CostoDirectoBase2.replace(/,/g,'');
+	CostoIndirectoBase2 = CostoIndirectoBase2.replace(/,/g,'');
+	CostoBase2 = CostoBase2.replace(/,/g,'');
+
+	Jornada = Jornada.replace(/,/g,'');
+
+	JornadaSemana = JornadaSemana.replace(/,/g,'');
+	JornadaMes = JornadaMes.replace(/,/g,'');
+	JornadaAno = JornadaAno.replace(/,/g,'');
+	
+
+	//alert(CostoDirectoBase1 + " " + CostoIndirectoBase1 + " " + CostoBase1 + " " + CostoDirectoBase2 + " " + CostoIndirectoBase2+ " " + CostoBase2);
+	
 	return async (dispatch) =>{
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let email = localStorage.getItem("email");
@@ -371,7 +388,7 @@ export const guardarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
 			"",
 			{
 				HasOutputParam: false,
-				ObjectName: `dbo.S10_01_Presupuesto_AdicionarGrupo '${email}','${CodPresupuesto}','${Descripcion}','${Nivel}'`,
+				ObjectName: `dbo.S10_01_Presupuesto_AdicionarGrupo '${email}','${CodPresupuesto}','${Descripcion}',${Nivel}`,
 				RequestId: "IngGrupo",
 				SignalRConnectionID: localStorage.getItem("connectionId"),
 				SecurityUserId: '1148', // SecurityUserId obtenido al logear
@@ -383,7 +400,7 @@ export const guardarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
 				},
 			}
 		);
-		console.log(data);
+		console.log(`dbo.S10_01_Presupuesto_AdicionarGrupo '${email}','${CodPresupuesto}','${Descripcion}',${Nivel}`);
 	}
 }
 
@@ -395,7 +412,7 @@ export const modificarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
 			"",
 			{
 				HasOutputParam: false,
-				ObjectName: `dbo.S10_01_Presupuesto_ModificarGrupo '${email}','${CodPresupuesto}','${Descripcion}','${Nivel}'`,
+				ObjectName: `dbo.S10_01_Presupuesto_ModificarGrupo '${email}','${CodPresupuesto}','${Descripcion}',${Nivel}`,
 				RequestId: "ModGrupo",
 				SignalRConnectionID: localStorage.getItem("connectionId"),
 				SecurityUserId: '1148', // SecurityUserId obtenido al logear
@@ -420,8 +437,8 @@ export const eliminarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
 			"",
 			{
 				HasOutputParam: false,
-				ObjectName: `dbo.S10_01_Presupuesto_EliminarGrupo '${CodPresupuesto}','${Descripcion}','${Nivel}'`,
-				RequestId: "IngSubPres",
+				ObjectName: `dbo.S10_01_Presupuesto_EliminarGrupo '${CodPresupuesto}','${Descripcion}',${Nivel}`,
+				RequestId: "EliminaGrupo",
 				SignalRConnectionID: localStorage.getItem("connectionId"),
 				SecurityUserId: '1148', // SecurityUserId obtenido al logear
 			},
@@ -926,6 +943,28 @@ export const cleanDataChart22 = () =>{
   payload: sel
 })}*/
 
+
+
+  export const limpiaTree = () =>{
+	/*console.log('aGREGANDO MODIFICA GRUPO');
+	console.log(sel);*/
+   return (dispatch) =>
+	   dispatch({
+		   type: LIMPIA_PARTY_CONTROL,
+		   payload: []
+	   })
+}
+
+export const limpiaSubs = () =>{
+	/*console.log('aGREGANDO MODIFICA GRUPO');
+	console.log(sel);*/
+   return (dispatch) =>
+	   dispatch({
+		   type: LIMPIAR_SUBS,
+		   payload: []
+	   })
+}
+
 export const limpiaUbicaciones = () => ({
 	type: LIMPIAR_UBICACIONES,
 	payload: []
@@ -971,6 +1010,16 @@ export const cambiaSeleccion = (sel) => ({
 
   export const agregaElementos = (sel) => ({
 	type: AGREGA_ELEMENTOS,
+	payload: sel
+  })
+
+  export const ponerPropiedades = (sel) => ({
+	type: PONER_PROPS,
+	payload: sel
+  })
+
+  export const seleccionarFilaAsociado = (sel) => ({
+	type: CAMBIAR_FILA_ASOCIADO,
 	payload: sel
   })
 

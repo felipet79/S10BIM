@@ -692,7 +692,12 @@ const DatosGeneralesAdd = ({itemSelected, setNuevoPres}) => {
         setPresupuestoN( (state) => ({...state,CostoIndirectoBase1:data.value, CostoBase1:total1}));
 	}
 
-
+    const onCurrentValueChanged = (e) => {
+        setPresupuestoN( (state) => ({...state, Fecha:e.value}));
+        /*this.setState({
+          currentValue: e.value
+        });*/
+      }
 
     const valida = (e) => {
 
@@ -714,15 +719,19 @@ const DatosGeneralesAdd = ({itemSelected, setNuevoPres}) => {
             Nivel: 3,
             PhantomId: itemSelected+presupuestoN.CodPresupuesto,
             PhantomParentId: itemSelected
-        }];            
+        }];  
         
         
+        //let fecha1=new Date(presupuestoN.Fecha);
         let fecha1=new Date(presupuestoN.Fecha);
-        let dia=parseInt(fecha1.getDate(),10)+1;
+        let dia=parseInt(fecha1.getDate(),10);
         let mes=parseInt(fecha1.getMonth(),10)+1;
         let fechaStr = dia + "/" + mes + '/' + fecha1.getFullYear();
         //dispatch(guardarGrupo(itemSelected+presupuestoN.CodPresupuesto, presupuestoN.Descripcion, 3, ''));
-        
+        //alert(presupuestoN.Fecha);
+        //let fechaStr = presupuestoN.Fecha.substring(8,10) + "/" + presupuestoN.Fecha.substring(5,7) + '/' + presupuestoN.Fecha.substring(0,4);
+      
+
         //dispatch(guardarGrupo(itemSelected+presupuestoN.CodPresupuesto, presupuestoN.Descripcion, 3, ''));
         dispatch(agregaGrupo1(Nuevo));
 
@@ -770,7 +779,7 @@ const DatosGeneralesAdd = ({itemSelected, setNuevoPres}) => {
       };
 
     return (
-        <div className="animate__animated animate__fadeIn" style={{ marginLeft: '0px', marginTop: '10px', height: '96%', width: '100%' }}>
+        <div className="animate__animated animate__fadeIn" style={{ marginLeft: '15px', marginTop: '10px', height: '90%', width: '99%' }}>
             <BuscaCliente tipo="Nuevo" presupuestoN={presupuestoN} setShow={setShow} show={show} />
             <BuscaUbicacion tipo="Nuevo" presupuestoN={presupuestoN} setShow={setShowUb} show={showUb} />
             {/* <BuscaModelo
@@ -782,14 +791,14 @@ const DatosGeneralesAdd = ({itemSelected, setNuevoPres}) => {
             /> */}
             <BuscaMoneda tipo="Nuevo" presupuestoN={presupuestoN} setShow={setShowMnd} show={showMnd} />
             {selecOP === 1 ?
-                (<Card className="animate__animated animate__fadeIn" style={{ overflow: 'scroll', marginLeft: '20px', height: '93vh', padding: '15px' }}>
-                    <Card.Header style={{fontSize:'1rem'}}>Datos Generales
+                (<Card className="animate__animated animate__fadeIn" style={{ overflow: 'scroll', marginLeft: '20px', height: '88vh', padding: '15px' }}>
+                    <Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white' }}>Datos Generales
                             
                     </Card.Header>
                     <Card.Body>
 
                         <Form onSubmit={valida}>
-                        <Button1 useSubmitBehavior={true} type="Submit" variant="outline-info" style={{ position: 'absolute', left: '210px', top: '13px' }} 
+                        <Button1 useSubmitBehavior={true} type="Submit" variant="outline-info" style={{ position: 'absolute', left: '210px', top: '23px' }} 
                             /*onClick={() => {
                             if (proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] && proyects.DatosPresupuesto[0].CodPresupuesto !== "") {
 
@@ -1020,6 +1029,7 @@ const DatosGeneralesAdd = ({itemSelected, setNuevoPres}) => {
                                         defaultValue={presupuestoN.Fecha}
                                         value={presupuestoN.Fecha}
                                         //value={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? (proyects.DatosPresupuesto[0].Fecha).substring(0, 10) : ''}
+                                        onValueChanged={onCurrentValueChanged}
                                         type="date" />
 
 
