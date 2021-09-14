@@ -441,7 +441,7 @@ const DatosGrupoAdd = ({ nivel, itemSelected, setNuevoGrupo, accion}) => {
             
             {selecOP === 1 ?
                 (<Card className="animate__animated animate__fadeIn" style={{ overflow: 'scroll', marginLeft: '20px', height: '20vh', padding: '15px' }}>
-                    <Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white' }}>Nuevo Grupo (Nivel {presupuestoN.Nivel})
+                    <Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white', fontWeight:'550' }}>Nuevo Grupo (Nivel {presupuestoN.Nivel})
                             
                     </Card.Header>
                     <Card.Body>

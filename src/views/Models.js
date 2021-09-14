@@ -130,6 +130,7 @@ const Models = ({ match }) => {
 					className="tree-fixed p-0 d-flex justify-content-between"
 					enable={{ top:false, right:true, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
 					size={{ width: width, height: height }}
+					style={{ background:'#f5f6f8'}}
 					//maxHeight="60vh"
 					maxWidth={open ? 600 : 0}
 					//minHeight="67.5vh"
@@ -161,11 +162,12 @@ const Models = ({ match }) => {
 
 
 						<div className="p-0 h-100 w-100" style={{ overflow: 'scroll',
-							background: 'rgb(242,245,246)',
+							/*background: 'rgb(242,245,246)',
 							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
 							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
 							background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',					
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',	*/
+							 background:'#f5f6f8'
 						}}>
 
 
@@ -209,39 +211,74 @@ const Models = ({ match }) => {
 						</div>
 					</Collapse>
 					<div
+						
 						className="bara-cerrar d-flex align-items-center barras"
 						style={{
-							width: 12,
+							width: '16px',
 							height: "100%",
-							/*background: "#dee2e6",*/
+							background: '#f5f6f8',
 							marginLeft: 5,
+							borderStyle: 'none solid none none',
+							borderColor:'#c6c7d0',
+							borderWidth:'0.5px',
+							zIndex:'1',
 						}}
 					>
 						<div
-							style={{ cursor: "pointer",
-							background: 'rgb(184,225,252)',
+							style={{ cursor: "pointer", width:'30px', 
+							/*background: 'rgb(184,225,252)',
 							background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
 							background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
 							background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0'						
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0',*/
+							background:'white',
+							zIndex:'1'
+							/*background: 'rgb(184,225,252)',
+							background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
+							background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+							background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0'	*/					 
 						}}
-							className="h-25 w-100 bg-primary d-flex justify-contentcenter align-items-center"
+							className="h-0 w-100 "
 							onClick={() => {
+								//alert('se activa');
+								
+
 								setOpen(!open);
+								
+
+								/*if (!open){
+									document.getElementById("Conte1").style.width = 0;
+									setWidth(260);
+								}else{
+									document.getElementById("Conte1").style.width = '260px';
+									setWidth(20);
+								}*/
+								//alert('');
+								//$("#forgeViewer").animate({ height: height + d.height }, 100);
+		
+								//$("#DetalleItem").animate({ height: window.innerHeight - (height + d.height) - 130 }, 100);
+		
+								//alert('');
+								
+
+
 								setTimeout(() => {
 									RefrescarV();
-								}, 50);
-		
+								}, 100);								
+								
+
 
 
 							}}
 							aria-controls="example-collapse-text"
 							aria-expanded={open}
+							style={{background:'transparent', zIndex:'1', width:'80px'}}
 						>
 							{open ? (
-								<ion-icon name="caret-back-outline"></ion-icon>
+								<ion-icon name="chevron-back-outline" style={{ cursor: "pointer", color:'black', borderColor:'#c6c7d0', marginLeft:'4px', background:'white', zIndex:'2', width:'20px', height:'20px',borderRadius:'20px', borderStyle: 'solid', borderWidth:'0.5px', }}></ion-icon>
 							) : (
-								<ion-icon name="caret-forward-outline"></ion-icon>
+								<ion-icon name="chevron-forward-outline" style={{ cursor: "pointer", color:'black', borderColor:'#c6c7d0', marginLeft:'4px', background:'white', zIndex:'2', width:'20px', height:'20px',borderRadius:'20px', borderStyle: 'solid', borderWidth:'0.5px' }}></ion-icon>
 							)}
 						</div>
 					</div>

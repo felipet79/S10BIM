@@ -3,7 +3,7 @@ import { Table } from "react-bootstrap";
 //import Bar from "./Charts/Bar";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { agregaRegistro, cleanDataChartAPU, seleccionarFilaAsociado, selectAPUS } from "../actions/proyects.actions";
+import { addAsociado, agregaRegistro, cleanDataChartAPU, seleccionarFilaAsociado, selectAPUS } from "../actions/proyects.actions";
 import TreeList, {
 	Pager,
 	Paging,
@@ -22,6 +22,9 @@ import { ContextMenu } from "devextreme-react";
 import notify from 'devextreme/ui/notify';
 import Swal from 'sweetalert2'
 import { randomInt } from "crypto";
+import { Template } from 'devextreme-react';
+import CellRend from "./Cellrend";
+
 
 const opcMenuInicio = [
 	{ text: 'Agregar' },
@@ -168,6 +171,29 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 	}
 
 
+	const DataRow= (rowInfo) => {
+		console.log('esta es la info de la fila')
+		console.log(rowInfo)
+		alert();
+		return (
+		  <tbody className={`employee dx-row ${rowInfo.rowIndex % 2 ? 'dx-row-alt' : ''}`}>
+			<tr className="main-row">
+			  <td rowSpan="2"><img src={rowInfo.data.Picture} /></td>
+			  <td>{rowInfo.data.Prefix}</td>
+			  <td>{rowInfo.data.FirstName}</td>
+			  <td>{rowInfo.data.LastName}</td>
+			  <td>{rowInfo.data.Position}</td>
+			  {/* <td>{formatDate(new Date(rowInfo.data.BirthDate))}</td>
+			  <td>{formatDate(new Date(rowInfo.data.HireDate))}</td> */}
+			</tr>
+			<tr className="notes-row">
+			  <td colSpan="6"><div>{rowInfo.data.Notes}</div></td>
+			</tr>
+		  </tbody>
+		);
+	  }
+
+
 	function itemClick(e) {
 		if (!e.itemData.items) {
 			//notify(`The "${ e.itemData.text }" item was clicked`, 'success', 200);
@@ -182,15 +208,83 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 						icon: 'error',
 						confirmButtonText: 'Ok'
 					})
-					dispatch(agregaRegistro(''));
-					return;
+
+					
 				}
-				dispatch(agregaRegistro('Asociado'));
+
+				const Nuevo=[{
+					ActualizacionFecha: "2021-07-26T16:09:24.607",
+					ActualizacionUsuario: "ctorres@s10peru.com",
+					CampoFiltro: "",
+					Categoria: "",
+					CodAsociado: getRandomString(24),
+					CodPresupuesto: "0501001",
+					CodSubpresupuesto: proyects.Sub_sel,
+					CreacionFecha: "2021-07-26T16:09:24.607",
+					CreacionUsuario: "ctorres@s10peru.com",
+					Familia: "",
+					Item: "000000000000034",
+					Tipo: "",
+					Valor:"",
+				}];
+
+				dispatch(addAsociado(Nuevo));
+				console.log('agregando un asociado')
+				//dispatch(agregaRegistro(''));
+				return;
+
+				//dispatch(agregaRegistro('Asociado'));
+				
 				//alert('Datos generales : Pres ' + itemSelected + ' Sub ' + itemSelected1 + ' tipo '+ tipoSeleccion);
 				/*if (tipoSeleccion === 'Presupuesto')
 					setDatosGenerales(true);
 				else
 					setDatosGeneralesSub(true);*/
+			}
+
+
+
+
+		if (e.itemData.text === 'Eliminar') {
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+				  confirmButton: 'btn btn-dark',
+				  cancelButton: 'btn btn-light'
+				},
+				buttonsStyling: false
+			  })
+			  
+			  swalWithBootstrapButtons.fire({
+				title: 'Estas Seguro de eliminar este elemento ?',
+				text: "Esta acción no podrá ser revertida!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Si, eliminarlo!',
+				cancelButtonText: 'No, salir!',
+				reverseButtons: true
+			  }).then((result) => {
+				if (result.isConfirmed) {
+
+					swalWithBootstrapButtons.fire(
+						'Borrado!',
+						'Su registro ha sido eliminado.',
+						'success'
+					  )
+					
+					//localStorage.setItem("EliminadoResp", resp[0].Response);
+
+				} else if (
+				  /* Read more about handling dismissals below */
+				  result.dismiss === Swal.DismissReason.cancel
+				) {
+				  swalWithBootstrapButtons.fire(
+					'Accion cancelada',
+					'No se hanb realizado Cambios :)',
+					'error'
+				  )
+				}
+			  })
+
 			}
 
 		}
@@ -263,8 +357,9 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 						setFilaAct(e.rowIndex);
 
 						
-						
+						if (!e.data) return;
 						//si tengo tipo = todos
+						
 						if (e.data.Tipo!==''){
 							dispatch(seleccionarFilaAsociado({Fila:e.rowIndex, Categoria:e.data.Categoria, Familia:e.data.Familia, Tipo:e.data.Tipo, Data:e.data}));
 
@@ -388,13 +483,16 @@ Valor: ""*/
 				//onEditingChange={(e)=>{ console.log('cambiando valor de celda');console.log(e) } }
 				//onOptionChanged={(e)=>{ console.log('Option chaged');console.log(e) } }
 				//onRowInserted={(e)=>{ console.log('Celda insertada');console.log(e) } }
+				onRowRemoving={(e)=>{ console.log('Celda en eliminacion');console.log(e) } }
 
+				/*rowRender={DataRow}*/
+				
 				wordWrapEnabled={true}
 			>
 				<Editing
-					allowAdding={true}
+					allowAdding={false}
 					allowUpdating={true}
-					allowDeleting={true}
+					allowDeleting={false}
 					selectTextOnEditStart={true}
 					useIcons={true}
 					mode="cell"
@@ -415,7 +513,7 @@ Valor: ""*/
 				<Column
 					width={'25%'}
 					dataField="Categoria" 
-					
+					cellTemplate="Template1"								
 				>
 				<Lookup
 					//dataSource={employees}
@@ -427,18 +525,24 @@ Valor: ""*/
 				
 				<Column
 					width={'25%'}
-					dataField="Familia">
+					dataField="Familia"
+					cellTemplate="Template1"
+					>
+					
 				<Lookup
 					//dataSource={employees}
 					dataSource={proyects.DataFamilia}
 					valueExpr="Name"
-					displayExpr="Name"/>
-								
+					displayExpr="Name"
+					cellTemplate="Template1"								
+					/>
+					
 				</Column>
 				<Column
 					width={'25%'}
 					dataField="Tipo"
 					alignment={'center'}
+					cellTemplate="Template1"								
 				>
 				<Lookup
 					//dataSource={employees}
@@ -452,7 +556,7 @@ Valor: ""*/
 					dataField="CampoFiltro"
 					caption="Campo"
 					alignment={'right'}
-				
+					cellTemplate="Template1"								
 				>
 				<Lookup
 					//dataSource={employees}
@@ -468,6 +572,7 @@ Valor: ""*/
 					dataField="Comp"
 					caption="Comparación"
 					alignment={'right'}
+					cellTemplate="Template1"								
 				>
 				<Lookup
 					//dataSource={employees}
@@ -481,10 +586,11 @@ Valor: ""*/
 					width={'20%'}
 					dataField="Valor"
 					alignment={'right'}
+					cellTemplate="Template1"
 				/>
-				<Column type="buttons">
+				{/* <Column type="buttons">
             		<Button name="delete" />
-          		</Column>				
+          		</Column>				 */}
 
 
 				<Pager
@@ -496,6 +602,7 @@ Valor: ""*/
 					enabled={true}
 					defaultPageSize={15}
 				/>
+				<Template name="Template1" render={CellRend} />
 			</TreeList>
 
 

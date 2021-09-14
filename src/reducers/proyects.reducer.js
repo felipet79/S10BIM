@@ -48,6 +48,16 @@ import {
 	LIMPIAR_SUBS,
 	PONER_PROPS,
 	CAMBIAR_FILA_ASOCIADO,
+	ADD_ASOCIADO,
+	ASOCIADO_LIMPIAR,
+	AGREGA_CATEGORIAB,
+	AGREGA_TIPOB,
+	AGREGA_FAMILIAB,
+	LISTAR_TITULOS,
+	LISTAR_PARTIDAS,
+	ADD_ITEM,
+	UPDATE_ITEM,
+	REMOVE_ITEM,
 } from '../constants';
 
 const initialState = {
@@ -80,9 +90,17 @@ const initialState = {
 	DataCategorias: null,
 	DataTipo: null,
 	DataFamilia: null,
+
+	DataCategoriasB: null,
+	DataTipoB: null,
+	DataFamiliaB: null,
+
 	DataElementos: null,
 	Propiedades: [],
-	filaAsociadoSel: {Fila: null, Categoria: "", Familia: "", Tipo: ""},
+	filaAsociadoSel: { Fila: null, Categoria: "", Familia: "", Tipo: "" },
+
+	DataTitulos: [],
+	DataPartidas: [],
 };
 
 
@@ -139,7 +157,7 @@ export default (state = initialState, { type, payload }) => {
 
 			return {
 				...state,
-				DataPc: [...payload]
+				DataPc: []
 				//DataPc: payload
 			};
 
@@ -237,8 +255,30 @@ export default (state = initialState, { type, payload }) => {
 		case ASOCIADO_DETALLE:
 			return {
 				...state,
-				DataAsociado: payload
+				DataAsociado: [...state.DataAsociado, ...payload],
+				//DataAsociado: payload
+
 			};
+
+		case ASOCIADO_LIMPIAR:
+			return {
+				...state,
+				DataAsociado: [],
+				//DataAsociado: payload
+
+			};
+
+		case ADD_ASOCIADO:
+			console.log('este es mi nuevo dato');
+			console.log(payload);
+			console.log(state.DataAsociado);
+			return {
+				...state,
+				DataAsociado: [...state.DataAsociado, ...payload]
+			};
+
+
+
 		case ESTRUCTURA_DETALLE:
 			return {
 				...state,
@@ -337,6 +377,32 @@ export default (state = initialState, { type, payload }) => {
 				//treePartyControl: [...state.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto)].sort((a, b) => a.Fila - b.Fila)
 				treePartyControl: [...state.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto !== payload)].sort((a, b) => a.Fila - b.Fila)
 			};
+
+
+			case ADD_ITEM:
+				console.log('este es mi nuevo dato');
+				console.log(payload);
+				console.log(state.DataPc);		
+				return {
+					...state,
+					DataPc: [...state.DataPc, ...payload]
+				};
+	
+			case UPDATE_ITEM:
+				//console.log('este es el codPresupuesto'); ///por actualizarse
+				//console.log(payload);
+				return {
+					...state,
+					DataPC: [...state.DataPC.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto), ...payload].sort((a, b) => a.Fila - b.Fila)
+					//treePartyControl: [...state.treePartyControl.filter( (filtro1) => filtro1.CodPresupuesto !== '1504' ), ...payload]
+				};
+			case REMOVE_ITEM:
+				return {
+					...state,
+					//treePartyControl: [...state.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto)].sort((a, b) => a.Fila - b.Fila)
+					DataPC: [...state.DataPC.filter((filtro1) => filtro1.CodPresupuesto !== payload)].sort((a, b) => a.Fila - b.Fila)
+				};
+
 
 
 		case MODIFICA_SUB:
@@ -462,6 +528,29 @@ export default (state = initialState, { type, payload }) => {
 				DataFamilia: payload,
 			};
 
+
+		case AGREGA_CATEGORIAB:
+			return {
+				...state,
+				//DataCategorias: [...state.DataCategorias, ...payload]
+				DataCategoriasB: payload,
+			};
+
+		case AGREGA_TIPOB:
+			return {
+				...state,
+				//DataCategorias: [...state.DataCategorias, ...payload]
+				DataTipoB: payload,
+			};
+
+		case AGREGA_FAMILIAB:
+			return {
+				...state,
+				//DataCategorias: [...state.DataCategorias, ...payload]
+				DataFamiliaB: payload,
+			};
+
+
 		case AGREGA_ELEMENTOS:
 			return {
 				...state,
@@ -479,6 +568,28 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				filaAsociadoSel: payload,
 			};
+
+
+		case LISTAR_TITULOS:
+			return {
+				...state,
+				//DataUbicaciones: [...state.DataUbicaciones, ...payload]
+				DataTitulos: [...payload]
+			};
+		case LISTAR_PARTIDAS:
+				return {
+					...state,
+					//DataUbicaciones: [...state.DataUbicaciones, ...payload]
+					DataPartidas: [...payload]
+				};
+	
+
+		/*case LIMPIAR_UBICACIONES:
+			return {
+				...state,
+				DataUbicaciones: []
+			};*/
+
 
 		default:
 			return state

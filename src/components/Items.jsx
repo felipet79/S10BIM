@@ -7,7 +7,7 @@ import Button1 from 'devextreme-react/button';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import $ from 'jquery';
-import { cleanDataChart, cleanDataChart22, cleanDataChartAPU, selectAPUS, selectAsociados, selectCalculo, selectCalculoDet, selectEstructura, selectItems, selectMETRADOS } from "../actions/proyects.actions";
+import { cleanDataChart, cleanDataChart22, cleanDataChartAPU, limpiaAsociado, selectAPUS, selectAsociados, selectCalculo, selectCalculoDet, selectEstructura, selectItems, selectMETRADOS, selectPARTIDAS, selectTITULOS } from "../actions/proyects.actions";
 import TreeList, {
 	Pager,
 	Paging,
@@ -19,7 +19,8 @@ import TreeList, {
 	Column,
 	Sorting,
 	SearchPanel,
-	ColumnFixing
+	ColumnFixing,
+	RowDragging
 } from 'devextreme-react/tree-list';
 import { Resizable } from "re-resizable";
 import { Collapse } from "@material-ui/core";
@@ -33,13 +34,16 @@ import Metrados from "../components/Metrados";
 import Tree from "./TreeAll";
 //import { ViewScreen1 } from "../views/ViewScreen1";
 import { ViewerSc, RefrescarV } from "../views/ViewerSc";
-import { ContextMenu, DropDownButton } from "devextreme-react";
+import { ContextMenu, DropDownButton, Template } from "devextreme-react";
 import { Tooltip } from 'devextreme-react/tooltip';
 //import notify from 'devextreme/ui/notify';
 import { Width } from "devextreme-react/chart";
 import zIndex from "@material-ui/core/styles/zIndex";
 import { red } from "@material-ui/core/colors";
 import BuscaModelo from "./BuscaModelo";
+import BuscaTitulo from "./BuscaTitulo";
+import BuscaPartida from "./BuscaPartida";
+import { CellRend_Items } from "./Cellrend";
 
 const animationConfig = {
 	show: {
@@ -78,6 +82,50 @@ const menuModo = [
 ];
 
 
+const ItemsM = [
+	{
+		text: 'Nuevo',
+		items: [
+			/*{ text: 'Partida' },*/
+			{ text: 'Título' }]
+	},
+	{ text: 'Generar Metrado' },
+	{ text: 'Actualizar todos los metrados' },
+];
+
+const ItemI = [{
+	CodPresupuesto: "",
+	CodSubpresupuesto: "",
+	Descripcion: "",
+	ERPCode: "",
+	Item: "",
+	Metrado: 0,
+	Nivel: 1,
+	Orden: "",
+	OrdenJerarquico: "",
+	PhantomParentId: "",
+	Precio1: 0,
+	Precio2: 0,
+	Secuencial: 0,
+	Unidad: null,
+}];
+
+/*CodPresupuesto: "0501001",
+CodSubpresupuesto: "002",
+Descripcion: "PINTURA EN TUBERIAS DE INSTALACIONES SANITARIAS Y ELECTRICAS",
+ERPCode: "0501001002000000000000167",
+Item: "000000000000167",
+Metrado: 1,
+Nivel: 3,
+Orden: "01.15.12",
+OrdenJerarquico: "00202.15.12",
+PhantomParentId: "00202.15",
+Precio1: 0,
+Precio2: 0,
+Secuencial: 153,
+Unidad: "glb",*/
+
+
 
 
 const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
@@ -108,6 +156,10 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 
 	const [showMdl, setShowMdl] = useState(false);
+
+	const [showTit, setShowTit] = useState(false);
+	const [showPart, setShowPart] = useState(false);
+
 	const [subseleccionado, setSubSeleccionado] = useState(null);
 
 
@@ -124,9 +176,16 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 	const [ultimoCALCULO, setUltimoCALCULO] = useState('');
 
 	const [itemSeleccionado, setItemSeleccionado] = useState('');
+	const [itemSel, setItemSel] = useState(null);
+
+	const [itemAgregar, setItemAgregar] = useState(ItemI);
 
 
 	const emptySelectedText = 'Nobody has been selected';
+
+	const [itemsMenu, setItemsMenu] = useState(ItemsM);
+
+
 
 	const [state, setState] = useState(
 		{
@@ -282,7 +341,17 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 		//console.log('datos de items')
 		//console.log(proyects.DataPc)
 
+
+
+		//habilitar la suma  *************************************************************************************************************
+		//habilitar la suma  *************************************************************************************************************
+		//habilitar la suma  *************************************************************************************************************
 		orderTree(proyects.DataPc);
+
+
+
+
+
 		//alert('ejecutó la primera carga');
 		// console.log(result);
 		// }
@@ -397,6 +466,21 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 	}
 
 	useEffect(() => {
+		//alert('')
+		const ItemsM1 = [
+			{
+				text: 'Nuevo',
+				items: [
+					/*{ text: 'Partida' },*/
+					{ text: 'Título' }]
+			},
+			{ text: 'Generar Metrado' },
+			{ text: 'Actualizar todos los metrados' },
+		];
+
+		setItemsMenu(ItemsM1);
+		setItemSeleccionado('');
+		setItemSel(null);
 
 		if (proyects.Sub_sel !== '') return;
 		if (proyects.treeSubControl)
@@ -427,7 +511,25 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 	}, [proyects.treeSubControl])
 
 
+	useEffect(() => {
+		//alert('')
+		const ItemsM1 = [
+			{
+				text: 'Nuevo',
+				items: [
+					/*{ text: 'Partida' },*/
+					{ text: 'Título' }]
+			},
+			{ text: 'Generar Metrado' },
+			{ text: 'Actualizar todos los metrados' },
+		];
 
+		setItemsMenu(ItemsM1);
+		setItemSeleccionado('');
+		setItemSel(null);
+
+
+	}, [proyects.DatosPresupuesto[0]?.CodPresupuesto + proyects.Sub_sel])
 	/*useEffect(() => {
 		setWidth(width);
 	}, [widthItems])*/
@@ -516,7 +618,104 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 		const codSub = Item.CodSubpresupuesto;
 		const codItem = Item.Item;
 
+		dispatch(limpiaAsociado());
+
+		setItemSel(Item)
+
+		let Ntoca = parseInt(Item.Nivel) + 1;
+		var ItemsM1 = [];
+		//alert(Item.Unidad);
+		/*if (itemSeleccionado !== (codP + codSub + codItem) )
+		{*/
+		if (Item.Nivel === 1) {
+			if (Item.Unidad === null) {
+				ItemsM1.push(
+					{
+						text: 'Nuevo Item (Nivel ' + Item.Nivel + ')',
+						items: [
+							{ text: 'Título' }
+						]
+					},
+					{
+						text: 'Nuevo SubItem (Nivel ' + Ntoca + ')',
+						items: [
+							{ text: 'Título ' },
+							{ text: 'Partida ' }
+						]
+					},
+
+					{ text: 'Generar Metrado' },
+					{ text: 'Actualizar todos los metrados' },
+				);
+			} else {
+				ItemsM1.push(
+					{
+						text: 'Nuevo Item (Nivel ' + Item.Nivel + ')',
+						items: [
+							{ text: 'Título' },
+							{ text: 'Partida' }
+						]
+					},
+					{ text: 'Generar Metrado' },
+					{ text: 'Actualizar todos los metrados' },
+				);
+
+
+			}
+
+
+			setItemsMenu(ItemsM1);
+
+		} else {
+
+			if (Item.Unidad === null) {
+				ItemsM1.push(
+					{
+						text: 'Nuevo Item (Nivel ' + Item.Nivel + ')',
+						items: [
+							{ text: 'Título' },
+							{ text: 'Partida' }
+						]
+					},
+					{
+						text: 'Nuevo SubItem (Nivel ' + Ntoca + ')',
+						items: [
+							{ text: 'Título ' },
+							{ text: 'Partida ' }
+						]
+					},
+
+					{ text: 'Generar Metrado' },
+					{ text: 'Actualizar todos los metrados' },
+				);
+			} else {
+				ItemsM1.push(
+					{
+						text: 'Nuevo Item (Nivel ' + Item.Nivel + ')',
+						items: [
+							{ text: 'Partida' },
+							{ text: 'Título' }]
+					},
+					{ text: 'Generar Metrado' },
+					{ text: 'Actualizar todos los metrados' },
+				);
+
+
+			}
+
+
+			setItemsMenu(ItemsM1);
+
+
+		}
+
+
 		setItemSeleccionado(codP + codSub + codItem);
+
+
+
+
+
 		//alert(codP + "-" + codSub + "-" + codItem);
 		if (levelPC === 1) {
 			if (ultimoAPU !== codP + codSub + codItem) {
@@ -559,15 +758,6 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 		}
 
-
-
-
-
-
-
-
-
-
 		//const selectedData = e.component.getSelectedRowsData(state.selectionMode);
 		/*setState({
 		  selectedRowKeys: e.selectedRowKeys,
@@ -589,16 +779,300 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 		});
 	}
 
-	const ItemsM = [
-		{
-			text: 'Nuevo',
-			items: [
-				{ text: 'Item' },
-				{ text: 'Capitulo' }]
-		},
-		{ text: 'Generar Metrado' },
-		{ text: 'Actualizar todos los metrados' },
-	];
+
+
+	/*CodPresupuesto: "0501001",
+		CodSubpresupuesto: "002",
+		Descripcion: "PINTURA EN TUBERIAS DE INSTALACIONES SANITARIAS Y ELECTRICAS",
+		ERPCode: "0501001002000000000000167",
+		Item: "000000000000167",
+		Metrado: 1,
+		Nivel: 3,
+		Orden: "01.15.12",
+		OrdenJerarquico: "00202.15.12",
+		PhantomParentId: "00202.15",
+		Precio1: 0,
+		Precio2: 0,
+		Secuencial: 153,
+		Unidad: "glb",*/
+
+
+	function itemClick(e) {
+		if (!e.itemData.items) {
+			//notify(`The "${ e.itemData.text }" item was clicked`, 'success', 1500);
+			if (e.itemData.text === '') {
+
+			}
+			if (!proyects.DatosPresupuesto || !proyects.DatosPresupuesto[0]) return;
+			if (proyects.Sub_sel === '') {
+				Swal.fire({
+					title: 'Error!',
+					text: 'Debe seleccionar un SubPresupuesto',
+					icon: 'error',
+					confirmButtonText: 'Ok'
+				})
+				return;
+			}
+
+
+			let NCod = proyects.DataPc.length + 1;
+			let NCodStr = '00000000000000';
+			if (NCod >= 10)
+				NCodStr = '0000000000000';
+			if (NCod >= 100)
+				NCodStr = '000000000000';
+			if (NCod >= 1000)
+				NCodStr = '00000000000';
+			if (NCod >= 10000)
+				NCodStr = '0000000000';
+			if (NCod >= 100000)
+				NCodStr = '000000000';
+			if (NCod >= 1000000)
+				NCodStr = '00000000';
+			if (NCod >= 10000000)
+				NCodStr = '0000000';
+			if (NCod >= 100000000)
+				NCodStr = '000000';
+			if (NCod >= 1000000000)
+				NCodStr = '00000';
+			if (NCod >= 10000000000)
+				NCodStr = '0000';
+			if (NCod >= 100000000000)
+				NCodStr = '000';
+
+			//alert(NCodStr + NCod)
+			var ItemN = [{
+				CodPresupuesto: proyects.DatosPresupuesto[0].CodPresupuesto,
+				CodSubpresupuesto: proyects.Sub_sel,
+				Descripcion: "",
+				ERPCode: proyects.DatosPresupuesto[0].CodPresupuesto + proyects.Sub_sel + NCodStr + NCod,
+				Item: NCodStr + NCod,
+				Metrado: null,
+				Nivel: 1,
+				Orden: "01.15.12",
+				OrdenJerarquico: proyects.Sub_sel + "02.01.01" + getRandomString(2),
+				PhantomParentId: null,
+				Precio1: null,
+				Precio2: null,
+				Secuencial: 1,
+				Unidad: null,
+			}];
+
+
+			if (e.itemData.text === 'Título') {
+				setShowTit(true);
+				let Niv = 1;
+				if (itemSel)
+					Niv = parseInt(itemSel.Nivel);
+				if (Niv === 1) {
+					let Cod1 = proyects.DataPc.filter(item => item.Nivel === 1).length + 1;
+					let Cod1S = '0';
+					if (Cod1 >= 10)
+						Cod1S = '';
+					ItemN[0].PhantomParentId = null;
+					ItemN[0].Orden = Cod1S + Cod1;
+					ItemN[0].OrdenJerarquico = proyects.Sub_sel + Cod1S + Cod1;
+				} else {
+					//console.log('ESTE ES ITEM SEL');
+					//console.log(itemSel);
+					//let CodPToca='';
+					//CodPToca=itemSel.OrdenJerarquico;
+					/*if (itemSel.Unidad===null)
+					{
+						CodPToca=itemSel.OrdenJerarquico;
+					}else
+					{
+						CodPToca=itemSel.PhantomParentId;
+					}*/
+					let Cod1 = proyects.DataPc.filter(item => item.Nivel === Niv && item.PhantomParentId === itemSel.PhantomParentId).length + 1;
+					let Cod1S = '0';
+					if (Cod1 >= 10)
+						Cod1S = '';
+					ItemN[0].PhantomParentId = itemSel.PhantomParentId;
+					ItemN[0].Orden = itemSel.PhantomParentId.substring(3, itemSel.PhantomParentId.length) + "." + Cod1S + Cod1;
+					ItemN[0].OrdenJerarquico = itemSel.PhantomParentId + "." + Cod1S + Cod1;
+				}
+				ItemN[0].Nivel = Niv;
+				/*if (Niv===1)
+				ItemN[0].PhantomParentId=null;
+				else
+				ItemN[0].PhantomParentId=itemSel.OrdenJerarquico;*/
+				dispatch(selectTITULOS('', '20', '1', ''));
+				setItemAgregar(ItemN);
+			}
+
+			if (e.itemData.text === 'Título ') {
+				setShowTit(true);
+				//ItemN[0].PhantomParentId=itemSeleccionado;
+				let Niv = parseInt(itemSel.Nivel) + 1;
+				let Cod1 = proyects.DataPc.filter(item => item.Nivel === Niv && item.PhantomParentId === itemSel.OrdenJerarquico).length + 1;
+				let Cod1S = '0';
+				if (Cod1 >= 10)
+					Cod1S = '';
+				//alert(Cod1)
+				ItemN[0].Orden = itemSel.OrdenJerarquico.substring(3, itemSel.OrdenJerarquico.length) + "." + Cod1S + Cod1;
+				ItemN[0].OrdenJerarquico = itemSel.OrdenJerarquico + "." + Cod1S + Cod1;
+				ItemN[0].PhantomParentId = itemSel.OrdenJerarquico;
+				ItemN[0].Nivel = Niv;
+				dispatch(selectTITULOS('', '20', '1', ''));
+				setItemAgregar(ItemN);
+			}
+
+
+			if (e.itemData.text === 'Partida') {
+				setShowPart(true);
+
+				let Niv = 1;
+				if (itemSel)
+					Niv = parseInt(itemSel.Nivel);
+				/*if (Niv===1){
+					let Cod1 = proyects.DataPc.filter(item => item.Nivel === 1).length + 1;
+					let Cod1S='0';
+					if (Cod1>=10)
+					Cod1S='';
+					ItemN[0].PhantomParentId=null;
+					ItemN[0].Orden=Cod1S + Cod1;
+					ItemN[0].OrdenJerarquico=   proyects.Sub_sel + Cod1S + Cod1;
+				}else{*/
+				let Cod1 = proyects.DataPc.filter(item => item.Nivel === Niv && item.PhantomParentId === itemSel.PhantomParentId).length + 1;
+				let Cod1S = '0';
+				if (Cod1 >= 10)
+					Cod1S = '';
+				ItemN[0].PhantomParentId = itemSel.PhantomParentId;
+				ItemN[0].Orden = itemSel.PhantomParentId.substring(3, itemSel.PhantomParentId.length) + "." + Cod1S + Cod1;
+				ItemN[0].OrdenJerarquico = itemSel.PhantomParentId + "." + Cod1S + Cod1;
+				ItemN[0].Metrado = 0;
+				ItemN[0].Precio1 = 0;
+				//}
+				ItemN[0].Nivel = Niv;
+
+
+				dispatch(selectPARTIDAS('', '20', '1', ''));
+				/*let Niv=1;
+				if (itemSel)
+					Niv=parseInt(itemSel.Nivel);
+
+				ItemN[0].Nivel=Niv;
+				if (Niv===1)
+				ItemN[0].PhantomParentId=null;
+				else
+				ItemN[0].PhantomParentId=itemSel.OrdenJerarquico;*/
+				setItemAgregar(ItemN);
+			}
+
+			if (e.itemData.text === 'Partida ') {
+				setShowPart(true);
+
+				let Niv = parseInt(itemSel.Nivel) + 1;
+				let Cod1 = proyects.DataPc.filter(item => item.Nivel === Niv && item.PhantomParentId === itemSel.OrdenJerarquico).length + 1;
+				let Cod1S = '0';
+				if (Cod1 >= 10)
+					Cod1S = '';
+				//alert(Cod1)
+				ItemN[0].Orden = itemSel.OrdenJerarquico.substring(3, itemSel.OrdenJerarquico.length) + "." + Cod1S + Cod1;
+				ItemN[0].OrdenJerarquico = itemSel.OrdenJerarquico + "." + Cod1S + Cod1;
+				ItemN[0].PhantomParentId = itemSel.OrdenJerarquico;
+				ItemN[0].Nivel = Niv;
+				ItemN[0].Metrado = 0;
+				ItemN[0].Precio1 = 0;
+
+
+				dispatch(selectPARTIDAS('', '20', '1', ''));
+
+				/*let Niv=parseInt(itemSel.Nivel)+1;
+				ItemN[0].PhantomParentId=itemSel.OrdenJerarquico;
+				ItemN[0].Nivel=Niv;*/
+
+				setItemAgregar(ItemN);
+			}
+
+
+
+		}
+	}
+
+
+	function getRandomString(length) {
+		var s = '';
+		do { s += Math.random().toString(36).substr(2); } while (s.length < length);
+		s = s.substr(0, length);
+
+		return s;
+	}
+
+
+	const onDragChange = (e) => {
+		console.log('datos de ...');
+		console.log(e);
+
+		//targetNode = visibleRows[e.toIndex].node;
+		let visibleRows = e.component.getVisibleRows(),
+		sourceNode = e.component.getNodeByKey(e.itemData.OrdenJerarquico),
+		targetNode = visibleRows[e.toIndex].node;
+		console.log('va a ');
+		console.log(targetNode);
+		//alert();
+		//targetNode = visibleRows[e.toIndex].node;
+		
+		if (e.itemData.Descripcion !== targetNode.data.Descripcion){
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+				  confirmButton: 'btn btn-dark',
+				  cancelButton: 'btn btn-light'
+				},
+				buttonsStyling: false
+			  })
+			  
+			  swalWithBootstrapButtons.fire({
+				title: 'Estas Seguro de mover ' + e.itemData.Descripcion + ' dentro de ' + targetNode.data.Descripcion + ' ?',
+				text: "Esta acción no podrá ser revertida!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Si, moverlo!',
+				cancelButtonText: 'No, salir!',
+				reverseButtons: true
+			  }).then((result) => {
+				if (result.isConfirmed) {
+	
+					
+					//realizar movimiento
+	
+	
+	
+					
+					
+					//localStorage.setItem("EliminadoResp", resp[0].Response);
+	
+				} else if (
+				  /* Read more about handling dismissals below */
+				  result.dismiss === Swal.DismissReason.cancel
+				) {
+				  swalWithBootstrapButtons.fire(
+					'Accion cancelada',
+					'No se han realizado Cambios :)',
+					':)'
+				  )
+				}
+			  })
+
+
+		}
+
+
+
+		
+		/*let visibleRows = e.component.getVisibleRows(),
+		  sourceNode = e.component.getNodeByKey(e.itemData.OrdenJerarquico),
+		  targetNode = visibleRows[e.toIndex].node;
+	
+		while (targetNode && targetNode.data) {
+		  if (targetNode.data.OrdenJerarquico === sourceNode.data.OrdenJerarquico) {
+			e.cancel = true;
+			break;
+		  }
+		  targetNode = targetNode.parent;
+		}*/
+	}
 
 	const { selectedRowKeys, recursive, selectionMode, selectedEmployeeNames } = state;
 	return (
@@ -619,6 +1093,22 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 				show={showMdl}
 			/>
 
+			<BuscaTitulo
+				setShow={setShowTit}
+				itemAgregar={itemAgregar}
+				setItemAgregar={setItemAgregar}
+				CodPresupuesto={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}
+				show={showTit}
+			/>
+
+			<BuscaPartida
+				setShow={setShowPart}
+				subseleccionado={subseleccionado}
+				itemAgregar={itemAgregar}
+				setItemAgregar={setItemAgregar}
+				CodPresupuesto={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}
+				show={showPart}
+			/>
 
 			<div id="ContenedorTotal1" className="d-flex flex-wrap justify-content-between overflow-hidden h-100" style={{ height: height - 20, fontSize: '0.8rem !important' }}>
 				<Resizable
@@ -893,13 +1383,14 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 								<Form id="FormLista">
 
 
-									<TreeList
+
+									<TreeList id="ListaIt"
 
 
 										dataSource={proyects.DataPc}
 										keyExpr="OrdenJerarquico"
 										parentIdExpr="PhantomParentId"
-										showBorders={true}
+										showBorders={false}
 										focusedRowEnabled={true}
 										//defaultExpandedRowKeys={[1, 2, 3, 5]}
 										columnAutoWidth={false}
@@ -907,8 +1398,8 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 										//selectedRowKeys={selectedRowKeys}
 										orderTree={"CodSubpresupuesto"}
 										allowColumnResizing={true}
-										showRowLines={true}
-										showColumnLines={true}
+										showRowLines={false}
+										showColumnLines={false}
 
 										/*columnResizingMode={{
 											columnResizingMode: 'nextColumn'
@@ -948,8 +1439,36 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 										}}
 										onFocusedRowChanged={onSelectionChanged}
+										onRowUpdated={(e) => {
+											console.log('Actualizando row'); console.log(e)
+											if (e.data.Unidad === null) {
+												e.data.Metrado = null;
+
+											}
+
+										}}
+										onEditorPreparing={(e) => {
+											//console.log('preparando para educion row');console.log(e) 
+											if (e.row?.values[2] === null) {
+												//alert('si es nulo')
+												e.cancel = true;
+											}
+											/*if (e.data.Unidad===null){
+												e.data.Metrado=null;
+
+											}*/
+
+										}}
 										wordWrapEnabled={true}
 									>
+										<RowDragging
+											//onDragChange={onDragChange}
+											onDragEnd={onDragChange}
+											//onReorder={onReorder}
+											allowDropInsideItem={true}
+											allowReordering={false}
+											showDragIcons={false}
+										/>
 										<SearchPanel visible={true} />
 										<Editing
 											allowUpdating={true}
@@ -980,12 +1499,14 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 											defaultSortOrder="asc"
 											caption="OrdenJ"
 											visible={false}
+										//cellTemplate="Template"
 										/>
 										<Column
 											width={'15%'}
 											dataField="Orden"
 											caption="Orden"
 											allowEditing={false}
+											cellTemplate="Template"
 										/>
 
 										<Column
@@ -993,19 +1514,21 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 											dataField="Descripcion"
 											caption="Descripcion"
 											allowEditing={false}
+											cellTemplate="Template"
 										/>
 										<Column
 											width={'7%'}
 											dataField="Unidad"
 											caption="Un"
 											allowEditing={false}
+											cellTemplate="Template"
 										/>
 
 										<Column
 											alignment={'right'}
 											width={'12%'}
 											dataField="Metrado"
-
+											cellTemplate="Template"
 										/>
 
 
@@ -1015,6 +1538,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 											dataField="Precio1"
 											caption="Precio"
 											allowEditing={false}
+											cellTemplate="Template"
 										/>
 
 										<Column
@@ -1024,6 +1548,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 											dataField="Totalf"
 											caption="Parcial"
 											allowEditing={false}
+											cellTemplate="Template"
 										//style={{fontSize:'0.5rem|important'}}
 
 										//customizeText={priceColumn_customizeText}
@@ -1039,9 +1564,17 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 											defaultPageSize={100}
 										/>
 										<ColumnFixing enabled={true} />
+
+
+										<Template name="Template" render={CellRend_Items} />
 									</TreeList>
 
-
+									<ContextMenu
+										dataSource={itemsMenu}
+										width={150}
+										target="#ListaIt"
+										onItemClick={itemClick}
+									/>
 
 								</Form>
 
@@ -1052,12 +1585,9 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 
 					</Collapse>
-					<ContextMenu
-						dataSource={ItemsM}
-						width={200}
-						target="#Card1"
-					//onItemClick={itemClick} 
-					/>
+
+
+
 
 					{open2 ? (
 
@@ -1463,7 +1993,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 													confirmButtonText: 'Ok'
 												})
 											}*/
-										}}><i class="fas fa-sign-in-alt"></i>   Asignar un modelo</Button1>
+										}}><i className="fas fa-sign-in-alt"></i>   Asignar un modelo</Button1>
 
 									</>
 
@@ -1529,7 +2059,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 									}}
 								>
-									<i class="fas fa-table" style={{ marginRight: '10px' }}></i>
+									<i className="fas fa-table" style={{ marginRight: '10px' }}></i>
 									APU Partida
 								</Nav.Link>
 							</Nav.Item>
@@ -1552,7 +2082,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 										}
 									}}
 								>
-									<i class="fas fa-table" style={{ marginRight: '10px', fontWeight: 'bold' }}></i>
+									<i className="fas fa-table" style={{ marginRight: '10px', fontWeight: 'bold' }}></i>
 									Metrado
 								</Nav.Link>
 							</Nav.Item>

@@ -55,12 +55,12 @@ const Navbar = () => {
           </Link>
         </li>
         <li className="d-flex align-items-center">
-          <p className="ml-3 mr-2 mb-0" style={{fontSize: 12}}>Presupuestos S10  |</p>
+          <p className="ml-3 mr-0 mb-0" style={{fontSize: 12, fontWeight:'300', marginTop:'-2px'}}>Presupuestos S10  |</p>
         </li>
       </ul>
 
       <Breadcrumb>
-        <Breadcrumb.Item href="#" ><p style={{color:'white', marginTop:'18px', fontSize:'0.7rem'}}> {proyects.titleProject} {proyects.titlePC ? ' ≫ ' + proyects.titlePC : ''} </p></Breadcrumb.Item>
+        <Breadcrumb.Item href="#" ><p style={{color:'white', marginTop:'15px', fontSize:'0.7rem',  fontWeight:'300'}}> {proyects.titleProject} {proyects.titlePC ? ' ≫ ' + proyects.titlePC : ''} </p></Breadcrumb.Item>
       </Breadcrumb>
 
       <ul className="navbar-nav ml-auto">

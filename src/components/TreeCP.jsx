@@ -54,9 +54,9 @@ function PlusSquare1(props) {
 	return (
 		<div className="d-flex">
 			{/* <ion-icon name="chevron-forward-outline"></ion-icon> */}
-			<ion-icon name="caret-forward-outline" style={{width:'12px', color: '#333337'}}></ion-icon>
-			<img src={projectIcon44} alt="icons" width="18" style={{ marginRight: 12 }} {...props} />
-
+			{/* <ion-icon name="caret-forward-outline" style={{width:'12px', color: '#333337'}}></ion-icon> */}
+			{/* <img src={projectIcon44} alt="icons" width="18" style={{ marginRight: 12 }} {...props} /> */}
+			<img src={projectIcon} alt="icons" width="18" style={{ marginRight: 15 }} {...props} />
 		</div>
 	);
 }
@@ -690,7 +690,7 @@ PhantomParentId: null
 
 	}
 
-
+	
 
 	const DatosPresupuesto = async (codigoP) => {
 		//alert(codigoP);		
@@ -725,13 +725,14 @@ PhantomParentId: null
 
 
 
-	const drawerItems = (level, filtro, parentId = '', parentName = '') => {
+	const drawerItems88 = (level, filtro, parentId = '', parentName = '') => {
 		//alert('carga de items');
 		const nextLevel = (level + 1);
 		if (level == 4) {
 			//SubPresupuestos(parentId);
 			//console.log('subpresupuestos: ');
 			//console.log(proyects.treeSubControl);
+			
 		}
 		return allLevels && allLevels[level]
 			? allLevels[level]
@@ -824,8 +825,105 @@ PhantomParentId: null
 						proyects.subPres.filter(item => item.CodPresupuesto === parentId).map(data => {
 							return (
 								<StyledTreeItem
+									icon={<CloseSquare />}
+									nodeId={parentId + data.CodSubpresupuesto}
+									label={data.Descripcion}
+									key={parentId + data.CodSubpresupuesto}
+									onLabelClick={() => changeItem1(data, `${/*newTitle*/''} ${parentName}  ${data.Descripcion}`, parentId)}
+								/>)
+						})) : ''
+				}
+			</>
+			)
+	}
+
+
+
+
+
+	function getRandomString(length) {
+		var s = '';
+		do { s += Math.random().toString(36).substr(2); } while (s.length < length);
+		s = s.substr(0, length);
+		
+		return s;
+	  }
+
+
+	  const drawerItems = (level, filtro, parentId = '', parentName = '') => {
+		//alert('carga de items');
+		const nextLevel = (level + 1);
+		if (level == 4) {
+			//SubPresupuestos(parentId);
+			//console.log('subpresupuestos: ');
+			//console.log(proyects.treeSubControl);
+			//alert()
+		}
+		return allLevels && allLevels[level]
+			? allLevels[level]
+				//.filter(item => item.Descripcion.indexOf(filtro))
+				.filter(item => parentId === '' || item.PhantomParentId === parentId)
+				.map(filter => {
+					const newTitle = level === 1 ? '' : `${parentName}${filter.Descripcion}`;
+					return (						
+						filter.Nivel !== 3 ?
+						<StyledTreeItem
+							nodeId={filter.CodPresupuesto}
+							label={filter.Descripcion}							
+							key={filter.CodPresupuesto}
+							onLabelClick={() => changeItem(filter, newTitle)}
+						>
+							{(nextLevel === 4
+								? allLevels[nextLevel].filter(item => filter.CodPresupuesto === item.PhantomParentId).map(grupo3 => (
+									
+									<StyledTreeItem
+										icon={<MinusSquare1 />}
+										nodeId={grupo3.CodPresupuesto}
+										label={grupo3.Descripcion}
+										onLabelClick={() => changeItem(grupo3, `${newTitle} ≫ ${grupo3.Descripcion}`)}
+									/>									
+									// </Link>
+								))
+								: drawerItems(nextLevel, filtro, filter.CodPresupuesto, (level === 1 ? '' : `${newTitle} ≫ `))
+
+							)}
+
+						</StyledTreeItem> :
+						<StyledTreeItem
+						//icon={<IconoProjecto />}
+						icon={<MinusSquare1 />}
+						//defaultExpandIcon={<PlusSquare1 />}
+						nodeId={filter.CodPresupuesto}
+						label={filter.Descripcion}							
+						key={filter.CodPresupuesto}
+						onLabelClick={() => changeItem(filter, newTitle)}
+					>
+						{(nextLevel === lastLevel
+							? allLevels[nextLevel].filter(item => filter.CodPresupuesto === item.PhantomParentId).map(grupo3 => (
+								<StyledTreeItem
+									icon={<MinusSquare1 />}
+									nodeId={grupo3.CodPresupuesto}
+									label={grupo3.Descripcion}
+									onLabelClick={() => changeItem(grupo3, `${newTitle} ≫ ${grupo3.Descripcion}`)}
+								/>
+								// </Link>
+							))
+							: drawerItems(nextLevel, filtro, filter.CodPresupuesto, (level === 1 ? '' : `${newTitle} ≫ `))
+
+						)}
+
+					</StyledTreeItem>
+					
+					)
+				})
+			: (<>
+				{					
+					proyects.subPres ? (						
+						proyects.subPres.filter(item => item.CodPresupuesto === parentId).map(data => {
+							return (
+								<StyledTreeItem
 									//defaultCollapseIcon={<MinusSquare />}
-									//icon={<CloseSquare />}
+									icon={<CloseSquare />}
 									//nodeId={parentId}
 									nodeId={parentId + data.CodSubpresupuesto}									
 									label={data.Descripcion}
@@ -839,6 +937,7 @@ PhantomParentId: null
 			</>
 			)
 	}
+
 
 
 
@@ -1032,7 +1131,7 @@ PhantomParentId: null
 				//defaultExpanded={['1']}
 				defaultCollapseIcon={<MinusSquare />}
 				defaultExpandIcon={<PlusSquare />}
-				defaultEndIcon={<CloseSquare />}
+				defaultEndIcon={<PlusSquare1 />}
 				multiSelect={false}				
 			>
 
@@ -1059,7 +1158,7 @@ PhantomParentId: null
 						itemSelected={itemSelected}
 						setNuevoPres={setNuevoPres}
 						/>
-						<Button1 variant="outline-info" style={{ position: 'absolute', right: '32px', top: '32px', background:'#398bf7', color:'white'  }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '42px', top: '32px', background:'#398bf7', color:'white'  }} onClick={() => {
 							setNuevoPres(false);
 						}
 						}><i class="fas fa-times"></i></Button1>
@@ -1081,7 +1180,7 @@ PhantomParentId: null
 						setNuevoGrupo={setNuevoGrupo}
 						accion={accion}
 						/>
-						<Button1 variant="outline-info" style={{ position: 'absolute', right: '78px', top: '42vh' , background:'#398bf7', color:'white' }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '88px', top: '42vh' , background:'#398bf7', color:'white' }} onClick={() => {
 							setNuevoGrupo(false);
 						}
 						}><i class="fas fa-times"></i></Button1>
@@ -1105,7 +1204,7 @@ PhantomParentId: null
 						//dispatch(LimpiarSubPres());
 			
 						/>
-						<Button1 variant="outline-info" style={{ position: 'absolute', right: '78px', top: '37vh' , background:'#398bf7', color:'white' }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '88px', top: '37vh' , background:'#398bf7', color:'white' }} onClick={() => {
 							setNuevoSubPres(false);
 						}
 						}><i class="fas fa-times"></i></Button1>
@@ -1122,7 +1221,7 @@ PhantomParentId: null
 						<DatosGenerales 
 							setCambioSub={setCambioSub}
 						/>
-						<Button1 variant="outline-info" style={{ position: 'absolute', right: '55px', top: '32px', background:'#398bf7', color:'white' }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '65px', top: '32px', background:'#398bf7', color:'white' }} onClick={() => {
 							setDatosGenerales(false)
 							
 							//dispatch(cleanDataChart22());
@@ -1191,7 +1290,7 @@ PhantomParentId: null
 						setDatosGeneralesSub={setDatosGeneralesSub}
 						/>
 
-						<Button1 variant="outline-info" style={{ position: 'absolute', right: '55px', top: '35px',background:'#398bf7', color:'white' }} onClick={() => {
+						<Button1 variant="outline-info" style={{ position: 'absolute', right: '65px', top: '35px',background:'#398bf7', color:'white' }} onClick={() => {
 							setDatosGeneralesSub(false)
 						}
 						}><i class="fas fa-times"></i></Button1>

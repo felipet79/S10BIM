@@ -792,7 +792,7 @@ const DatosGeneralesAdd = ({itemSelected, setNuevoPres}) => {
             <BuscaMoneda tipo="Nuevo" presupuestoN={presupuestoN} setShow={setShowMnd} show={showMnd} />
             {selecOP === 1 ?
                 (<Card className="animate__animated animate__fadeIn" style={{ overflow: 'scroll', marginLeft: '20px', height: '88vh', padding: '15px' }}>
-                    <Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white' }}>Datos Generales
+                    <Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white', fontWeight:'550' }}>Datos Generales
                             
                     </Card.Header>
                     <Card.Body>

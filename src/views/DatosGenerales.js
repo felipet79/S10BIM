@@ -146,8 +146,8 @@ const DatosGenerales = ({ setCambioSub }) => {
 
                             </Form.Group>
                         </td>
-                        <td align="right">{formatNumber(filter.Cantidad)}</td>
-                        <td align="right">{formatNumber(filter.CostoOferta1)}</td>
+                        <td align="center">{formatNumber(filter.Cantidad)}</td>
+                        <td align="center">{formatNumber(filter.CostoOferta1)}</td>
                         <td align="left">{filter.NombreModelo ? filter.NombreModelo : 'No asignado'} <Button1 style={{ position: 'absolute', right: '40px', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></Button1>
                             <Button1 style={{ position: 'absolute', right: '10px', width: "20px", height: '20px' }} onClick={() => { Elimina(filter) }}><i class="far fa-trash-alt" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></Button1>
                         </td>
@@ -361,8 +361,8 @@ const DatosGenerales = ({ setCambioSub }) => {
                             </Col>
 
                         </Form.Group></td>
-                        <td align="right">{formatNumber(filter.Cantidad)}</td>
-                        <td align="right">{formatNumber(filter.CostoOferta1)}</td>
+                        <td align="center">{formatNumber(filter.Cantidad)}</td>
+                        <td align="center" >{formatNumber(filter.CostoOferta1)}</td>
                         {/* <td align="left">{filter.NombreModelo ? filter.NombreModelo : 'No asignado'} <div className="btn btn-outline-info" style={{ position: 'absolute', right: '20px', color: '#3c8dbc', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></div></td> */}
                         <td align="left">{filter.NombreModelo ? filter.NombreModelo : 'No asignado'} <Button1 style={{ position: 'absolute', right: '40px', width: "20px", height: '20px' }} onClick={() => { Selecciona(filter) }}><i class="far fa-edit" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></Button1>
                             <Button1 style={{ position: 'absolute', right: '10px', width: "20px", height: '20px' }} onClick={() => { Elimina(filter) }}><i class="far fa-trash-alt" style={{ position: 'absolute', marginTop: '-5px', marginLeft: '-8px' }}></i></Button1>
@@ -875,7 +875,7 @@ const DatosGenerales = ({ setCambioSub }) => {
             <BuscaMoneda tipo="Modificar" presupuestoN={presupuestoN} setShow={setShowMnd} show={showMnd} />
             {selecOP === 1 ?
                 (<Card className="animate__animated animate__fadeIn" style={{ overflow: 'scroll', marginLeft: '20px', height: '92vh', padding: '15px' }}>
-                    <Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white' }}>Datos Generales</Card.Header>
+                    <Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white', fontWeight:'550' }}>Datos Generales</Card.Header>
                     <Card.Body>
 
                     <Form onSubmit={valida}>
@@ -1455,8 +1455,8 @@ const DatosGenerales = ({ setCambioSub }) => {
                                                         <th>Codigo</th>
                                                         <th>Alterno</th>
                                                         <th>Descripcion</th>
-                                                        <th>Cantidad</th>
-                                                        <th>Costo Oferta</th>
+                                                        <th> Cantidad</th>
+                                                        <th> Costo Oferta</th>
                                                         <th>Modelo Asignado</th>
                                                     </tr>
                                                 </thead>
@@ -1493,7 +1493,7 @@ const DatosGenerales = ({ setCambioSub }) => {
                 :
                 (
                     <Card className="animate__animated animate__fadeInUp" style={{ overflow: 'hidden', height: '100%', padding: '15px' }}>
-                        <Card.Header className="" style={{ fontSize:'1rem', background:'#398bf7', color:'white'}}>Datos de SubPresupuesto</Card.Header>
+                        <Card.Header className="" style={{ fontSize:'1rem', background:'#398bf7', color:'white', fontWeight:'550'}}>Datos de SubPresupuesto</Card.Header>
                         <Card.Body>
 
                             <Form>
@@ -1557,8 +1557,8 @@ const DatosGenerales = ({ setCambioSub }) => {
                                                             <th>Codigo</th>
                                                             <th>Alterno</th>
                                                             <th>Descripcion</th>
-                                                            <th>Cantidad</th>
-                                                            <th>Costo Oferta</th>
+                                                            <th align="center">Cantidad</th>
+                                                            <th align="center">Costo Oferta</th>
                                                             <th>Modelo Asignado</th>
                                                         </tr>
                                                     </thead>

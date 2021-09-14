@@ -14,6 +14,10 @@ import TreeList, {
 	Scrolling,
 	Column } from 'devextreme-react/tree-list';
 
+import { Template } from 'devextreme-react';
+import {CellCheck} from "./Cellrend";
+	
+
 
 const allowedPageSizes = [5, 10, 15, 20, 50, 100, 500];
 
@@ -143,7 +147,7 @@ const Estructura = ({levelStart=1, idProject}) => {
 		<>
 			<TreeList
 				dataSource={proyects.Dataestructura}
-				keyExpr="Nivel"
+				keyExpr="CodEstructura"
 				//parentIdExpr="PhantomParentId"
 				//orderedLevels="Nivel ASC"
 				showBorders={true}
@@ -196,6 +200,7 @@ const Estructura = ({levelStart=1, idProject}) => {
 					width={'7%'}
 					dataField="Mostrar"
 					alignment={'center'}
+					cellTemplate="Template"
 				/>
 				
 				<Pager
@@ -207,6 +212,7 @@ const Estructura = ({levelStart=1, idProject}) => {
 					enabled={true}
 					defaultPageSize={15}
 				/>
+				<Template name="Template" render={CellCheck} />
 			</TreeList>
 
 			{/* <Table

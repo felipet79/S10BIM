@@ -11,7 +11,7 @@ import queryString from 'query-string';
 import * as THREE from 'three';
 import { useDispatch, useSelector } from 'react-redux';
 import { relativeTimeRounding } from 'moment';
-import { agregaCategoria, agregaElementos, agregaFamilia, agregaTipo, ponerPropiedades, selectParidas } from '../actions/proyects.actions';
+import { agregaCategoria, agregaCategoriaB, agregaElementos, agregaFamilia, agregaFamiliaB, agregaTipo, agregaTipoB, ponerPropiedades, selectParidas } from '../actions/proyects.actions';
 /*import { Timeline } from 'react-svg-timeline'
 import { now } from 'moment';
 import Tooltip from "@material-ui/core/Tooltip";*/
@@ -827,18 +827,23 @@ export const ViewerSc = (props) => {
             const employees2 = [];
             var elementos = [];
 
-            employees1.push({
-                'ID': '',
-                'Name': ''
-            });
 
             employees.push({
                 'ID': '',
                 'Name': ''
             });
+
             employees2.push({
                 'ID': '',
-                'Name': ''
+                'Name': '',
+                'Categoria': '',
+            });
+
+            employees1.push({
+                'ID': '',
+                'Name': '',
+                'Familia': '',
+                'Categoria': ''
             });
 
 
@@ -874,31 +879,35 @@ export const ViewerSc = (props) => {
                             var DBids = viewer.getSelection();
                             var n = 0;
 
+
+                            E_Id = ''; E_cat = ''; E_fam = ''; E_tip = ''; E_ext = '';
+
                             //var objSelected = viewer.getSelection()[n];
                             var objSelected = dbId;
                             E_Id = objSelected;
                             n = n + 1;
                             viewer.getProperties(objSelected, (props) => {
-
+                                
                                 uniqueIds.push(props.externalId);
                                 T_uniqueIds.push(props.externalId);
                                 E_ext = props.externalId;
 
-
+                                let reg2 = null;
                                 if (props.name.substring(props.name.length - 1, props.name.length) === ']') {
 
-                                    let reg2 = null;
-                                    if (employees2) {
-                                        reg2 = employees2.find((filtro1) => filtro1.Name === props.name.substring(0, props.name.length - 9));
-                                    }
+                                    
+                                    
+                                    reg2 = employees2.find((filtro1) => filtro1.Name.trim() === props.name.substring(0, props.name.length - 9).trim());
+
 
                                     if (!reg2) {
-                                        employees2.push({
+                                        /*employees2.push({
                                             'ID': props.name.substring(0, props.name.length - 9),
-                                            'Name': props.name.substring(0, props.name.length - 9)
-                                        })
+                                            'Name': props.name.substring(0, props.name.length - 9),
+                                            'Categoria': props.name.substring(0, props.name.length - 9)
+                                        })*/
                                         //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
-                                        E_fam = props.name.substring(0, props.name.length - 9);
+                                        E_fam = props.name.substring(0, props.name.length - 9).trim();
                                     }
 
 
@@ -936,20 +945,28 @@ export const ViewerSc = (props) => {
 
                                 let reg = null;
                                 if (employees) {
-                                    reg = employees.find((filtro1) => filtro1.Name === props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length));
+                                    reg = employees.find((filtro1) => filtro1.Name.trim() === props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length).trim());
                                 }
 
                                 if (!reg) {
                                     employees.push({
-                                        'ID': props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length),
-                                        'Name': props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length)
+                                        'ID': props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length).trim(),
+                                        'Name': props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length).trim()
                                     })
 
-                                    E_cat = props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length);
-
-
+                                    E_cat = props.properties[indice].displayValue.substring(6, props.properties[indice].displayValue.length).trim();
                                     //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
                                 }
+
+                                
+                                let reg3 = employees2.find((filtro1) => filtro1.Name.trim() === E_fam);
+                                if ((E_fam!=='') && (!reg3))
+                                employees2.push({
+                                    'ID': E_fam,
+                                    'Name': E_fam,
+                                    'Categoria': E_cat
+                                })
+
 
                                 //proyects.DataCategorias.find()
 
@@ -961,19 +978,21 @@ export const ViewerSc = (props) => {
                                 var enc = 0;
                                 for (var Propiedad of props.properties) {
                                     if (Propiedad.displayName === 'Nombre de tipo') {
-                                        T_TipoT.push(Propiedad.displayValue);
+                                        T_TipoT.push(Propiedad.displayValue.trim());
 
                                         let reg1 = null;
                                         if (employees1) {
-                                            reg1 = employees1.find((filtro1) => filtro1.Name === Propiedad.displayValue);
+                                            reg1 = employees1.find((filtro1) => filtro1.Name.trim() === Propiedad.displayValue.trim());
                                         }
 
                                         if (!reg1) {
                                             employees1.push({
-                                                'ID': Propiedad.displayValue,
-                                                'Name': Propiedad.displayValue
+                                                'ID': Propiedad.displayValue.trim(),
+                                                'Name': Propiedad.displayValue.trim(),
+                                                'Familia': E_fam,
+                                                'Categoria': E_cat
                                             });
-                                            E_tip = Propiedad.displayValue;
+                                            E_tip = Propiedad.displayValue.trim();
                                             //dispatch(agregaCategoria({Nombre:props.properties[0].displayValue}));
                                         }
 
@@ -1038,11 +1057,19 @@ export const ViewerSc = (props) => {
                         }, true);
                 });
                 //alert('');
+
+
+
                 dispatch(agregaCategoria(employees));
-
                 dispatch(agregaTipo(employees1));
-
                 dispatch(agregaFamilia(employees2));
+
+
+
+                dispatch(agregaCategoriaB(employees));
+                dispatch(agregaTipoB(employees1));
+                dispatch(agregaFamiliaB(employees2));
+
 
                 dispatch(agregaElementos(elementos));
 
@@ -2873,9 +2900,16 @@ export const ViewerSc = (props) => {
             if (proyects.filaAsociadoSel.Categoria === undefined) proyects.filaAsociadoSel.Categoria='';
 
 
+
+            if (proyects.filaAsociadoSel.Tipo === '' && proyects.filaAsociadoSel.Familia === '' && proyects.filaAsociadoSel.Categoria !== '') {
+
+                /*dispatch(agregaTipo(proyects.DataTipoB));
+                dispatch(agregaFamilia(proyects.DataFamiliaB));*/
+            }
+
             if (proyects.filaAsociadoSel.Tipo !== '') {
 
-                const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Tipo === proyects.filaAsociadoSel.Tipo);
+                const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Tipo.trim() === proyects.filaAsociadoSel.Tipo.trim());
                 if (filtr) {
                     //console.log('este es el filtro')
                     //console.log(filtr)
@@ -2908,21 +2942,43 @@ export const ViewerSc = (props) => {
                     console.log(proyects.DataAsociado) */
 
 
+                    /*const filtroA = proyects.DataTipoB.filter((filtro1) => filtro1.Familia.trim() === proyects.filaAsociadoSel.Familia.trim());
+                    const filtroB = proyects.DataFamiliaB.filter((filtro1) => filtro1.Categoria.trim() === proyects.filaAsociadoSel.Categoria.trim());
+                    filtroB.push({
+                        'ID': '',
+                        'Name': '',
+                        'Categoria': '',
+                    });
+        
+                    filtroA.push({
+                        'ID': '',
+                        'Name': '',
+                        'Familia': '',
+                        'Categoria': ''
+                    });
+
+                    //dispatch(agregaCategoria(employees));
+                    dispatch(agregaTipo(filtroA));
+                    dispatch(agregaFamilia(filtroB));*/
+
+
 
                 }
 
             }
+            
+            
             if (proyects.filaAsociadoSel.Tipo === '' && proyects.filaAsociadoSel.Familia !== '') {
 
-
-
-                const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Familia === proyects.filaAsociadoSel.Familia);
+                const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Familia.trim() === proyects.filaAsociadoSel.Familia.trim() && filtro1.Tipo.trim() !== 'sin tipo');
+                //const filtr = proyects.DataElementos.filter((filtro1) => filtro1.UniqueId.trim() === '12923f74-c1bc-409a-a76d-4d7f4fa7040d-00090650');
+                //const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Tipo.trim() === 'sin tipo');
                 if (filtr) {
-                    //console.log('este es el filtro')
-                    //console.log(filtr)
+                    console.log('este es el filtro')
+                    console.log(filtr)
                     if (viewer){
 
-                        viewer.getProperties(filtr[0].Id, (props) => {
+                        viewer.getProperties(filtr[0]?.Id, (props) => {
                             for (var Propiedad of props.properties) {
                                 Propies.push({
                                     'ID': Propiedad.displayName,
@@ -2939,10 +2995,33 @@ export const ViewerSc = (props) => {
                         {
                             ids=ids+filtr[i].UniqueId+',';
                         }
-                        //console.log('estos son los ids')
-                        //console.log(ids)
+                        console.log('estos son los ids')
+                        console.log(filtr)
+                        console.log(ids)
                         highlightRevit(ids);
+                        //highlightRevit('380444ae-b94c-4c6e-ad5a-08a1a8974d62-0006ad5e');
+                        //highlightRevit('12923f74-c1bc-409a-a76d-4d7f4fa7040d-000902e5,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000902eb,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a085b,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a0da0,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a0dc1,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a0df7,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a0e0f,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a0e31,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a1436,47e46396-fd7f-44bb-941c-3dd493a1b714,12923f74-c1bc-409a-a76d-4d7f4fa7040d-00090650');
                     }
+
+                    /*const filtroA = proyects.DataTipoB.filter((filtro1) => filtro1.Familia.trim() === proyects.filaAsociadoSel.Familia.trim());
+                    const filtroB = proyects.DataFamiliaB.filter((filtro1) => filtro1.Categoria.trim() === proyects.filaAsociadoSel.Categoria.trim());
+                    filtroB.push({
+                        'ID': '',
+                        'Name': '',
+                        'Categoria': '',
+                    });
+        
+                    filtroA.push({
+                        'ID': '',
+                        'Name': '',
+                        'Familia': '',
+                        'Categoria': ''
+                    });
+
+                    
+                    dispatch(agregaTipo(filtroA));
+                    dispatch(agregaFamilia(filtroB));*/
+
 
                 }
 
@@ -2958,7 +3037,7 @@ export const ViewerSc = (props) => {
                // console.log('antes del filtro')
                 //console.log(proyects.filaAsociadoSel)
 
-                const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Categoria === proyects.filaAsociadoSel.Categoria);
+                const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Categoria.trim() === proyects.filaAsociadoSel.Categoria.trim());
                 if (filtr && filtr[0]) {
                     //console.log('este es el filtro')
                     //console.log(filtr)
@@ -2985,6 +3064,27 @@ export const ViewerSc = (props) => {
                         //console.log(ids)
                         highlightRevit(ids);
                     }
+
+
+                    /*const filtroA = proyects.DataTipoB.filter((filtro1) => filtro1.Categoria.trim() === proyects.filaAsociadoSel.Categoria.trim());
+                    const filtroB = proyects.DataFamiliaB.filter((filtro1) => filtro1.Categoria.trim() === proyects.filaAsociadoSel.Categoria.trim());
+                    filtroB.push({
+                        'ID': '',
+                        'Name': '',
+                        'Categoria': '',
+                    });
+        
+                    filtroA.push({
+                        'ID': '',
+                        'Name': '',
+                        'Familia': '',
+                        'Categoria': ''
+                    });*/
+
+                    
+                    //dispatch(agregaTipo(filtroA));
+                    //dispatch(agregaFamilia(filtroB));
+
 
                 }
 

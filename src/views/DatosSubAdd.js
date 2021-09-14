@@ -314,7 +314,7 @@ const DatosSubAdd = ({ nivel, itemSelected, setNuevoSubPres, accion, SubPresupue
 
             {selecOP === 1 ?
                 (<Card className="animate__animated animate__fadeIn" style={{ overflow: 'scroll', marginLeft: '20px', height: '25vh', padding: '15px' }}>
-                    <Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white' }}>Nuevo SubPresupuesto
+                    <Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white', fontWeight:'550' }}>Nuevo SubPresupuesto
                             
                     </Card.Header>
                     <Card.Body>

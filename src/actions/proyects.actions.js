@@ -1,5 +1,5 @@
 import axios from '../config/axios';
-import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB,URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES, PARTY_CONTROL1, AGREGA_REGISTRO, AGREGA_CATEGORIA, AGREGA_TIPO, AGREGA_FAMILIA, AGREGA_GRUPO, MODIFICA_GRUPO, ELIMINA_GRUPO, AGREGA_ELEMENTOS, MODIFICA_SUB, MODIFICA_SUB1, AGREGA_SUB1, ACT_PRESUPUESTO, LIMPIA_PARTY_CONTROL, LIMPIAR_SUBS, PONER_PROPS, CAMBIAR_FILA_ASOCIADO} from '../constants';
+import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB,URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES, PARTY_CONTROL1, AGREGA_REGISTRO, AGREGA_CATEGORIA, AGREGA_TIPO, AGREGA_FAMILIA, AGREGA_GRUPO, MODIFICA_GRUPO, ELIMINA_GRUPO, AGREGA_ELEMENTOS, MODIFICA_SUB, MODIFICA_SUB1, AGREGA_SUB1, ACT_PRESUPUESTO, LIMPIA_PARTY_CONTROL, LIMPIAR_SUBS, PONER_PROPS, CAMBIAR_FILA_ASOCIADO, ADD_ASOCIADO, ASOCIADO_LIMPIAR, AGREGA_CATEGORIAB, AGREGA_TIPOB, AGREGA_FAMILIAB, ADD_ITEM, UPDATE_ITEM, REMOVE_ITEM} from '../constants';
 
 export const selectProyect = (idCod, userName, userId) =>{
 	return async (dispatch) =>{
@@ -633,6 +633,68 @@ export const selectUBICACIONES = (Descripcion,Cantidad,Pagina, userId) =>{
 	}
 }
 
+
+export const selectTITULOS = (Descripcion,TamPagina, NumPagina, EtiquetaPag, userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		//console.log(idCod, idPc);
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: true,
+				// dbo.s10_06_Proyecto_General
+				ObjectName: `dbo.S10_01_Titulo_ListarPorDescripcion '${Descripcion}','${TamPagina}','${NumPagina}','${EtiquetaPag}'`,
+				//ObjectName: `dbo.S10_01_Partida_ListarPorDescripcion '${Descripcion}','${TamPagina}','${NumPagina}','${EtiquetaPag}'`,
+				RequestId: "LISTAR_TITULOS",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: userId, // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		//console.log(data);
+
+		/*dispatch({
+			type: ID_PC,
+			payload: CodPres
+		})*/
+	}
+}
+
+export const selectPARTIDAS = (Descripcion,TamPagina, NumPagina, EtiquetaPag, userId) =>{
+	return async (dispatch) =>{
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		//console.log(idCod, idPc);
+		const {data} = await axios.post(
+			"",
+			{
+				HasOutputParam: true,
+				// dbo.s10_06_Proyecto_General				
+				ObjectName: `dbo.S10_01_Partida_ListarPorDescripcion '${Descripcion}','${TamPagina}','${NumPagina}','${EtiquetaPag}'`,
+				RequestId: "LISTAR_PARTIDAS",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: userId, // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token , // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		//console.log(data);
+
+		/*dispatch({
+			type: ID_PC,
+			payload: CodPres
+		})*/
+	}
+}
+
 export const selectAPUS = (CodPres, CodSubP, CodItem, userId) =>{
 	return async (dispatch) =>{
 		let company = JSON.parse(localStorage.getItem("company-s10"));
@@ -1008,6 +1070,22 @@ export const cambiaSeleccion = (sel) => ({
 	payload: sel
   })
 
+
+  export const agregaCategoriaB = (sel) => ({
+	type: AGREGA_CATEGORIAB,
+	payload: sel
+  })
+
+  export const agregaTipoB = (sel) => ({
+	type: AGREGA_TIPOB,
+	payload: sel
+  })
+
+  export const agregaFamiliaB = (sel) => ({
+	type: AGREGA_FAMILIAB,
+	payload: sel
+  })
+
   export const agregaElementos = (sel) => ({
 	type: AGREGA_ELEMENTOS,
 	payload: sel
@@ -1082,6 +1160,48 @@ export const eliminaGrupo1 = (sel) =>{
 		})
 }
 
+
+
+
+
+
+
+
+export const agregaItem = (sel) =>{
+	/*console.log('aGREGANDO MODIFICA GRUPO');
+	console.log(sel);*/
+   return (dispatch) =>
+	   dispatch({
+		   type: ADD_ITEM,
+		   payload: sel
+	   })
+}
+
+
+export const modificaItem = (sel) =>{
+	/*console.log('aGREGANDO MODIFICA GRUPO');
+	console.log(sel);*/
+   return (dispatch) =>
+	   dispatch({
+		   type: UPDATE_ITEM,
+		   payload: sel
+	   })
+}
+
+export const eliminaItem = (sel) =>{
+	// console.log('reiniciando desde actions')
+	return (dispatch) =>
+		dispatch({
+			type: REMOVE_ITEM,
+			payload: sel
+		})
+}
+
+
+
+
+
+
 export const actPresupuesto = (sel) =>{
 	/*console.log('aGREGANDO MODIFICA GRUPO');
 	console.log(sel);*/
@@ -1092,6 +1212,23 @@ export const actPresupuesto = (sel) =>{
 	   })
 }
 
+export const addAsociado = (sel) =>{
+	console.log('aGREGANDO asociado');
+	console.log(sel);
+   return (dispatch) =>
+	   dispatch({
+		   type: ADD_ASOCIADO,
+		   payload: sel
+	   })
+}
+
+export const limpiaAsociado = () =>{
+   return (dispatch) =>
+	   dispatch({
+		   type: ASOCIADO_LIMPIAR,
+		   payload: []
+	   })
+}
 
 export const SeleccionaSub = (sel) => ({
 	type: SUB_SEL,

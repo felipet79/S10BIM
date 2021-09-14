@@ -79,8 +79,8 @@ a{
 }
 
 ::-webkit-scrollbar{
-    width: 0px;
-    height: 0px;
+    width: 6px;
+    height: 6px;
     }
     ::-webkit-scrollbar-thumb{
     background: linear-gradient(39deg,rgba(255,255,255,0.8) 14%, rgba(0,0,0,0.1) 64%);
@@ -137,7 +137,7 @@ a{
 }
 
 .main-sidebar, .main-sidebar::before {
-    transition: margin-left .3s ease-in-out,width .3s ease-in-out;
+    /*transition: margin-left .3s ease-in-out,width .3s ease-in-out;*/
     width: 200px;
 }
 .layout-fixed .brand-link {
@@ -173,7 +173,7 @@ a{
     border-right: 1px solid rgb(246, 246, 246);
 }
 .dx-treelist .dx-row-lines > td {
-    border-bottom: 1px solid rgb(248, 246, 246);
+    border-bottom: 0px solid rgb(248, 246, 246);
 }
 
 .dx-treelist-container {
@@ -188,7 +188,9 @@ a{
     background: linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%) !important;
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 ) !important;*/
     /*background: rgb(245, 246, 246);*/
-    background: #F5F6F8;
+   /* background: #F5F6F8;*/
+    background: #f8f9fa;
+    background: white;
 }
 
 .dx-editor-cell .dx-texteditor, .dx-editor-cell .dx-texteditor .dx-texteditor-input {
@@ -235,6 +237,7 @@ a{
     background: linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 );*/
     background: white;
+
 }
 
 
@@ -249,6 +252,7 @@ a{
 
     background:#cce5ff;
     color: black;
+    
 }
 
 /*@media (min-width: 768px) 
@@ -278,7 +282,8 @@ a{
     /*background: linear-gradient(to bottom, rgba(216,224,222,1) 0%,rgba(174,191,188,1) 22%,rgba(153,175,171,1) 33%,rgba(142,166,162,1) 50%,rgba(130,157,152,1) 71%,rgba(78,92,90,1) 99%,rgba(14,14,14,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d8e0de', endColorstr='#0e0e0e',GradientType=0 ); */
     
-    background: rgb(255, 255, 255);
+    /*background: rgb(255, 255, 255);*/
+    background: rgb(236, 234, 234);
     color: black;
     font-weight: 600 !important;
     /*background: rgb(242,245,246);
@@ -470,9 +475,9 @@ element.style {
 .dx-treelist-borders .dx-treelist-rowsview, .dx-treelist-headers + .dx-treelist-rowsview {
     /*border-top: 1px solid #ddd;*/
     
-    border: 0.5px solid #ddd;;
+    border: 0.1px solid #ddd;
     border-top: none;
-    box-shadow: 0.2px 0.2px 0.2px 0.2px rgb(240, 238, 238) inset;
+    /*box-shadow: 0.2px 0.2px 0.2px 0.2px rgb(240, 238, 238) inset;*/
 }
 
 .dx-treelist-headers .dx-treelist-table .dx-row > td {
@@ -484,6 +489,7 @@ element.style {
 }
 
 .dx-treelist-rowsview .dx-row-focused.dx-data-row:not(.dx-row-lines) > td, .dx-treelist-rowsview .dx-row-focused.dx-data-row:not(.dx-row-lines) > tr:first-child > td {
+    border:none;
     border-top: none;
     border-bottom: 4px solid #6ac5b1;
 }
@@ -522,7 +528,7 @@ element.style {
 .dx-treelist .dx-column-lines > td {
     /*border-left: 1px solid rgb(255, 255, 255);
     border-right: 1px solid rgb(255, 255, 255);*/
-    box-shadow: 0.6px 0.6px 0.6px 0.6px rgb(255, 255, 255) inset;
+    /*box-shadow: 0px 0.6px 0.6px 0px rgb(255, 255, 255) inset;*/
     border-top: none;
 }
 
@@ -535,4 +541,36 @@ element.style {
 
 .dx-texteditor-input {
     min-height: 24px !important;
+}
+
+.dx-treelist .dx-row > td {
+    
+    /*height: 30px;*/
+    padding: 0px;
+}
+
+.dx-treelist-headers .dx-treelist-table .dx-row > td {
+    border-bottom: 0.2px solid #ddd;
+    padding: 7px;
+}
+
+.dx-treelist-rowsview .dx-treelist-empty-space {
+    position: relative;
+    display: inline-block;
+    width: 10px;
+    font: 30px/1 DXIcons;
+}
+
+.dx-treelist-content .dx-treelist-table .dx-row > td:first-child, .dx-treelist-content .dx-treelist-table .dx-row > tr > td:first-child {
+    border-left: 0;
+    /*background: rgba(0,0,0,0.02);
+    /*box-shadow:0.0px 0.5px 0.5px 0.0px rgba(0,0,0,0.06) inset;
+    border-radius: 5px;*/
+    
+}
+
+.swal2-title {
+ 
+    font-size: 1.275em;
+ 
 }

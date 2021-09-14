@@ -142,7 +142,7 @@ const BuscaCliente = ({ tipo='',presupuestoN, show, setShow }) => {
 						defaultExpandedRowKeys={[1, 2, 3, 5]}
 						columnAutoWidth={false}
 						rootValue={-1}
-
+						rowAlternationEnabled={true}
 						//selectedRowKeys={selectedRowKeys}
 
 						//onSelectionChanged={() => {alert('hola')}}

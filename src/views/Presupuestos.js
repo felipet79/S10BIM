@@ -7,24 +7,36 @@ import IdProyect from "./IdProyect";
 import { Resizable } from "re-resizable";
 import "../styles/project.css";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from 'sweetalert2'
 import TreeCP from "../components/TreeCP";
 import IdPc from "./IdPc";
 import $ from 'jquery';
 import { RefrescarV } from "./ViewerSc";
 import Items from "../components/Items";
 import axios from "../config/axios";
-import { TextBox } from "devextreme-react";
+import { DropDownButton, TextBox } from "devextreme-react";
 import { Search } from "@material-ui/icons";
 import { limpiaSubs, limpiaTree } from "../actions/proyects.actions";
+import Button1 from 'devextreme-react/button';
 
+
+const menuFiltro = [
+	{ id: 1, name: 'Escritorio', icon: 'home' },
+	{ id: 2, name: 'Obras ganadas', icon: 'exportselected' },
+	{ id: 3, name: 'Bandeja', icon: 'box' },
+	{ id: 4, name: 'Archivo central', icon: 'toolbox' },
+	{ id: 5, name: 'Papelera', icon: 'trash' },
+];
 
 const Presupuestos = ({ match }) => {
 
 	const auth = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
-	
+	const [modo, setModo] = useState('Escritorio');
+	const [modoicono, setModoIcono] = useState('home');
 	const codProject = match.params.codProject;
-
+	
+	const [estado, setEstado] = useState(1);
 	// console.log(codProject)
 	const proyects = useSelector((state) => state.proyects);
 	const [width, setWidth] = useState(260);
@@ -35,6 +47,8 @@ const Presupuestos = ({ match }) => {
 
 	const [levelPC1, setLevelPC1] = useState(1);
 	const [level1, setLevel1] = useState(2);
+
+
 
 
 	const [reducido, setReducido] = useState(false);
@@ -92,8 +106,11 @@ const Presupuestos = ({ match }) => {
 		dispatch(limpiaSubs());
 		//alert();
 	}, []);
-	
+
 	useEffect(() => {
+		//alert(estado)
+		dispatch(limpiaTree());
+		
 		async function init() {
 			let company = JSON.parse(localStorage.getItem("company-s10"));
 			let connectId = await localStorage.getItem("connectionId");
@@ -104,7 +121,7 @@ const Presupuestos = ({ match }) => {
 					"",
 					{
 						HasOutputParam: false,
-						ObjectName: `dbo.S10_01_Presupuesto_ListarArbol 'ncortez@s10peru.com'`,
+						ObjectName: `dbo.S10_01_Presupuesto_ListarArbol 'ncortez@s10peru.com',${estado}`,
 						//ObjectName: `dbo.S10_01_Presupuesto_ListarArbol 'ctorres@s10peru.com'`,
 						RequestId: "PARTY_CONTROL",
 						SignalRConnectionID: connectId,
@@ -123,7 +140,7 @@ const Presupuestos = ({ match }) => {
 		}
 		init()
 		// eslint-disable-next-line
-	}, []);
+	}, [estado] );
 
 
 	useEffect(() => {
@@ -160,11 +177,11 @@ const Presupuestos = ({ match }) => {
 		}
 		init()
 		// eslint-disable-next-line
-	}, []);	
+	}, []);
 	//setLevelPC(1);
-	
-	
-	
+
+
+
 	const buscarPres = (e) => {
 
 		setTextoB((state) => {
@@ -180,8 +197,8 @@ const Presupuestos = ({ match }) => {
 
 				<Resizable
 					className="tree-fixed p-0 d-flex justify-content-between"
-					enable={{ top:false, right:true, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
-					style={{ background:'#f5f6f8'}}
+					enable={{ top: false, right: true, bottom: false, left: false, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false }}
+					style={{ background: '#f5f6f8' }}
 					size={{ width: width, height: height }}
 					marginLeft="-20px"
 					//maxHeight="60vh"
@@ -214,15 +231,16 @@ const Presupuestos = ({ match }) => {
 					<Collapse in={open}>
 
 
-						<div id="Conte1" className="p-2 h-100 w-100" style={{ overflow: 'scroll',
+						<div id="Conte1" className="p-2 h-100 w-100" style={{
+							overflow: 'scroll',
 							/*background: 'rgb(242,245,246)',
 							background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
 							background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
 							background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
 							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',*/
-							background:'#f5f6f8',
-							color:'#333337'
-					
+							background: '#f5f6f8',
+							color: '#333337'
+
 						}}>
 
 
@@ -266,7 +284,82 @@ const Presupuestos = ({ match }) => {
 
 							{/* <!-- SidebarSearch Form --> */}
 							<div className="form mt-3">
+
 								<div className="input-group" data-widget="">
+
+									<DropDownButton
+										splitButton={true}
+										width='180px'
+										useSelectMode={false}
+										text={modo}
+										//icon="dist/img/manager.png"
+										icon={modoicono}
+										items={menuFiltro}
+										displayExpr="name"
+										keyExpr="id"
+										//onButtonClick={this.onButtonClick}
+										onItemClick={(e) => {
+
+											setModo(e.itemData.name);
+											setModoIcono(e.itemData.icon)
+											//notify(e.itemData.name || e.itemData, 'success', 300);
+
+
+											let timerInterval
+											Swal.fire({
+												title: 'Cargando datos de directorios!',
+												html: 'Aplicando vista en <b></b> .',
+												timer: 300,
+												timerProgressBar: true,
+												didOpen: () => {
+													Swal.showLoading()
+													const b = Swal.getHtmlContainer().querySelector('b')
+													timerInterval = setInterval(() => {
+														b.textContent = Swal.getTimerLeft()
+													}, 100)
+												},
+												willClose: () => {
+													clearInterval(timerInterval)
+												}
+											}).then((result) => {
+												/* Read more about handling dismissals below */
+												if (result.dismiss === Swal.DismissReason.timer) {
+													//console.log('I was closed by the timer')
+												}
+											})
+
+
+
+											if (e.itemData.name === 'Escritorio') {
+												setEstado(1);
+											}
+
+											if (e.itemData.name === 'Obras ganadas') {
+												setEstado(2);
+											}
+
+											if (e.itemData.name === 'Bandeja') {
+												setEstado(3);
+											}
+
+											if (e.itemData.name === 'Archivo central') {
+												setEstado(8);
+											}
+
+											if (e.itemData.name === 'Papelera') {
+												setEstado(9);
+											}
+
+
+										}}
+									/>
+									<Button1 variant="outline-info" style={{ position: 'absolute', right: '2px', top: '5px',  }} onClick={() => {
+										//setNuevoPres(false);
+
+										//BUSCAR PRESUPUESTO
+									}
+									}><i class="fas fa-search fa-fw"></i></Button1>
+
 									{/* <input
 										className="form-control form-control"
 										type="search"
@@ -275,7 +368,7 @@ const Presupuestos = ({ match }) => {
 										value={textoB}
 										onChange={buscarPres}
 									/> */}
-									<TextBox
+									{/* <TextBox
 									//stylingMode={'Search'}
 									defaultValue={textoB}
 									value={textoB}
@@ -287,7 +380,7 @@ const Presupuestos = ({ match }) => {
 									>
 									<i className="fas fa-search fa-fw" style={{position:'absolute', top:'10px', right:'30px', width:'12px', height:'12px' }}></i>
 
-									</TextBox>
+									</TextBox> */}
 									{/* <div className="input-group-append">
 										<button className="btn btn-sidebar">
 											
@@ -315,7 +408,7 @@ const Presupuestos = ({ match }) => {
 							)}
 
 
-							
+
 
 
 							{/* </div>  */}
@@ -325,7 +418,7 @@ const Presupuestos = ({ match }) => {
 						</div>
 					</Collapse>
 					<div
-						
+
 						className="bara-cerrar d-flex align-items-center barras"
 						style={{
 							width: '16px',
@@ -333,66 +426,67 @@ const Presupuestos = ({ match }) => {
 							background: '#f5f6f8',
 							marginLeft: 5,
 							borderStyle: 'none solid none none',
-							borderColor:'#c6c7d0',
-							borderWidth:'0.5px',
-							zIndex:'1',
+							borderColor: '#c6c7d0',
+							borderWidth: '0.5px',
+							zIndex: '1',
 						}}
 					>
 						<div
-							style={{ cursor: "pointer", width:'30px', 
-							/*background: 'rgb(184,225,252)',
-							background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
-							background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
-							background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0',*/
-							background:'white',
-							zIndex:'1'
-							/*background: 'rgb(184,225,252)',
-							background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
-							background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
-							background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
-							filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0'	*/					 
-						}}
+							style={{
+								cursor: "pointer", width: '30px',
+								/*background: 'rgb(184,225,252)',
+								background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
+								background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+								background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+								filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0',*/
+								background: 'white',
+								zIndex: '1'
+								/*background: 'rgb(184,225,252)',
+								background: '-moz-linear-gradient(top, rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%)',
+								background: '-webkit-linear-gradient(top, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+								background: 'linear-gradient(to bottom, rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%)',
+								filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#b8e1fc", endColorstr="#bdf3fd",GradientType=0'	*/
+							}}
 							className="h-0 w-100 "
 							onClick={() => {
 								//alert('se activa');
-								
+
 
 								setOpen(!open);
-								
 
-								if (!open){
+
+								if (!open) {
 									document.getElementById("Conte1").style.width = 0;
 									setWidth(260);
-								}else{
+								} else {
 									document.getElementById("Conte1").style.width = '260px';
 									setWidth(20);
 								}
 								//alert('');
 								//$("#forgeViewer").animate({ height: height + d.height }, 100);
-		
+
 								//$("#DetalleItem").animate({ height: window.innerHeight - (height + d.height) - 130 }, 100);
-		
+
 								//alert('');
-								
+
 
 
 								setTimeout(() => {
 									RefrescarV();
-								}, 100);								
-								
+								}, 100);
+
 
 
 
 							}}
 							aria-controls="example-collapse-text"
 							aria-expanded={open}
-							style={{background:'transparent', zIndex:'1', width:'80px'}}
+							style={{ background: 'transparent', zIndex: '1', width: '80px' }}
 						>
 							{open ? (
-								<ion-icon name="chevron-back-outline" style={{ cursor: "pointer", color:'black', borderColor:'#c6c7d0', marginLeft:'4px', background:'white', zIndex:'2', width:'20px', height:'20px',borderRadius:'20px', borderStyle: 'solid', borderWidth:'0.5px', }}></ion-icon>
+								<ion-icon name="chevron-back-outline" style={{ cursor: "pointer", color: 'black', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px', }}></ion-icon>
 							) : (
-								<ion-icon name="chevron-forward-outline" style={{ cursor: "pointer", color:'black', borderColor:'#c6c7d0', marginLeft:'4px', background:'white', zIndex:'2', width:'20px', height:'20px',borderRadius:'20px', borderStyle: 'solid', borderWidth:'0.5px' }}></ion-icon>
+								<ion-icon name="chevron-forward-outline" style={{ cursor: "pointer", color: 'black', borderColor: '#c6c7d0', marginLeft: '4px', background: 'white', zIndex: '2', width: '20px', height: '20px', borderRadius: '20px', borderStyle: 'solid', borderWidth: '0.5px' }}></ion-icon>
 							)}
 						</div>
 					</div>
@@ -404,7 +498,7 @@ const Presupuestos = ({ match }) => {
 					background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
 					background: 'linear-gradient(to bottom, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
 					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#f2f5f6", endColorstr="#c8d7dc",GradientType=0 )',*/
-					background:'white'
+					background: 'white'
 
 
 				}}>
@@ -416,15 +510,15 @@ const Presupuestos = ({ match }) => {
 
 
 					{/* <DatosGenerales/> */}
-					<Items 
+					<Items
 						widthItems={width}
 						widthNav={$("#ContenedorSide").innerWidth()}
 					/>
 
 
-					
 
-					
+
+
 
 
 					{/* <Route path="/projects/id-pc/:codPc" component={IdPc} /> */}

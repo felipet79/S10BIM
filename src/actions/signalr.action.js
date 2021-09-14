@@ -23,6 +23,8 @@ import {
 	LISTAR_UBICACIONES,
 	LISTAR_MODELOS,
 	LISTAR_MONEDAS,
+	LISTAR_TITULOS,
+	LISTAR_PARTIDAS,
 } from "../constants";
 
 import $ from 'jquery';
@@ -46,9 +48,9 @@ export const connectSignalr = (token) => {
 		hubProxy.on("receiveS10ERPDataResult", function (response) {
 			const data = JSON.parse(response);
 
-			console.log('data antes');
+			//console.log('data antes');
 			//console.log(JSON.parse(data.OutputValue));
-			console.log(JSON.parse(data.Data));
+			//console.log(JSON.parse(data.Data));
 
 			switch (data.Name) {
 				case ARBOL:
@@ -68,6 +70,7 @@ export const connectSignalr = (token) => {
 					break;
 
 				case LISTAR_POR_PERIODO:
+
 					dispatch({
 						type: LISTAR_POR_PERIODO,
 						payload: JSON.parse(data.Data),
@@ -124,7 +127,7 @@ export const connectSignalr = (token) => {
 
 
 				case LISTAR_UBICACIONES:
-					console.log('ubicaciones llegadas:');
+					//console.log('ubicaciones llegadas:');
 					//console.log(JSON.parse(data.OutputValue));
 
 					//console.log(data.OutputValue);
@@ -137,9 +140,36 @@ export const connectSignalr = (token) => {
 					break;
 
 
+				case LISTAR_TITULOS:
+					//console.log('titulos llegadas:');
+					//console.log(JSON.parse(data.OutputValue));
+					console.log('data de titulos:');					
+					console.log(data);
+					console.log(JSON.parse(data.Data));
+					dispatch({
+						type: LISTAR_TITULOS,
+						payload: JSON.parse(data.Data),
+						//payload: (data.Data),
+					});
+					break;
+
+				case LISTAR_PARTIDAS:
+						//console.log('titulos llegadas:');
+						//console.log(JSON.parse(data.OutputValue));
+						console.log('data de PARTIDAS:');					
+						console.log(data);
+						console.log(JSON.parse(data.Data));
+						localStorage.setItem("paginacionP", data.OutputValue);
+						dispatch({
+							type: LISTAR_PARTIDAS,
+							payload: JSON.parse(data.Data),
+							//payload: (data.Data),
+						});
+					break;
+
 				case PARTY_CONTROL1:
-					//console.log('datos llegados de Subprespuestos:');
-					//console.log(JSON.parse(data.Data));
+					console.log('datos llegados de Subprespuestos:');
+					console.log(JSON.parse(data.Data));
 					dispatch({
 						type: PARTY_CONTROL1,
 						payload: JSON.parse(data.Data),
@@ -147,8 +177,8 @@ export const connectSignalr = (token) => {
 					break;
 
 				case LISTAR_SUBS:
-					//console.log('datos llegados de Subprespuestos tODOS:');
-					//console.log(JSON.parse(data.Data));
+					console.log('datos llegados de Subprespuestos tODOS:');
+					console.log(JSON.parse(data.Data));
 					dispatch({
 						type: LISTAR_SUBS,
 						payload: JSON.parse(data.Data),
@@ -167,8 +197,8 @@ export const connectSignalr = (token) => {
 					break;
 
 				case MENSUAL_DETALLE:
-					//console.log('datos llegados de items:');
-					//console.log(JSON.parse(data.Data));
+					console.log('datos llegados de items:');
+					console.log(JSON.parse(data.Data));
 					dispatch({
 						type: MENSUAL_DETALLE,
 						payload: JSON.parse(data.Data),
@@ -264,7 +294,7 @@ export const connectSignalr = (token) => {
 				case 'EliminaGrupo':
 					console.log('Respuesta de Eliminar Grupo');
 					console.log(JSON.parse(data.Data));
-					let resp=JSON.parse(data.Data);
+					let resp = JSON.parse(data.Data);
 					/*console.log('Respuesta de Eliminar Grupo Respuesta');
 					console.log(resp);*/
 					localStorage.setItem("EliminadoSuccess", resp[0].Success);

@@ -15,6 +15,8 @@ import TreeList, {
 	Scrolling,
 	Column
 } from 'devextreme-react/tree-list';
+import { Template } from "devextreme-react";
+import CellRend from "./Cellrend";
 
 
 const allowedPageSizes = [5, 10, 15, 20, 50, 100, 500];
@@ -193,21 +195,28 @@ const Apus = ({ levelStart = 1, idProject }) => {
 
 				<Column
 					width={'10%'}
-					dataField="TipoDetalle" />
+					dataField="TipoDetalle" 
+					cellTemplate="Template1"
+					/>
 
 				<Column
 					width={'45%'}
-					dataField="Descripcion" />
+					dataField="Descripcion" 
+					cellTemplate="Template1"
+					/>
+					
 				<Column
 					width={'7%'}
 					dataField="Unidad"
 					alignment={'center'}
+					cellTemplate="Template1"
 				/>
 				<Column
 					width={'10%'}
 					dataField="CuadrillaInsumo"
 					caption="Cuadrilla"
 					alignment={'right'}
+					cellTemplate="Template1"
 				/>
 
 				<Column
@@ -215,6 +224,7 @@ const Apus = ({ levelStart = 1, idProject }) => {
 					dataField="CantidadInsumo"
 					caption="Cantidad"
 					alignment={'right'}
+					cellTemplate="Template1"
 				/>
 
 				<Column
@@ -222,6 +232,7 @@ const Apus = ({ levelStart = 1, idProject }) => {
 					dataField="PrecioInsumo1"
 					caption="Precio"
 					alignment={'right'}
+					cellTemplate="Template1"
 				/>
 
 				<Column
@@ -229,6 +240,7 @@ const Apus = ({ levelStart = 1, idProject }) => {
 					dataField="Parcial1"
 					caption="Parcial"
 					alignment={'right'}
+					cellTemplate="Template1"
 				/>
 
 				<Pager
@@ -240,6 +252,7 @@ const Apus = ({ levelStart = 1, idProject }) => {
 					enabled={true}
 					defaultPageSize={15}
 				/>
+				<Template name="Template1" render={CellRend} />
 			</TreeList>
 			{/*<Bar />*/}
 			{/* <Table

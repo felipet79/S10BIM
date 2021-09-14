@@ -16,14 +16,15 @@ import TreeList, {
 	Column
 } from 'devextreme-react/tree-list';
 import { useEffect, useState } from 'react';
-import { TextBox } from 'devextreme-react';
+import { Template, TextBox } from 'devextreme-react';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import { Link } from 'react-router-dom';
-import { limpiaUbicaciones, selectUBICACIONES } from '../actions/proyects.actions';
+import { agregaItem, limpiaUbicaciones, selectTITULOS, selectUBICACIONES } from '../actions/proyects.actions';
+import CellRend from './Cellrend';
 
 
-const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
+const BuscaTitulo = ({ tipo='',presupuestoN,show, setShow, setItemAgregar, itemAgregar }) => {
 	const dispatch = useDispatch();
 	const handleClose = () => setShow(false);
 	const auth = useSelector(state => state.auth);
@@ -46,20 +47,26 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 
 	const seleccionar = () => {
 
-		if (ubicacionSel.Descripcion === '') {
+		if (itemAgregar.Descripcion === '') {
 
 			//mensaje de error 
 			return;
 		}
+		console.log(proyects.DataPc);
+		console.log(itemAgregar);
+
+		dispatch(agregaItem(itemAgregar));
+
+
 		/*if (tipo===''){
 			proyects.DatosPresupuesto[0].CodLugar = ubicacionSel.Codigo;
 			proyects.DatosPresupuesto[0].UbicacionGeografica = ubicacionSel.Descripcion;
 		}else
 		{*/
-			presupuestoN.CodLugar = ubicacionSel.Codigo;
-			presupuestoN.UbicacionGeografica = ubicacionSel.Descripcion;
+			//presupuestoN.CodLugar = ubicacionSel.Codigo;
+			//presupuestoN.UbicacionGeografica = ubicacionSel.Descripcion;
 		//}
-		
+		//setItemAgregar
 		//proyects.DatosPresupuesto[0].CodCliente=clienteSel.Codigo;
 		//proyects.DatosPresupuesto[0].Cliente=clienteSel.Descripcion;
 
@@ -67,7 +74,7 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 	}
 
 	useEffect(() => {
-		var paginas = localStorage.getItem("paginacion");
+		var paginas = localStorage.getItem("paginacionT");
 		var arrayDeCadenas = [];
 		if (paginas)
 		arrayDeCadenas = paginas.split('/');
@@ -80,7 +87,7 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 		//alert(totalesp);
 		setTPagina(totalesp);
 
-	}, [proyects.DataUbicaciones, textoB])
+	}, [proyects.DataTitulos, textoB])
 
 
 	const valueChanged = (data) => {
@@ -89,14 +96,14 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 		});*/
 		setTextoB(data.value);
 		//dispatch(limpiaUbicaciones()); 
-		dispatch(selectUBICACIONES(data.value, '20', 1, ''));
+		dispatch(selectTITULOS(data.value, '20', 1, '',''));
 		setPagina(1);
 	}
 
 	const handleChange = (event, value) => {
 		setPagina(value);
 		//dispatch(limpiaUbicaciones()); 
-		dispatch(selectUBICACIONES(textoB, '20', value, ''));
+		dispatch(selectTITULOS(textoB, '20', value, '',''));
 	};
 	return (
 		<>
@@ -110,7 +117,7 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'*/
 					background:'#398bf7'
 				}}>
-					<Modal.Title style={{ fontSize: '0.95rem' }}>Selecciona una Ubicación</Modal.Title>
+					<Modal.Title style={{ fontSize: '0.95rem' }}>Selecciona un Título</Modal.Title>
 				</Modal.Header>
 
 
@@ -179,8 +186,8 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 
 					<TreeList
 						style={{ width: '100%', height: '660px', marginTop: '-25px' }}
-						dataSource={proyects.DataUbicaciones}
-						keyExpr="CodLugar"
+						dataSource={proyects.DataTitulos}
+						keyExpr="CodTitulo"
 						//parentIdExpr="PhantomParentId"
 						showBorders={true}
 						focusedRowEnabled={true}
@@ -188,15 +195,47 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 						columnAutoWidth={false}
 						rootValue={-1}
 						//selectedRowKeys={selectedRowKeys}
-						rowAlternationEnabled={true}
+
 						//onSelectionChanged={() => {alert('hola')}}
 						//onRowClick={() => {alert(this)}}
 						onFocusedRowChanged={(e) => {
-							console.log(e)
-							setUbicacionSel({
+							
+							//setItemAgregar()
+							//setItemAgregar( (state) => ([...state]));
+
+							/*const ItemN = [{
+								CodPresupuesto: itemAgregar.CodPresupuesto,
+								CodSubpresupuesto: itemAgregar.CodSubpresupuesto,
+								Descripcion: e.row.data.Descripcion,
+								ERPCode: itemAgregar.ERPCode,
+								Item: itemAgregar.Item,
+								Metrado: itemAgregar.Metrado,
+								Nivel: itemAgregar.Nivel,
+								Orden: itemAgregar.Orden,
+								OrdenJerarquico: itemAgregar.OrdenJerarquico,
+								PhantomParentId: itemAgregar.PhantomParentId,
+								Precio1: itemAgregar.Precio1,
+								Precio2: itemAgregar.Precio2,
+								Secuencial: itemAgregar.Secuencial,
+								Unidad: itemAgregar.Unidad,
+							}];*/
+
+							/*return {
+								DataPC: [...state.DataPC, ...payload]
+							};*/
+							setItemAgregar( (state) => {
+								const estado=[...state];
+								estado[0].Descripcion=e.row.data.Descripcion;
+								return estado;
+
+							});
+							//setItemAgregar(ItemN)
+							console.log(itemAgregar)
+							//console.log(e)
+							/*setUbicacionSel({
 								Codigo: e.row.data.CodLugar,
 								Descripcion: e.row.data.Departamento + ' - ' + e.row.data.Descripcion + ' - ' + e.row.data.Provincia,
-							});
+							});*/
 
 						}/*onSelectionChanged*/}
 						wordWrapEnabled={true}
@@ -221,18 +260,22 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 						/>
 
 						<Column
-							width={'33%'}
-							dataField="Departamento" />
+							width={'10%'}
+							dataField="CodTitulo" 
+							cellTemplate="Template1"
+							/>
 						<Column
-							width={'33%'}
+							width={'65%'}
 							dataField="Descripcion"
-							alignment={'right'}
+							alignment={'left'}
+							cellTemplate="Template1"
 						/>
 						<Column
-							width={'33%'}
-							dataField="Provincia"
-							caption="Provincia"
-							alignment={'right'}
+							width={'25%'}
+							dataField="Grupo"
+							caption="Grupo"
+							alignment={'left'}
+							cellTemplate="Template1"
 						/>
 
 						{/*<Column
@@ -270,7 +313,7 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 							enabled={true}
 							defaultPageSize={20}
 						/>
-
+						<Template name="Template1" render={CellRend} />
 					</TreeList>
 					<div className="" style={{ position: 'relative', width: '100%', height: '30px' }}></div>
 					<Pagination count={tpagina} page={pagina} onChange={handleChange} style={{ position: 'absolute', right: '25px', top: '655px' }} />
@@ -294,7 +337,7 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 							if (data.value!=='' && (pag > 0 && pag <= tpagina)){
 
 								setPagina(pag);
-								dispatch(selectUBICACIONES(textoB, '20', data.value, ''));
+								dispatch(selectTITULOS(textoB, '20', data.value,'', ''));
 
 							}else{
 								//setPagina(1);
@@ -328,7 +371,7 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 				</Modal.Body>
 
 				<Modal.Footer>
-					<strong style={{ fontSize: '0.6rem', position: 'absolute', left: '5px', marginLeft: '20px', }}> {ubicacionSel.Descripcion}</strong>
+					<strong style={{ fontSize: '0.6rem', position: 'absolute', left: '5px', marginLeft: '20px', }}> {itemAgregar.Descripcion}</strong>
 					<Button1
 						variant="primary"
 						onClick={seleccionar}
@@ -357,4 +400,4 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 	)
 }
 
-export default BuscaUbicacion
+export default BuscaTitulo
