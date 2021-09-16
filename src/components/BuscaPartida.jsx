@@ -16,15 +16,16 @@ import TreeList, {
 	Column
 } from 'devextreme-react/tree-list';
 import { useEffect, useState } from 'react';
-import { Template, TextBox } from 'devextreme-react';
+import { DataGrid, Template, TextBox } from 'devextreme-react';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import { Link } from 'react-router-dom';
 import { agregaItem, limpiaUbicaciones, selectPARTIDAS, selectUBICACIONES } from '../actions/proyects.actions';
 import CellRend from './Cellrend';
+import { Grouping, GroupPanel, SearchPanel } from 'devextreme-react/data-grid';
 
 
-const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemAgregar }) => {
+const BuscaPartida = ({ tipo = '', presupuestoN, show, setShow, setItemAgregar, itemAgregar }) => {
 	const dispatch = useDispatch();
 	const handleClose = () => setShow(false);
 	const auth = useSelector(state => state.auth);
@@ -32,10 +33,7 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 	const proyects = useSelector((state) => state.proyects);
 	//dispatch(selectAPUS(codP, codSub, codItem, ''));
 
-	const [ubicacionSel, setUbicacionSel] = useState({
-		Codigo: '',
-		Descripcion: '',
-	});
+	const [ubicacionSel, setUbicacionSel] = useState('');
 
 	const [pagina, setPagina] = useState(1);
 	const [tpagina, setTPagina] = useState(1);
@@ -43,11 +41,11 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 
 
 
-	
+
 
 	const seleccionar = (e) => {
 
-		if (itemAgregar.Descripcion === '') {
+		if (itemAgregar[0].Descripcion === '') {
 
 			//mensaje de error 
 			return;
@@ -64,7 +62,7 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 		var paginas = localStorage.getItem("paginacionP");
 		var arrayDeCadenas = [];
 		if (paginas)
-		arrayDeCadenas = paginas.split('/');
+			arrayDeCadenas = paginas.split('/');
 
 		var totalesp = Math.trunc((arrayDeCadenas[1] / 20));
 		if (arrayDeCadenas[1] % 20 !== 0) {
@@ -94,55 +92,57 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 	};
 	return (
 		<>
-
-			<Modal size="lg" centered show={show} onHide={handleClose} >
-				<Modal.Header closeButton style={{ background: '#3c8dbc', color: 'white', height: '42px',
-					/*background: '#3c8dbc', color: 'white', height: '50px',
-					background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
-					background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
-					background: 'linear-gradient(to bottom, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
-					filter: 'progid:DXImageTransform.Microsoft.gradient( startColorstr="#627d4d", endColorstr="#cc1f3b08",GradientType=0 )'*/
-					background:'#398bf7'
-				}}>
-					<Modal.Title style={{ fontSize: '0.95rem' }}>Selecciona una Partida</Modal.Title>
-				</Modal.Header>
+		<div className="animate__animated animate__fadeIn" style={{ height:'90vh', background:'white' }}>
+			{/* <Modal size="lg" centered show={show} onHide={handleClose} >
+				<Modal.Header closeButton style={{
+					background: '#3c8dbc', color: 'white', height: '42px',
+					
+					background: '#398bf7'
+				}}> */}
+					{/* <Modal.Title style={{ fontSize: '0.95rem' }}>Selecciona una Partida</Modal.Title> */}
+				{/* </Modal.Header> */}
 
 
-				<Card style={{ height: '100%', width: '100%', marginTop: '5px'/*, background: '#e8f7fe'*/ }}>
-					{/* <Card.Header style={{ height: '38px' }}> <div style={{ marginTop: '-5px' }}>Moneda Principal ({proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].SimboloMoneda : ''}) </div> </Card.Header> */}
+				<Card.Header style={{fontSize:'1rem', background:'#398bf7', color:'white', fontWeight:'550' }}>Seleccionar una Partida
+                            
+				</Card.Header>
 					<Card.Body>
 
-						<Form.Group as={Row} className="mb-0" controlId="formHorizontalPassword">
-							<Form.Label column sm={6}>
+					<Card style={{ width: '100%', marginTop: '5px'/*, background: '#e8f7fe'*/ }}>
+						{/* <Card.Header style={{ height: '38px' }}> <div style={{ marginTop: '-5px' }}>Moneda Principal ({proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].SimboloMoneda : ''}) </div> </Card.Header> */}
+						<Card.Body>
+
+							<Form.Group as={Row} className="mb-0" controlId="formHorizontalPassword">
+								<Form.Label column sm={6}>
 
 
 
-							</Form.Label>
+								</Form.Label>
 
 
-							<Col sm={6}>
+								<Col sm={6}>
 
 
-								<div className="form mt-0">
-									<div className="input-group" data-widget="">
+									<div className="form mt-0">
+										<div className="input-group" data-widget="">
 
-										<TextBox
-											//stylingMode={'Search'}
-											defaultValue={textoB}
-											value={textoB}
-											width="100%"
-											showClearButton={true}
-											valueChangeEvent="keyup"
-											onValueChanged={valueChanged}
-											//placeholder="Subject"
+											<TextBox
+												//stylingMode={'Search'}
+												defaultValue={textoB}
+												value={textoB}
+												width="100%"
+												showClearButton={true}
+												valueChangeEvent="keyup"
+												onValueChanged={valueChanged}
+												//placeholder="Subject"
 
-											placeholder="Search.."
-										>
-											<i className="fas fa-search fa-fw" style={{ position: 'absolute', top: '10px', right: '30px', width: '12px', height: '12px' }}></i>
+												placeholder="Search.."
+											>
+												<i className="fas fa-search fa-fw" style={{ position: 'absolute', top: '10px', right: '30px', width: '12px', height: '12px' }}></i>
 
-										</TextBox>
+											</TextBox>
 
-										{/* <input
+											{/* <input
 											className="form-control form-control"
 											type="search"
 											placeholder="Buscar"
@@ -155,23 +155,100 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 												<i className="fas fa-search fa-fw"></i>
 											</button>
 										</div> */}
+										</div>
 									</div>
-								</div>
 
-							</Col>
+								</Col>
 
 
-						</Form.Group>
+							</Form.Group>
 
+
+						</Card.Body>
+					</Card>
 
 					</Card.Body>
-				</Card>
+				
+
+{/* 
+				<Modal.Body> */}
 
 
-				<Modal.Body>
+
+					<DataGrid
+						style={{ width: '98%', height: '67vh', marginTop: '0px', marginLeft:'15px' }}
+						dataSource={proyects.DataPartidas}
+						selection={{ mode: 'single' }}
+						keyExpr="CodPartida"
+						allowColumnReordering={true}
+						showBorders={true}
+						focusedRowEnabled={true}
+						allowColumnResizing={true}
+						rowAlternationEnabled={true}
+						
+						onFocusedRowChanged={(e) => {
+							console.log(e);
+							console.log(e.row.data.UnidadPartida);
+							
+							if (e.row.rowType==='group'){
+								itemAgregar[0].Descripcion='';
+								itemAgregar[0].Unidad='';
 
 
-					<TreeList
+							}else{
+
+								itemAgregar[0].Descripcion=e.row.data.Descripcion;
+								itemAgregar[0].Unidad=e.row.data.UnidadPartida;
+	
+							}
+							
+							
+							//ubicacionSel.Descripcion=e.row.data.Descripcion;
+							//setUbicacionSel(e.row.data.Descripcion);
+							/*setItemAgregar((state) => {
+								const estado = [...state];
+								//estado[0].Descripcion = e.row?.data.Descripcion;
+								//estado[0].Unidad = e.row?.data.UnidadPartida;
+								//estado[0].Unidad=e.row.data.Unidad;
+								return estado;
+
+							});
+
+							/*console.log(e.row?.data.Descripcion)
+
+							setItemAgregar((state) => {
+								const estado = [...state];
+								estado[0].Descripcion = e.row?.data.Descripcion;
+								estado[0].Unidad = e.row?.data.UnidadPartida;
+								//estado[0].Unidad=e.row.data.Unidad;
+								return estado;
+
+							});
+							//setItemAgregar(ItemN)*/
+							//console.log(itemAgregar)
+							
+
+						}}
+
+
+						
+					>
+						<GroupPanel visible={true} />
+						<SearchPanel visible={false} />
+						<Grouping autoExpandAll={/*this.state.autoExpandAll*/true} 
+						/>
+						<Paging defaultPageSize={500} />
+
+						<Column dataField="Descripcion" dataType="string" width={'80%'}/>
+						<Column dataField="PartidaN1" dataType="string" groupIndex={0} caption="Grupo1"  width={'20%'}/>
+						<Column dataField="PartidaN2" dataType="string" groupIndex={1} caption="Grupo2" width={'20%'}/>
+						<Column dataField="PartidaN3" dataType="string" groupIndex={2} caption="Grupo3" width={'20%'}/>
+						<Column dataField="PartidaN4" dataType="string" groupIndex={3} caption="Grupo4" width={'20%'}/>
+						<Column dataField="PartidaN5" dataType="string" groupIndex={4} caption="Grupo5" width={'20%'}/>
+						<Column dataField="UnidadPartida" dataType="string" width={'8%'}/>
+					</DataGrid>
+
+					{/* <TreeList
 						style={{ width: '100%', height: '660px', marginTop: '-25px' }}
 						dataSource={proyects.DataPartidas}
 						keyExpr="CodPartida"
@@ -188,22 +265,19 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 						onFocusedRowChanged={(e) => {
 							console.log(e)
 
-							setItemAgregar( (state) => {
-								const estado=[...state];
-								estado[0].Descripcion=e.row.data.Descripcion;
-								estado[0].Unidad=e.row.data.UnidadPartida;
+							setItemAgregar((state) => {
+								const estado = [...state];
+								estado[0].Descripcion = e.row.data.Descripcion;
+								estado[0].Unidad = e.row.data.UnidadPartida;
 								//estado[0].Unidad=e.row.data.Unidad;
 								return estado;
 
 							});
 							//setItemAgregar(ItemN)
 							console.log(itemAgregar)
-							/*setUbicacionSel({
-								Codigo: e.row.data.CodLugar,
-								Descripcion: e.row.data.Departamento + ' - ' + e.row.data.Descripcion + ' - ' + e.row.data.Provincia,
-							});*/
+							
 
-						}/*onSelectionChanged*/}
+						}}
 						wordWrapEnabled={true}
 					>
 						<Editing
@@ -227,9 +301,9 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 
 						<Column
 							width={'20%'}
-							dataField="CodPartida" 
+							dataField="CodPartida"
 							cellTemplate="Template1"
-							/>
+						/>
 
 						<Column
 							width={'70%'}
@@ -245,32 +319,7 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 							cellTemplate="Template1"
 						/>
 
-						{/*<Column
-							width={'10%'}
-							dataField="Ancho"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'10%'}
-							dataField="Alto"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'10%'}
-							dataField="Total"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'20%'}
-							dataField="Detalle" 
-							alignment={'center'}
-						/>*/}
-
-
-
+						
 						<Pager
 							//allowedPageSizes={allowedPageSizes}
 							showPageSizeSelector={true}
@@ -281,32 +330,33 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 							defaultPageSize={20}
 						/>
 						<Template name="Template1" render={CellRend} />
-					</TreeList>
-					<div className="" style={{ position: 'relative', width: '100%', height: '30px' }}></div>
-					<Pagination count={tpagina} page={pagina} onChange={handleChange} style={{ position: 'absolute', right: '25px', top: '655px' }} />
-					<strong style={{ fontSize: '0.7rem', position: 'absolute', left: '5px', marginLeft: '20px', top: '665px' }}> Pagina</strong>
+					</TreeList> */}
+
+					<div className="" style={{ position: 'absolute', marginTop:'80vh', width: '100%', height: '30px', background:'red' }}></div>
+					<Pagination count={tpagina} page={pagina} onChange={handleChange} style={{ position: 'absolute', right: '25px', top: '79vh' }} />
+					<strong style={{ fontSize: '0.7rem', position: 'absolute', left: '5px', marginLeft: '20px', top: '81vh' }}> Pagina</strong>
 					<TextBox
 						id='TPag'
-						style={{ fontSize: '0.7rem', position: 'absolute', left: '25px', marginLeft: '40px', top: '655px' }}
+						style={{ fontSize: '0.7rem', position: 'absolute', left: '25px', marginLeft: '40px', top: '80vh' }}
 						//stylingMode={'Search'}
 						defaultValue={pagina}
 						value={pagina}
 						width="40px"
-						
+
 						valueChangeEvent="keyup"
-						onValueChanged={(data) =>{
-							if (data.value===''){
-								
+						onValueChanged={(data) => {
+							if (data.value === '') {
+
 								//setPagina(1);
 								//return;
 							}
-							let pag=Math.trunc(data.value);
-							if (data.value!=='' && (pag > 0 && pag <= tpagina)){
+							let pag = Math.trunc(data.value);
+							if (data.value !== '' && (pag > 0 && pag <= tpagina)) {
 
 								setPagina(pag);
 								dispatch(selectPARTIDAS(textoB, '20', data.value, ''));
 
-							}else{
+							} else {
 								//setPagina(1);
 								//$("#TPag").focus(function() { $(this).select(); } );
 								//$("#TPag").select();
@@ -316,7 +366,7 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 								//seleccionaTexto(this)
 								//$("#TPag").select();
 							}
-							
+
 						}}
 						//placeholder="Subject"
 
@@ -335,14 +385,15 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 							)):''
 						}
 					</ListGroup> */}
-				</Modal.Body>
+				{/* </Modal.Body>
 
-				<Modal.Footer>
-					<strong style={{ fontSize: '0.6rem', position: 'absolute', left: '5px', marginLeft: '20px', }}> {ubicacionSel.Descripcion}</strong>
+				<Modal.Footer> */}
+					<strong style={{ fontSize: '0.6rem', position: 'absolute', marginLeft: '3%', marginTop:'65px' }}> {ubicacionSel}</strong>
 					<Button1
 						variant="primary"
 						onClick={seleccionar}
 						style={{
+							position: 'absolute', right: '155px',  marginTop:'65px'
 							/*background: '-moz-linear-gradient(top, rgba(98,125,77,1) 0%, rgba(98,125,77,0.95) 23%, rgba(98,125,77,0.91) 38%, rgba(98,125,77,0.86) 58%, rgba(98,125,77,0.84) 68%, rgba(48,76,26,0.8) 85%, rgba(31,59,8,0.8) 91%)',
 							background: '-webkit-linear-gradient(top, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
 							background: 'linear-gradient(to bottom, rgba(98,125,77,1) 0%,rgba(98,125,77,0.95) 23%,rgba(98,125,77,0.91) 38%,rgba(98,125,77,0.86) 58%,rgba(98,125,77,0.84) 68%,rgba(48,76,26,0.8) 85%,rgba(31,59,8,0.8) 91%)',
@@ -357,12 +408,15 @@ const BuscaPartida = ({ tipo='',presupuestoN,show, setShow,setItemAgregar, itemA
 					<Button1
 						variant="secondary"
 						onClick={handleClose}
+						style={{
+							position: 'absolute', right: '55px',  marginTop:'65px'}}
 					>
 						<ion-icon name="close-outline"></ion-icon>
 						Cancelar
 			</Button1>
-				</Modal.Footer>
-			</Modal>
+				{/* </Modal.Footer>
+			</Modal> */}
+		</div>			
 		</>
 	)
 }

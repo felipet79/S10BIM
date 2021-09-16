@@ -16,12 +16,13 @@ import TreeList, {
 	Column
 } from 'devextreme-react/tree-list';
 import { useEffect, useState } from 'react';
-import { Template, TextBox } from 'devextreme-react';
+import { DataGrid, Template, TextBox } from 'devextreme-react';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import { Link } from 'react-router-dom';
 import { agregaItem, limpiaUbicaciones, selectTITULOS, selectUBICACIONES } from '../actions/proyects.actions';
 import CellRend from './Cellrend';
+import { Grouping, GroupPanel, SearchPanel } from 'devextreme-react/data-grid';
 
 
 const BuscaTitulo = ({ tipo='',presupuestoN,show, setShow, setItemAgregar, itemAgregar }) => {
@@ -182,9 +183,61 @@ const BuscaTitulo = ({ tipo='',presupuestoN,show, setShow, setItemAgregar, itemA
 
 
 				<Modal.Body>
+				<DataGrid
+						style={{ width: '100%', height: '660px', marginTop: '-25px' }}
+						dataSource={proyects.DataTitulos}
+						selection={{ mode: 'single' }}
+						keyExpr="CodTitulo"
+						allowColumnReordering={true}
+						showBorders={true}
+						focusedRowEnabled={true}
+						rowAlternationEnabled={true}
+						onFocusedRowChanged={(e) => {
+							//console.log(e);
+							//console.log(e.row.data.UnidadPartida);
+							itemAgregar[0].Descripcion=e.row.data.Descripcion;
+							//itemAgregar[0].Unidad=e.row.data.UnidadPartida;
+							/*setItemAgregar((state) => {
+								const estado = [...state];
+								//estado[0].Descripcion = e.row?.data.Descripcion;
+								//estado[0].Unidad = e.row?.data.UnidadPartida;
+								//estado[0].Unidad=e.row.data.Unidad;
+								return estado;
+
+							});
+
+							/*console.log(e.row?.data.Descripcion)
+
+							setItemAgregar((state) => {
+								const estado = [...state];
+								estado[0].Descripcion = e.row?.data.Descripcion;
+								estado[0].Unidad = e.row?.data.UnidadPartida;
+								//estado[0].Unidad=e.row.data.Unidad;
+								return estado;
+
+							});
+							//setItemAgregar(ItemN)*/
+							console.log(itemAgregar)
+							
+
+						}}
 
 
-					<TreeList
+						
+					>
+						<GroupPanel visible={true} />
+						<SearchPanel visible={false} />
+						<Grouping autoExpandAll={/*this.state.autoExpandAll*/true} 
+						/>
+						<Paging defaultPageSize={500} />
+
+						<Column dataField="Descripcion" dataType="string" width={'100%'}/>
+						<Column dataField="Grupo" dataType="string" groupIndex={4} caption="Grupo" width={'40%'}/>
+						
+					</DataGrid>
+
+
+					{/* <TreeList
 						style={{ width: '100%', height: '660px', marginTop: '-25px' }}
 						dataSource={proyects.DataTitulos}
 						keyExpr="CodTitulo"
@@ -200,29 +253,7 @@ const BuscaTitulo = ({ tipo='',presupuestoN,show, setShow, setItemAgregar, itemA
 						//onRowClick={() => {alert(this)}}
 						onFocusedRowChanged={(e) => {
 							
-							//setItemAgregar()
-							//setItemAgregar( (state) => ([...state]));
-
-							/*const ItemN = [{
-								CodPresupuesto: itemAgregar.CodPresupuesto,
-								CodSubpresupuesto: itemAgregar.CodSubpresupuesto,
-								Descripcion: e.row.data.Descripcion,
-								ERPCode: itemAgregar.ERPCode,
-								Item: itemAgregar.Item,
-								Metrado: itemAgregar.Metrado,
-								Nivel: itemAgregar.Nivel,
-								Orden: itemAgregar.Orden,
-								OrdenJerarquico: itemAgregar.OrdenJerarquico,
-								PhantomParentId: itemAgregar.PhantomParentId,
-								Precio1: itemAgregar.Precio1,
-								Precio2: itemAgregar.Precio2,
-								Secuencial: itemAgregar.Secuencial,
-								Unidad: itemAgregar.Unidad,
-							}];*/
-
-							/*return {
-								DataPC: [...state.DataPC, ...payload]
-							};*/
+							
 							setItemAgregar( (state) => {
 								const estado=[...state];
 								estado[0].Descripcion=e.row.data.Descripcion;
@@ -231,13 +262,9 @@ const BuscaTitulo = ({ tipo='',presupuestoN,show, setShow, setItemAgregar, itemA
 							});
 							//setItemAgregar(ItemN)
 							console.log(itemAgregar)
-							//console.log(e)
-							/*setUbicacionSel({
-								Codigo: e.row.data.CodLugar,
-								Descripcion: e.row.data.Departamento + ' - ' + e.row.data.Descripcion + ' - ' + e.row.data.Provincia,
-							});*/
+							
 
-						}/*onSelectionChanged*/}
+						}}
 						wordWrapEnabled={true}
 					>
 						<Editing
@@ -278,29 +305,7 @@ const BuscaTitulo = ({ tipo='',presupuestoN,show, setShow, setItemAgregar, itemA
 							cellTemplate="Template1"
 						/>
 
-						{/*<Column
-							width={'10%'}
-							dataField="Ancho"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'10%'}
-							dataField="Alto"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'10%'}
-							dataField="Total"
-							alignment={'right'}
-						/>
-
-						<Column
-							width={'20%'}
-							dataField="Detalle" 
-							alignment={'center'}
-						/>*/}
+					
 
 
 
@@ -314,7 +319,7 @@ const BuscaTitulo = ({ tipo='',presupuestoN,show, setShow, setItemAgregar, itemA
 							defaultPageSize={20}
 						/>
 						<Template name="Template1" render={CellRend} />
-					</TreeList>
+					</TreeList> */}
 					<div className="" style={{ position: 'relative', width: '100%', height: '30px' }}></div>
 					<Pagination count={tpagina} page={pagina} onChange={handleChange} style={{ position: 'absolute', right: '25px', top: '655px' }} />
 					<strong style={{ fontSize: '0.7rem', position: 'absolute', left: '5px', marginLeft: '20px', top: '665px' }}> Pagina</strong>

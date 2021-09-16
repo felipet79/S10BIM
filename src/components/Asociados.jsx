@@ -3,7 +3,7 @@ import { Table } from "react-bootstrap";
 //import Bar from "./Charts/Bar";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addAsociado, agregaRegistro, cleanDataChartAPU, seleccionarFilaAsociado, selectAPUS } from "../actions/proyects.actions";
+import { addAsociado, agregaRegistro, cleanDataChartAPU, eliminaAsociado, eliminarXCodigo, guardarAsociado, seleccionarFilaAsociado, selectAPUS } from "../actions/proyects.actions";
 import TreeList, {
 	Pager,
 	Paging,
@@ -35,7 +35,7 @@ const opcMenuInicio = [
 
 const allowedPageSizes = [5, 10, 15, 20, 50, 100, 500];
 
-const Asociados = ({ levelStart = 1, idProject }) => {
+const Asociados = ({ levelStart = 1, idProject, itemSel }) => {
 
 
 	const [opcMenu, setOpcMenu] = useState(opcMenuInicio)
@@ -95,10 +95,28 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 	}
 
 	useEffect(() => {
-		//console.log('datos de apus 1')
-		//console.log(proyects.DataAsociado)
+		console.log('datos de Asociados')
+		console.log(proyects.DataAsociado)
 		if (proyects.DataAsociado == undefined) return;
 		orderTree(proyects.DataAsociado);
+
+		for (let i=0;i<proyects.DataAsociado.length;i++){
+			if (proyects.DataAsociado[i].Valor!==''){
+				if (proyects.DataAsociado[i].Valor.substring(0,1)==='=')
+					proyects.DataAsociado[i].Comp='Igual';
+				
+				if (proyects.DataAsociado[i].Valor.substring(0,1)==='!')
+					proyects.DataAsociado[i].Comp='Diferente';
+
+			proyects.DataAsociado[i].Valor=proyects.DataAsociado[i].Valor.substring(1,proyects.DataAsociado[i].Valor.length);
+			}
+
+
+
+		}
+
+
+
 		//alert('ejecutó la primera carga');
 		// console.log(result);
 		// }
@@ -218,18 +236,26 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 					CampoFiltro: "",
 					Categoria: "",
 					CodAsociado: getRandomString(24),
-					CodPresupuesto: "0501001",
+					CodPresupuesto: proyects.DatosPresupuesto[0].CodPresupuesto,
 					CodSubpresupuesto: proyects.Sub_sel,
 					CreacionFecha: "2021-07-26T16:09:24.607",
 					CreacionUsuario: "ctorres@s10peru.com",
 					Familia: "",
-					Item: "000000000000034",
+					Item: itemSel?.Item,
 					Tipo: "",
 					Valor:"",
 				}];
 
 				dispatch(addAsociado(Nuevo));
-				console.log('agregando un asociado')
+				/*console.log('agregando un asociado')
+				console.log(Nuevo)
+				console.log('Este es mi Item sel')
+				console.log(itemSel.Item)*/
+				//(Presupuesto, SubPresupuesto, Item, CodAsociado, Categoria, Familia, Tipo, campoFiltro, valorFiltro, userId) 
+				dispatch(guardarAsociado(proyects.DatosPresupuesto[0].CodPresupuesto,proyects.Sub_sel,itemSel.Item,Nuevo[0].CodAsociado,'','','','','',''));
+				
+
+
 				//dispatch(agregaRegistro(''));
 				return;
 
@@ -246,6 +272,10 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 
 
 		if (e.itemData.text === 'Eliminar') {
+
+			//console.log(proyects.filaAsociadoSel.Data.CodAsociado)
+
+
 			const swalWithBootstrapButtons = Swal.mixin({
 				customClass: {
 				  confirmButton: 'btn btn-dark',
@@ -255,7 +285,7 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 			  })
 			  
 			  swalWithBootstrapButtons.fire({
-				title: 'Estas Seguro de eliminar este elemento ?',
+				title: 'Estas Seguro de eliminar este elemento ' + proyects.filaAsociadoSel.Data.Categoria + ' ' + proyects.filaAsociadoSel.Data.Familia + ' ' + proyects.filaAsociadoSel.Data.Tipo +'  ?',
 				text: "Esta acción no podrá ser revertida!",
 				icon: 'warning',
 				showCancelButton: true,
@@ -264,7 +294,9 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 				reverseButtons: true
 			  }).then((result) => {
 				if (result.isConfirmed) {
-
+					
+					dispatch(eliminarXCodigo('Asociado',proyects.filaAsociadoSel.Data.CodAsociado,''))
+					dispatch(eliminaAsociado(proyects.filaAsociadoSel.Data.CodAsociado));
 					swalWithBootstrapButtons.fire(
 						'Borrado!',
 						'Su registro ha sido eliminado.',
@@ -345,6 +377,7 @@ const Asociados = ({ levelStart = 1, idProject }) => {
 				focusedRowEnabled={true}
 				//defaultExpandedRowKeys={[1, 2, 3, 5]}
 				columnAutoWidth={false}
+				rowAlternationEnabled={true}
 				//rootValue={-1}
 				//selectedRowKeys={selectedRowKeys}
 
@@ -411,7 +444,10 @@ Valor: ""*/
 					//GENERAR NUEVO CODIGO
 					
 					
-					e.data.CodAsociado=getRandomString(24);
+					//e.data.CodAsociado=getRandomString(24);
+					
+					
+					
 					/*ActualizacionFecha: "2021-08-09T08:08:08.783"
 					ActualizacionUsuario: "ctorres@s10peru.com"
 					CampoFiltro: ""
@@ -475,8 +511,16 @@ Valor: ""*/
 						//dispatch(seleccionarFilaAsociado({Fila:e.rowIndex, Categoria:e.data.Categoria, Familia:'', Tipo:'', Data:e.data}));
 
 					}
+					//(Presupuesto, SubPresupuesto, Item, CodAsociado, Categoria, Familia, Tipo, campoFiltro, valorFiltro, userId) 
+					let agre='';
+					if (e.data?.Comp==='Igual'){
+						agre='=';
+					}
+					if (e.data?.Comp==='Diferente'){
+						agre='!';
+					}
 
-				
+					dispatch(guardarAsociado(e.data.CodPresupuesto,e.data.CodSubpresupuesto,e.data.Item,e.data.CodAsociado,e.data.Categoria,e.data.Familia,e.data.Tipo,e.data.CampoFiltro,agre+e.data.Valor,''));
 				
 				} } ///aqui actualizo
 

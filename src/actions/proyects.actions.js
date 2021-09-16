@@ -1,8 +1,9 @@
+import { createModuleResolutionCache } from 'typescript';
 import axios from '../config/axios';
-import {APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB,URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES, PARTY_CONTROL1, AGREGA_REGISTRO, AGREGA_CATEGORIA, AGREGA_TIPO, AGREGA_FAMILIA, AGREGA_GRUPO, MODIFICA_GRUPO, ELIMINA_GRUPO, AGREGA_ELEMENTOS, MODIFICA_SUB, MODIFICA_SUB1, AGREGA_SUB1, ACT_PRESUPUESTO, LIMPIA_PARTY_CONTROL, LIMPIAR_SUBS, PONER_PROPS, CAMBIAR_FILA_ASOCIADO, ADD_ASOCIADO, ASOCIADO_LIMPIAR, AGREGA_CATEGORIAB, AGREGA_TIPOB, AGREGA_FAMILIAB, ADD_ITEM, UPDATE_ITEM, REMOVE_ITEM} from '../constants';
+import { APU_DETALLE, METRADO_DETALLE, ID_DATA_TABLE, ID_PC, LISTAR_POR_PERIODO, MENSUAL_DETALLE, NAVIGATION_TREE, NAVIGATION_TREE_PC, TREE_SELECTEDS, URN_WEB, URN_WEB1, CAMBIA_SELECCION, SUB_SEL, METRADO_LIMPIAR, LIMPIAR_UBICACIONES, PARTY_CONTROL1, AGREGA_REGISTRO, AGREGA_CATEGORIA, AGREGA_TIPO, AGREGA_FAMILIA, AGREGA_GRUPO, MODIFICA_GRUPO, ELIMINA_GRUPO, AGREGA_ELEMENTOS, MODIFICA_SUB, MODIFICA_SUB1, AGREGA_SUB1, ACT_PRESUPUESTO, LIMPIA_PARTY_CONTROL, LIMPIAR_SUBS, PONER_PROPS, CAMBIAR_FILA_ASOCIADO, ADD_ASOCIADO, ASOCIADO_LIMPIAR, AGREGA_CATEGORIAB, AGREGA_TIPOB, AGREGA_FAMILIAB, ADD_ITEM, UPDATE_ITEM, REMOVE_ITEM, DELETE_ASOCIADO, DELETE_ESTRUCTURA, ADD_ESTRUCTURA, UPDATE_ESTRUCTURA, ADD_CALCULO, UPDATE_CALCULO } from '../constants';
 
-export const selectProyect = (idCod, userName, userId) =>{
-	return async (dispatch) =>{
+export const selectProyect = (idCod, userName, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		// console.log(idCod, '<--- lo que le paso');
 		await axios.post(
@@ -17,7 +18,7 @@ export const selectProyect = (idCod, userName, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 10,
 				},
 			}
@@ -30,11 +31,11 @@ export const selectProyect = (idCod, userName, userId) =>{
 	}
 }
 
-export const selectPc = (idCod, idPc, userId) =>{
-	return async (dispatch) =>{
+export const selectPc = (idCod, idPc, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -46,7 +47,7 @@ export const selectPc = (idCod, idPc, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 10,
 				},
 			}
@@ -60,8 +61,8 @@ export const selectPc = (idCod, idPc, userId) =>{
 	}
 }
 
-export const ListarPorPeriodo = (idCod, moneda) =>{
-	return async () =>{
+export const ListarPorPeriodo = (idCod, moneda) => {
+	return async () => {
 		// console.log('ListarPorPeriodo');
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let user = JSON.parse(localStorage.getItem("user-s10"));
@@ -76,7 +77,7 @@ export const ListarPorPeriodo = (idCod, moneda) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 10,
 				},
 			}
@@ -85,8 +86,8 @@ export const ListarPorPeriodo = (idCod, moneda) =>{
 	}
 }
 
-export const ListarPorPeriodoPc = (idCod, idPc) =>{
-	return async () =>{
+export const ListarPorPeriodoPc = (idCod, idPc) => {
+	return async () => {
 		// console.log('ListarPorPeriodo');
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let user = JSON.parse(localStorage.getItem("user-s10"));
@@ -101,7 +102,7 @@ export const ListarPorPeriodoPc = (idCod, idPc) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 10,
 				},
 			}
@@ -110,8 +111,8 @@ export const ListarPorPeriodoPc = (idCod, idPc) =>{
 	}
 }
 
-export const ProjectDetails = (idCod, moneda) =>{
-	return async () =>{
+export const ProjectDetails = (idCod, moneda) => {
+	return async () => {
 		// console.log('ProjectDetails#')
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let user = JSON.parse(localStorage.getItem("user-s10"));
@@ -126,7 +127,7 @@ export const ProjectDetails = (idCod, moneda) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 10,
 				},
 			}
@@ -135,8 +136,8 @@ export const ProjectDetails = (idCod, moneda) =>{
 	}
 }
 
-export const ProjectDetailsPc = (idCod, idPc) =>{
-	return async () =>{
+export const ProjectDetailsPc = (idCod, idPc) => {
+	return async () => {
 		// console.log('ProjectDetails#')
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let user = JSON.parse(localStorage.getItem("user-s10"));
@@ -151,7 +152,7 @@ export const ProjectDetailsPc = (idCod, idPc) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 10,
 				},
 			}
@@ -160,9 +161,9 @@ export const ProjectDetailsPc = (idCod, idPc) =>{
 	}
 }
 
-export const listHistory = (codProyecto) =>{
-	return async () =>{
-	
+export const listHistory = (codProyecto) => {
+	return async () => {
+
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let user = JSON.parse(localStorage.getItem("user-s10"));
 		await axios.post(
@@ -171,12 +172,12 @@ export const listHistory = (codProyecto) =>{
 				HasOutputParam: true,
 				ObjectName: `dbo.S10_06_Tablero_ListarProyectoMensualDetalle '${codProyecto}', '01', '', '', 20, 1`,
 				RequestId: "LIST_HISTORY",
-				SignalRConnectionID:  localStorage.getItem("connectionId"),
+				SignalRConnectionID: localStorage.getItem("connectionId"),
 				SecurityUserId: user.IdUser, // SecurityUserId obtenido al logear
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 10,
 				},
 			}
@@ -189,11 +190,11 @@ export const listHistory = (codProyecto) =>{
 
 
 
-export const selectItems = (CodPres, CodSubP, userId) =>{
-	return async (dispatch) =>{
+export const selectItems = (CodPres, CodSubP, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -205,7 +206,7 @@ export const selectItems = (CodPres, CodSubP, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -219,11 +220,11 @@ export const selectItems = (CodPres, CodSubP, userId) =>{
 	}
 }
 
-export const selectCLIENTES = (Descripcion, userId) =>{
-	return async (dispatch) =>{
+export const selectCLIENTES = (Descripcion, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -235,7 +236,7 @@ export const selectCLIENTES = (Descripcion, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -251,11 +252,11 @@ export const selectCLIENTES = (Descripcion, userId) =>{
 
 
 
-export const guardarPresupuesto = (CodPresupuesto, Descripcion, Plazo,  Fecha,  Jornada, DobleMoneda ,CostoDirectoBase1,CostoIndirectoBase1,CostoBase1,CostoDirectoBase2,CostoIndirectoBase2,CostoBase2,CodIdentificador,CodLugar,CodMoneda1,CodMoneda2,CodigoAlterno,JornadaSemana,JornadaMes,JornadaAno,userId) =>{
-	return async (dispatch) =>{
+export const guardarPresupuesto = (CodPresupuesto, Descripcion, Plazo, Fecha, Jornada, DobleMoneda, CostoDirectoBase1, CostoIndirectoBase1, CostoBase1, CostoDirectoBase2, CostoIndirectoBase2, CostoBase2, CodIdentificador, CodLugar, CodMoneda1, CodMoneda2, CodigoAlterno, JornadaSemana, JornadaMes, JornadaAno, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let email = localStorage.getItem("email");
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				//dbo.S10_01_Presupuesto_Adicionar 'ctorres@s10peru.com','1502005','Presupuesto 5',0,'6/8/2021',8.00,0,0.00,0.00,0.00,0.00,0.00,0.00,'22000030','010112','01',NULL,'',0.00,0.00,0.00
@@ -268,11 +269,11 @@ export const guardarPresupuesto = (CodPresupuesto, Descripcion, Plazo,  Fecha,  
 				RequestId: "IngPres",
 				SignalRConnectionID: localStorage.getItem("connectionId"),
 				SecurityUserId: '1148', // SecurityUserId obtenido al logear
-				
+
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -281,28 +282,28 @@ export const guardarPresupuesto = (CodPresupuesto, Descripcion, Plazo,  Fecha,  
 	}
 }
 
-export const modificarPresupuesto = (CodPresupuesto, Descripcion, Plazo,  Fecha,  Jornada, DobleMoneda ,CostoDirectoBase1,CostoIndirectoBase1,CostoBase1,CostoDirectoBase2,CostoIndirectoBase2,CostoBase2,CodIdentificador,CodLugar,CodMoneda1,CodMoneda2,CodigoAlterno,JornadaSemana,JornadaMes,JornadaAno,userId) =>{
-	
-	CostoDirectoBase1 = CostoDirectoBase1.replace(/,/g,'');
-	CostoIndirectoBase1 = CostoIndirectoBase1.replace(/,/g,'');
-	CostoBase1 = CostoBase1.replace(/,/g,'');
-	CostoDirectoBase2 = CostoDirectoBase2.replace(/,/g,'');
-	CostoIndirectoBase2 = CostoIndirectoBase2.replace(/,/g,'');
-	CostoBase2 = CostoBase2.replace(/,/g,'');
+export const modificarPresupuesto = (CodPresupuesto, Descripcion, Plazo, Fecha, Jornada, DobleMoneda, CostoDirectoBase1, CostoIndirectoBase1, CostoBase1, CostoDirectoBase2, CostoIndirectoBase2, CostoBase2, CodIdentificador, CodLugar, CodMoneda1, CodMoneda2, CodigoAlterno, JornadaSemana, JornadaMes, JornadaAno, userId) => {
 
-	Jornada = Jornada.replace(/,/g,'');
+	CostoDirectoBase1 = CostoDirectoBase1.replace(/,/g, '');
+	CostoIndirectoBase1 = CostoIndirectoBase1.replace(/,/g, '');
+	CostoBase1 = CostoBase1.replace(/,/g, '');
+	CostoDirectoBase2 = CostoDirectoBase2.replace(/,/g, '');
+	CostoIndirectoBase2 = CostoIndirectoBase2.replace(/,/g, '');
+	CostoBase2 = CostoBase2.replace(/,/g, '');
 
-	JornadaSemana = JornadaSemana.replace(/,/g,'');
-	JornadaMes = JornadaMes.replace(/,/g,'');
-	JornadaAno = JornadaAno.replace(/,/g,'');
-	
+	Jornada = Jornada.replace(/,/g, '');
+
+	JornadaSemana = JornadaSemana.replace(/,/g, '');
+	JornadaMes = JornadaMes.replace(/,/g, '');
+	JornadaAno = JornadaAno.replace(/,/g, '');
+
 
 	//alert(CostoDirectoBase1 + " " + CostoIndirectoBase1 + " " + CostoBase1 + " " + CostoDirectoBase2 + " " + CostoIndirectoBase2+ " " + CostoBase2);
-	
-	return async (dispatch) =>{
+
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let email = localStorage.getItem("email");
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: false,
@@ -314,7 +315,7 @@ export const modificarPresupuesto = (CodPresupuesto, Descripcion, Plazo,  Fecha,
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -325,11 +326,11 @@ export const modificarPresupuesto = (CodPresupuesto, Descripcion, Plazo,  Fecha,
 
 
 
-export const guardarSubPresupuesto = (CodPresupuesto,CodSubpresupuesto,Descripcion,CodModelo,userId) =>{
-	return async (dispatch) =>{
+export const guardarSubPresupuesto = (CodPresupuesto, CodSubpresupuesto, Descripcion, CodModelo, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let email = localStorage.getItem("email");
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: false,
@@ -340,7 +341,7 @@ export const guardarSubPresupuesto = (CodPresupuesto,CodSubpresupuesto,Descripci
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -380,11 +381,11 @@ export const guardarSubPresupuesto = (CodPresupuesto,CodSubpresupuesto,Descripci
 @Descripcion VARCHAR(250),
 @Nivel SMALLINT*/
 
-export const guardarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
-	return async (dispatch) =>{
+export const guardarGrupo = (CodPresupuesto, Descripcion, Nivel, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let email = localStorage.getItem("email");
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: false,
@@ -395,7 +396,7 @@ export const guardarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -404,11 +405,11 @@ export const guardarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
 	}
 }
 
-export const modificarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
-	return async (dispatch) =>{
+export const modificarGrupo = (CodPresupuesto, Descripcion, Nivel, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let email = localStorage.getItem("email");
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: false,
@@ -419,7 +420,7 @@ export const modificarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -429,11 +430,11 @@ export const modificarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
 }
 
 
-export const eliminarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
-	return async (dispatch) =>{
+export const eliminarGrupo = (CodPresupuesto, Descripcion, Nivel, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let email = localStorage.getItem("email");
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: false,
@@ -444,7 +445,7 @@ export const eliminarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -454,13 +455,13 @@ export const eliminarGrupo = (CodPresupuesto,Descripcion,Nivel,userId) =>{
 }
 
 
-export const guardarModelo = (CodPlano, NombreArchivoRvt, RutaArchivoRvt,  UrnAddIn,  UrnWeb, userId) =>{
-	return async (dispatch) =>{
+export const guardarModelo = (CodPlano, NombreArchivoRvt, RutaArchivoRvt, UrnAddIn, UrnWeb, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let email = localStorage.getItem("email");
 		//console.log(idCod, idPc);
-		
-		const {data} = await axios.post(
+
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: false,
@@ -473,12 +474,12 @@ export const guardarModelo = (CodPlano, NombreArchivoRvt, RutaArchivoRvt,  UrnAd
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
 		);
-		console.log("estado del guardar modelo" + `dbo.S10_01_SubpresupuestoDetallePlano_Actualizar '${CodPlano}','${NombreArchivoRvt}','${UrnAddIn}','${UrnWeb}','${email}'` );
+		console.log("estado del guardar modelo" + `dbo.S10_01_SubpresupuestoDetallePlano_Actualizar '${CodPlano}','${NombreArchivoRvt}','${UrnAddIn}','${UrnWeb}','${email}'`);
 		console.log(data);
 
 
@@ -497,14 +498,181 @@ export const guardarModelo = (CodPlano, NombreArchivoRvt, RutaArchivoRvt,  UrnAd
 }
 
 
-
-export const ModificarSubPresupuesto = (CodPresupuesto, CodSubPresupuesto, Descripcion,  CodModelo, userId) =>{
-	return async (dispatch) =>{
+export const guardarAsociado = (Presupuesto, SubPresupuesto, Item, CodAsociado, Categoria, Familia, Tipo, campoFiltro, valorFiltro, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		let email = localStorage.getItem("email");
 		//console.log(idCod, idPc);
-		
-		const {data} = await axios.post(
+		const { data } = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				//request.AddParameter("ObjectName", "dbo.S10_01_SubpresupuestoDetalleAsociado_Actualizar '" + Presupuesto_actual + "','" + SubPresupuesto_actual + "','" + Item_actual + "','" + CodAsociado + "','" + Categoria + "','" + Familia + "','" + Tipo + "','" + campoFiltro + "','" + valorFiltro + "','" + EmailUsuario + "'");
+				ObjectName: `dbo.S10_01_SubpresupuestoDetalleAsociado_Actualizar '${Presupuesto}','${SubPresupuesto}','${Item}','${CodAsociado}','${Categoria}','${Familia}','${Tipo}','${campoFiltro}','${valorFiltro}','${email}'`,
+				RequestId: "IngAsociado",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token, // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log("llamando a guardar asociado" + `dbo.S10_01_SubpresupuestoDetalleAsociado_Actualizar '${Presupuesto}','${SubPresupuesto}','${Item}','${CodAsociado}','${Categoria}','${Familia}','${Tipo}','${campoFiltro}','${valorFiltro}','${email}'`);
+		console.log(data);
+
+	}
+}
+//private async void GuardarEstructura(string CodEstructura, string Nivel, string Campo, string Mostrar)
+export const guardarEstructura = (Presupuesto, SubPresupuesto, Item, CodEstructura, Nivel, Campo, Mostrar, userId) => {
+	return async (dispatch) => {
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		//console.log(idCod, idPc);
+		const { data } = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				//request.AddParameter("ObjectName", "dbo.S10_01_SubpresupuestoDetalleAsociado_Actualizar '" + Presupuesto_actual + "','" + SubPresupuesto_actual + "','" + Item_actual + "','" + CodAsociado + "','" + Categoria + "','" + Familia + "','" + Tipo + "','" + campoFiltro + "','" + valorFiltro + "','" + EmailUsuario + "'");
+				ObjectName: `dbo.S10_01_SubpresupuestoDetalleEstructura_Actualizar '${Presupuesto}','${SubPresupuesto}','${Item}','${CodEstructura}','${Nivel}','${Campo}','${Mostrar}','${email}'`,
+				RequestId: "IngEstructura",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token, // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log("llamando a guardar estructura" + `dbo.S10_01_SubpresupuestoDetalleEstructura_Actualizar '${Presupuesto}','${SubPresupuesto}','${Item}','${CodEstructura}','${Nivel}','${Campo}','${Mostrar}','${email}'`);
+		console.log(data);
+
+	}
+}
+
+//private async void GuardarCalculo(string CodCalculo, string Descripcion, string Cantidad, string Longitud, string Ancho, string Alto)
+export const guardarCalculo = (Presupuesto, SubPresupuesto, Item, CodCalculo, Descripcion, Cantidad, Longitud, Ancho, Alto, userId) => {
+	return async (dispatch) => {
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		//console.log(idCod, idPc);
+		const { data } = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				//request.AddParameter("ObjectName", "dbo.S10_01_SubpresupuestoDetalleAsociado_Actualizar '" + Presupuesto_actual + "','" + SubPresupuesto_actual + "','" + Item_actual + "','" + CodAsociado + "','" + Categoria + "','" + Familia + "','" + Tipo + "','" + campoFiltro + "','" + valorFiltro + "','" + EmailUsuario + "'");
+				ObjectName: `dbo.S10_01_SubpresupuestoDetalleCalculo_Actualizar '${Presupuesto}','${SubPresupuesto}','${Item}','${CodCalculo}','${Descripcion}','${Cantidad}','${Longitud}','${Ancho}','${Alto}','${email}'`,
+				RequestId: "IngCalculo",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token, // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log("llamando a guardar asociado" + `dbo.S10_01_SubpresupuestoDetalleCalculo_Actualizar '${Presupuesto}','${SubPresupuesto}','${Item}','${CodCalculo}','${Descripcion}','${Cantidad}','${Longitud}','${Ancho}','${Alto}','${email}'`);
+		console.log(data);
+
+	}
+}
+
+
+//private async void GuardarCalculoDetalle(string CodCalculoDetalle, string CodCalculo, string TipoCampo, string Campo, string Operacion, string Posicion)
+export const guardarCalculoDetalle = (Presupuesto, SubPresupuesto, Item, CodCalculoDetalle, CodCalculo, TipoCampo, Campo, Operacion, Posicion, userId) => {
+	return async (dispatch) => {
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		//console.log(idCod, idPc);
+		const { data } = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				//request.AddParameter("ObjectName", "dbo.S10_01_SubpresupuestoDetalleAsociado_Actualizar '" + Presupuesto_actual + "','" + SubPresupuesto_actual + "','" + Item_actual + "','" + CodAsociado + "','" + Categoria + "','" + Familia + "','" + Tipo + "','" + campoFiltro + "','" + valorFiltro + "','" + EmailUsuario + "'");
+				ObjectName: `dbo.S10_01_SubpresupuestoDetalleCalculoDetalle_Actualizar '${Presupuesto}','${SubPresupuesto}','${Item}','${CodCalculoDetalle}','${CodCalculo}','${TipoCampo}','${Campo}','${Operacion}','${Posicion}','${email}'`,
+				RequestId: "IngCalculoDetalle",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token, // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log("llamando a guardar estructura" + `dbo.S10_01_SubpresupuestoDetalleCalculoDetalle_Actualizar '${Presupuesto}','${SubPresupuesto}','${Item}','${CodCalculoDetalle}','${CodCalculo}','${TipoCampo}','${Campo}','${Operacion}','${Posicion}','${email}'`);
+		console.log(data);
+
+	}
+}
+
+
+
+export const eliminarXCodigo = (Tabla, CodEliminar, userId) => {
+
+	let CadenaC = '';
+	switch (Tabla) {
+		case 'Asociado':
+			CadenaC = `dbo.S10_01_SubpresupuestoDetalleAsociado_Eliminar '${CodEliminar}'`
+			break;
+		case 'Estructura':
+			CadenaC = `dbo.S10_01_SubpresupuestoDetalleEstructura_Eliminar '${CodEliminar}'`
+			break;
+		case 'Medicion':
+			CadenaC = `dbo.S10_01_SubpresupuestoDetalleMedicion_Eliminar '${CodEliminar}'`
+			break;
+		case 'Calculo':
+			CadenaC = `dbo.S10_01_SubpresupuestoDetalleCalculo_Eliminar '${CodEliminar}'`
+			break;
+		case 'CalculoDetalle':
+			CadenaC = `dbo.S10_01_SubpresupuestoDetalleCalculoDetalle_Eliminar '${CodEliminar}'`
+			break;
+	};
+
+	return async (dispatch) => {
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		//console.log(idCod, idPc);
+		const { data } = await axios.post(
+			"",
+			{
+				HasOutputParam: false,
+				//request.AddParameter("ObjectName", "dbo.S10_01_SubpresupuestoDetalleAsociado_Actualizar '" + Presupuesto_actual + "','" + SubPresupuesto_actual + "','" + Item_actual + "','" + CodAsociado + "','" + Categoria + "','" + Familia + "','" + Tipo + "','" + campoFiltro + "','" + valorFiltro + "','" + EmailUsuario + "'");
+				ObjectName: CadenaC,
+				RequestId: "EliminarXCodigo",
+				SignalRConnectionID: localStorage.getItem("connectionId"),
+				SecurityUserId: '1148', // SecurityUserId obtenido al logear
+			},
+			{
+				headers: {
+					Token: company.Token, // no lo mandes en duro este vence
+					ModuleId: 21,
+				},
+			}
+		);
+		console.log("llamando a eliminar " + Tabla + CadenaC);
+		console.log(data);
+
+	}
+}
+
+
+
+
+export const ModificarSubPresupuesto = (CodPresupuesto, CodSubPresupuesto, Descripcion, CodModelo, userId) => {
+	return async (dispatch) => {
+		let company = JSON.parse(localStorage.getItem("company-s10"));
+		let email = localStorage.getItem("email");
+		//console.log(idCod, idPc);
+
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: false,
@@ -517,7 +685,7 @@ export const ModificarSubPresupuesto = (CodPresupuesto, CodSubPresupuesto, Descr
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -541,11 +709,11 @@ export const ModificarSubPresupuesto = (CodPresupuesto, CodSubPresupuesto, Descr
 }
 
 
-export const selectMODELOS = (userId) =>{
-	return async (dispatch) =>{
+export const selectMODELOS = (userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -557,7 +725,7 @@ export const selectMODELOS = (userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -572,11 +740,11 @@ export const selectMODELOS = (userId) =>{
 }
 
 
-export const selectMONEDAS = (userId) =>{
-	return async (dispatch) =>{
+export const selectMONEDAS = (userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -588,7 +756,7 @@ export const selectMONEDAS = (userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -603,11 +771,11 @@ export const selectMONEDAS = (userId) =>{
 }
 
 
-export const selectUBICACIONES = (Descripcion,Cantidad,Pagina, userId) =>{
-	return async (dispatch) =>{
+export const selectUBICACIONES = (Descripcion, Cantidad, Pagina, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -619,7 +787,7 @@ export const selectUBICACIONES = (Descripcion,Cantidad,Pagina, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -634,11 +802,11 @@ export const selectUBICACIONES = (Descripcion,Cantidad,Pagina, userId) =>{
 }
 
 
-export const selectTITULOS = (Descripcion,TamPagina, NumPagina, EtiquetaPag, userId) =>{
-	return async (dispatch) =>{
+export const selectTITULOS = (Descripcion, TamPagina, NumPagina, EtiquetaPag, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -651,7 +819,7 @@ export const selectTITULOS = (Descripcion,TamPagina, NumPagina, EtiquetaPag, use
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -665,11 +833,11 @@ export const selectTITULOS = (Descripcion,TamPagina, NumPagina, EtiquetaPag, use
 	}
 }
 
-export const selectPARTIDAS = (Descripcion,TamPagina, NumPagina, EtiquetaPag, userId) =>{
-	return async (dispatch) =>{
+export const selectPARTIDAS = (Descripcion, TamPagina, NumPagina, EtiquetaPag, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -681,7 +849,7 @@ export const selectPARTIDAS = (Descripcion,TamPagina, NumPagina, EtiquetaPag, us
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -695,11 +863,11 @@ export const selectPARTIDAS = (Descripcion,TamPagina, NumPagina, EtiquetaPag, us
 	}
 }
 
-export const selectAPUS = (CodPres, CodSubP, CodItem, userId) =>{
-	return async (dispatch) =>{
+export const selectAPUS = (CodPres, CodSubP, CodItem, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -711,7 +879,7 @@ export const selectAPUS = (CodPres, CodSubP, CodItem, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -725,11 +893,11 @@ export const selectAPUS = (CodPres, CodSubP, CodItem, userId) =>{
 	}
 }
 
-export const selectMETRADOS = (CodPres, CodSubP, CodItem, userId) =>{
-	return async (dispatch) =>{
+export const selectMETRADOS = (CodPres, CodSubP, CodItem, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -741,7 +909,7 @@ export const selectMETRADOS = (CodPres, CodSubP, CodItem, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -759,11 +927,11 @@ export const selectMETRADOS = (CodPres, CodSubP, CodItem, userId) =>{
 
 
 
-export const selectParidas = ( Unique, userId) =>{
-	return async (dispatch) =>{
+export const selectParidas = (Unique, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -775,7 +943,7 @@ export const selectParidas = ( Unique, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -790,11 +958,11 @@ export const selectParidas = ( Unique, userId) =>{
 }
 
 
-export const selectAsociados = (CodPres, CodSubP, CodItem, userId) =>{
-	return async (dispatch) =>{
+export const selectAsociados = (CodPres, CodSubP, CodItem, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -806,7 +974,7 @@ export const selectAsociados = (CodPres, CodSubP, CodItem, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -821,11 +989,11 @@ export const selectAsociados = (CodPres, CodSubP, CodItem, userId) =>{
 }
 
 
-export const selectEstructura = (CodPres, CodSubP, CodItem, userId) =>{
-	return async (dispatch) =>{
+export const selectEstructura = (CodPres, CodSubP, CodItem, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -837,7 +1005,7 @@ export const selectEstructura = (CodPres, CodSubP, CodItem, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -853,11 +1021,11 @@ export const selectEstructura = (CodPres, CodSubP, CodItem, userId) =>{
 
 
 
-export const selectCalculo = (CodPres, CodSubP, CodItem, userId) =>{
-	return async (dispatch) =>{
+export const selectCalculo = (CodPres, CodSubP, CodItem, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -869,7 +1037,7 @@ export const selectCalculo = (CodPres, CodSubP, CodItem, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -883,11 +1051,11 @@ export const selectCalculo = (CodPres, CodSubP, CodItem, userId) =>{
 	}
 }
 
-export const selectCalculoDet = (CodPres, CodSubP, CodItem, userId) =>{
-	return async (dispatch) =>{
+export const selectCalculoDet = (CodPres, CodSubP, CodItem, userId) => {
+	return async (dispatch) => {
 		let company = JSON.parse(localStorage.getItem("company-s10"));
 		//console.log(idCod, idPc);
-		const {data} = await axios.post(
+		const { data } = await axios.post(
 			"",
 			{
 				HasOutputParam: true,
@@ -899,7 +1067,7 @@ export const selectCalculoDet = (CodPres, CodSubP, CodItem, userId) =>{
 			},
 			{
 				headers: {
-					Token: company.Token , // no lo mandes en duro este vence
+					Token: company.Token, // no lo mandes en duro este vence
 					ModuleId: 21,
 				},
 			}
@@ -914,7 +1082,7 @@ export const selectCalculoDet = (CodPres, CodSubP, CodItem, userId) =>{
 }
 
 
-export const cleanDataChart1 = () =>{
+export const cleanDataChart1 = () => {
 	// console.log('reiniciando desde actions')
 	return (dispatch) =>
 		dispatch({
@@ -925,7 +1093,7 @@ export const cleanDataChart1 = () =>{
 
 
 
-export const SelectUrn = (Urn) =>{
+export const SelectUrn = (Urn) => {
 	// console.log('reiniciando desde actions')
 	//alert(Urn);
 	return (dispatch) =>
@@ -935,7 +1103,7 @@ export const SelectUrn = (Urn) =>{
 		})
 }
 
-export const SelectUrnB = (Urn) =>{
+export const SelectUrnB = (Urn) => {
 	// console.log('reiniciando desde actions')
 	//alert(Urn);
 	return (dispatch) =>
@@ -946,7 +1114,7 @@ export const SelectUrnB = (Urn) =>{
 }
 
 
-export const cleanDataChartAPU = () =>{
+export const cleanDataChartAPU = () => {
 	// console.log('reiniciando desde actions')
 	return (dispatch) =>
 		dispatch({
@@ -959,7 +1127,7 @@ export const cleanDataChartAPU = () =>{
 
 
 
-export const cleanDataChart = () =>{
+export const cleanDataChart = () => {
 	// console.log('reiniciando desde actions')
 	return (dispatch) =>
 		dispatch({
@@ -969,7 +1137,7 @@ export const cleanDataChart = () =>{
 }
 
 
-export const LimpiarSubPres = () =>{
+export const LimpiarSubPres = () => {
 	// console.log('reiniciando desde actions')
 	return (dispatch) =>
 		dispatch({
@@ -979,7 +1147,7 @@ export const LimpiarSubPres = () =>{
 }
 
 
-export const cleanDataChart22 = () =>{
+export const cleanDataChart22 = () => {
 	// console.log('reiniciando desde actions')
 	return (dispatch) =>
 		dispatch({
@@ -1007,102 +1175,102 @@ export const cleanDataChart22 = () =>{
 
 
 
-  export const limpiaTree = () =>{
+export const limpiaTree = () => {
 	/*console.log('aGREGANDO MODIFICA GRUPO');
 	console.log(sel);*/
-   return (dispatch) =>
-	   dispatch({
-		   type: LIMPIA_PARTY_CONTROL,
-		   payload: []
-	   })
+	return (dispatch) =>
+		dispatch({
+			type: LIMPIA_PARTY_CONTROL,
+			payload: []
+		})
 }
 
-export const limpiaSubs = () =>{
+export const limpiaSubs = () => {
 	/*console.log('aGREGANDO MODIFICA GRUPO');
 	console.log(sel);*/
-   return (dispatch) =>
-	   dispatch({
-		   type: LIMPIAR_SUBS,
-		   payload: []
-	   })
+	return (dispatch) =>
+		dispatch({
+			type: LIMPIAR_SUBS,
+			payload: []
+		})
 }
 
 export const limpiaUbicaciones = () => ({
 	type: LIMPIAR_UBICACIONES,
 	payload: []
-  })
+})
 
 
 export const navigationTree = (grupo) => ({
-  type: NAVIGATION_TREE,
-  payload: {grupo}
+	type: NAVIGATION_TREE,
+	payload: { grupo }
 })
 
 export const navigationTreePC = (grupo) => ({
-  type: NAVIGATION_TREE_PC,
-  payload: {grupo}
+	type: NAVIGATION_TREE_PC,
+	payload: { grupo }
 })
 
 
 export const cambiaSeleccion = (sel) => ({
 	type: CAMBIA_SELECCION,
 	payload: sel
-  })
-  
+})
 
- export const agregaRegistro = (sel) => ({
+
+export const agregaRegistro = (sel) => ({
 	type: AGREGA_REGISTRO,
 	payload: sel
-  })
+})
 
-  export const agregaCategoria = (sel) => ({
+export const agregaCategoria = (sel) => ({
 	type: AGREGA_CATEGORIA,
 	payload: sel
-  })
+})
 
-  export const agregaTipo = (sel) => ({
+export const agregaTipo = (sel) => ({
 	type: AGREGA_TIPO,
 	payload: sel
-  })
+})
 
-  export const agregaFamilia = (sel) => ({
+export const agregaFamilia = (sel) => ({
 	type: AGREGA_FAMILIA,
 	payload: sel
-  })
+})
 
 
-  export const agregaCategoriaB = (sel) => ({
+export const agregaCategoriaB = (sel) => ({
 	type: AGREGA_CATEGORIAB,
 	payload: sel
-  })
+})
 
-  export const agregaTipoB = (sel) => ({
+export const agregaTipoB = (sel) => ({
 	type: AGREGA_TIPOB,
 	payload: sel
-  })
+})
 
-  export const agregaFamiliaB = (sel) => ({
+export const agregaFamiliaB = (sel) => ({
 	type: AGREGA_FAMILIAB,
 	payload: sel
-  })
+})
 
-  export const agregaElementos = (sel) => ({
+export const agregaElementos = (sel) => ({
 	type: AGREGA_ELEMENTOS,
 	payload: sel
-  })
+})
 
-  export const ponerPropiedades = (sel) => ({
+export const ponerPropiedades = (sel) => ({
 	type: PONER_PROPS,
 	payload: sel
-  })
+})
 
-  export const seleccionarFilaAsociado = (sel) => ({
+export const seleccionarFilaAsociado = (sel) => ({
 	type: CAMBIAR_FILA_ASOCIADO,
 	payload: sel
-  })
+})
 
 
-  export const agregaGrupo1 = (sel) =>{
+export const agregaGrupo1 = (sel) => {
 	// console.log('reiniciando desde actions')
 	return (dispatch) =>
 		dispatch({
@@ -1111,9 +1279,9 @@ export const cambiaSeleccion = (sel) => ({
 		})
 }
 
-export const modificaGrupo1 = (sel) =>{
-	 console.log('aGREGANDO MODIFICA GRUPO');
-	 console.log(sel);
+export const modificaGrupo1 = (sel) => {
+	console.log('aGREGANDO MODIFICA GRUPO');
+	console.log(sel);
 	return (dispatch) =>
 		dispatch({
 			type: MODIFICA_GRUPO,
@@ -1121,37 +1289,37 @@ export const modificaGrupo1 = (sel) =>{
 		})
 }
 
-export const modificaSub = (sel) =>{
+export const modificaSub = (sel) => {
 	/*console.log('aGREGANDO MODIFICA GRUPO');
 	console.log(sel);*/
-   return (dispatch) =>
-	   dispatch({
-		   type: MODIFICA_SUB,
-		   payload: sel
-	   })
+	return (dispatch) =>
+		dispatch({
+			type: MODIFICA_SUB,
+			payload: sel
+		})
 }
 
-export const modificaSub1 = (sel) =>{
+export const modificaSub1 = (sel) => {
 	/*console.log('aGREGANDO MODIFICA GRUPO');
 	console.log(sel);*/
-   return (dispatch) =>
-	   dispatch({
-		   type: MODIFICA_SUB1,
-		   payload: sel
-	   })
+	return (dispatch) =>
+		dispatch({
+			type: MODIFICA_SUB1,
+			payload: sel
+		})
 }
 
-export const agregaSub1 = (sel) =>{
+export const agregaSub1 = (sel) => {
 	/*console.log('aGREGANDO MODIFICA GRUPO');
 	console.log(sel);*/
-   return (dispatch) =>
-	   dispatch({
-		   type: AGREGA_SUB1,
-		   payload: sel
-	   })
+	return (dispatch) =>
+		dispatch({
+			type: AGREGA_SUB1,
+			payload: sel
+		})
 }
 
-export const eliminaGrupo1 = (sel) =>{
+export const eliminaGrupo1 = (sel) => {
 	// console.log('reiniciando desde actions')
 	return (dispatch) =>
 		dispatch({
@@ -1161,34 +1329,57 @@ export const eliminaGrupo1 = (sel) =>{
 }
 
 
+export const eliminaAsociado = (sel) => {
+	// console.log('reiniciando desde actions')
+	return (dispatch) =>
+		dispatch({
+			type: DELETE_ASOCIADO,
+			payload: sel
+		})
+}
 
+export const eliminaEstructura = (sel) => {
+	// console.log('reiniciando desde actions')
+	return (dispatch) =>
+		dispatch({
+			type: DELETE_ESTRUCTURA,
+			payload: sel
+		})
+}
 
-
-
-
-
-export const agregaItem = (sel) =>{
-	/*console.log('aGREGANDO MODIFICA GRUPO');
-	console.log(sel);*/
-   return (dispatch) =>
-	   dispatch({
-		   type: ADD_ITEM,
-		   payload: sel
-	   })
+export const modificaEstructura = (sel) => {
+	// console.log('reiniciando desde actions')
+	return (dispatch) =>
+		dispatch({
+			type: UPDATE_ESTRUCTURA,
+			payload: sel
+		})
 }
 
 
-export const modificaItem = (sel) =>{
+
+export const agregaItem = (sel) => {
 	/*console.log('aGREGANDO MODIFICA GRUPO');
 	console.log(sel);*/
-   return (dispatch) =>
-	   dispatch({
-		   type: UPDATE_ITEM,
-		   payload: sel
-	   })
+	return (dispatch) =>
+		dispatch({
+			type: ADD_ITEM,
+			payload: sel
+		})
 }
 
-export const eliminaItem = (sel) =>{
+
+export const modificaItem = (sel) => {
+	/*console.log('aGREGANDO MODIFICA GRUPO');
+	console.log(sel);*/
+	return (dispatch) =>
+		dispatch({
+			type: UPDATE_ITEM,
+			payload: sel
+		})
+}
+
+export const eliminaItem = (sel) => {
 	// console.log('reiniciando desde actions')
 	return (dispatch) =>
 		dispatch({
@@ -1202,41 +1393,70 @@ export const eliminaItem = (sel) =>{
 
 
 
-export const actPresupuesto = (sel) =>{
+export const actPresupuesto = (sel) => {
 	/*console.log('aGREGANDO MODIFICA GRUPO');
 	console.log(sel);*/
-   return (dispatch) =>
-	   dispatch({
-		   type: ACT_PRESUPUESTO,
-		   payload: sel
-	   })
+	return (dispatch) =>
+		dispatch({
+			type: ACT_PRESUPUESTO,
+			payload: sel
+		})
 }
 
-export const addAsociado = (sel) =>{
-	console.log('aGREGANDO asociado');
-	console.log(sel);
-   return (dispatch) =>
-	   dispatch({
-		   type: ADD_ASOCIADO,
-		   payload: sel
-	   })
+export const addAsociado = (sel) => {
+	//console.log('aGREGANDO asociado');
+	//console.log(sel);
+	return (dispatch) =>
+		dispatch({
+			type: ADD_ASOCIADO,
+			payload: sel
+		})
 }
 
-export const limpiaAsociado = () =>{
-   return (dispatch) =>
-	   dispatch({
-		   type: ASOCIADO_LIMPIAR,
-		   payload: []
-	   })
+export const addEstructura = (sel) => {
+	//console.log('aGREGANDO estructura');
+	//console.log(sel);
+	return (dispatch) =>
+		dispatch({
+			type: ADD_ESTRUCTURA,
+			payload: sel
+		})
+}
+
+export const addCalculo = (sel) => {
+	//console.log('aGREGANDO estructura');
+	//console.log(sel);
+	return (dispatch) =>
+		dispatch({
+			type: ADD_CALCULO,
+			payload: sel
+		})
+}
+
+export const actualizaCalculo = (sel) => {
+	return (dispatch) =>
+		dispatch({
+			type: UPDATE_CALCULO,
+			payload: sel
+		})
+}
+
+export const limpiaAsociado = () => {
+	return (dispatch) =>
+		dispatch({
+			type: ASOCIADO_LIMPIAR,
+			payload: []
+		})
 }
 
 export const SeleccionaSub = (sel) => ({
 	type: SUB_SEL,
 	payload: sel
-  })
+})
 
-export const selectTree = (nodeId) => {	
+export const selectTree = (nodeId) => {
 	return ({
-  type: TREE_SELECTEDS,
-  payload: nodeId
-})}
+		type: TREE_SELECTEDS,
+		payload: nodeId
+	})
+}

@@ -58,6 +58,12 @@ import {
 	ADD_ITEM,
 	UPDATE_ITEM,
 	REMOVE_ITEM,
+	DELETE_ASOCIADO,
+	ADD_ESTRUCTURA,
+	DELETE_ESTRUCTURA,
+	UPDATE_ESTRUCTURA,
+	ADD_CALCULO,
+	UPDATE_CALCULO,
 } from '../constants';
 
 const initialState = {
@@ -269,26 +275,91 @@ export default (state = initialState, { type, payload }) => {
 			};
 
 		case ADD_ASOCIADO:
-			console.log('este es mi nuevo dato');
-			console.log(payload);
-			console.log(state.DataAsociado);
+			//console.log('este es mi nuevo dato');
+			//console.log(payload);
+			//console.log(state.DataAsociado);
 			return {
 				...state,
 				DataAsociado: [...state.DataAsociado, ...payload]
 			};
 
 
+		case ADD_CALCULO:
+			//console.log('este es mi nuevo dato');
+			//console.log(payload);
+			//console.log(state.DataAsociado);
+			return {
+				...state,
+				Datacalculo: [...state.Datacalculo, ...payload]
+			};
+
+		case UPDATE_CALCULO:
+				//console.log('este es mi nuevo dato');
+				//console.log(payload);
+				//console.log(state.DataAsociado);
+			return {
+					...state,
+				Datacalculo: payload
+			};
+	
+
+		case DELETE_ASOCIADO:
+			//console.log('este es mi dato A ELIMINAR');
+			//console.log(payload);
+			//console.log(state.DataAsociado);
+			return {
+				...state,
+				DataAsociado: [...state.DataAsociado.filter((filtro1) => filtro1.CodAsociado !== payload)]
+				//DataAsociado: [...state.DataAsociado, ...payload]
+			};
 
 		case ESTRUCTURA_DETALLE:
 			return {
 				...state,
-				Dataestructura: payload
+				Dataestructura: payload.sort((a, b) => a.Nivel - b.Nivel)
 			};
+
+
+		case ADD_ESTRUCTURA:
+			console.log('este es mi nuevo dato');
+			console.log(payload);
+			console.log(state.Dataestructura);
+			return {
+				...state,
+				Dataestructura: [...state.Dataestructura, ...payload].sort((a, b) => a.Nivel - b.Nivel)
+			};
+
+		case DELETE_ESTRUCTURA:
+			console.log('este es mi dato A ELIMINAR');
+			console.log(payload);
+			console.log(state.Dataestructura);
+			return {
+				...state,
+				Dataestructura: [...state.Dataestructura.filter((filtro1) => filtro1.CodEstructura !== payload)].sort((a, b) => a.Nivel - b.Nivel)
+				//DataAsociado: [...state.DataAsociado, ...payload]
+			};
+
+
+		case UPDATE_ESTRUCTURA:
+			console.log('este es mi dato A MODIFICAR');
+			console.log(payload);
+			console.log(state.Dataestructura);
+			return {
+				...state,
+				Dataestructura: [...state.Dataestructura.filter((filtro1) => filtro1.CodEstructura !== payload.CodEstructura), payload].sort((a, b) => a.Nivel - b.Nivel)
+				//DataAsociado: [...state.DataAsociado, ...payload]
+			};
+
+
+
 		case CALCULO_DETALLE:
 			return {
 				...state,
 				Datacalculo: payload
 			};
+
+
+
 
 		case CALCULODET_DETALLE:
 			return {
@@ -379,29 +450,29 @@ export default (state = initialState, { type, payload }) => {
 			};
 
 
-			case ADD_ITEM:
-				console.log('este es mi nuevo dato');
-				console.log(payload);
-				console.log(state.DataPc);		
-				return {
-					...state,
-					DataPc: [...state.DataPc, ...payload]
-				};
-	
-			case UPDATE_ITEM:
-				//console.log('este es el codPresupuesto'); ///por actualizarse
-				//console.log(payload);
-				return {
-					...state,
-					DataPC: [...state.DataPC.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto), ...payload].sort((a, b) => a.Fila - b.Fila)
-					//treePartyControl: [...state.treePartyControl.filter( (filtro1) => filtro1.CodPresupuesto !== '1504' ), ...payload]
-				};
-			case REMOVE_ITEM:
-				return {
-					...state,
-					//treePartyControl: [...state.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto)].sort((a, b) => a.Fila - b.Fila)
-					DataPC: [...state.DataPC.filter((filtro1) => filtro1.CodPresupuesto !== payload)].sort((a, b) => a.Fila - b.Fila)
-				};
+		case ADD_ITEM:
+			console.log('este es mi nuevo dato');
+			console.log(payload);
+			console.log(state.DataPc);
+			return {
+				...state,
+				DataPc: [...state.DataPc, ...payload]
+			};
+
+		case UPDATE_ITEM:
+			//console.log('este es el codPresupuesto'); ///por actualizarse
+			//console.log(payload);
+			return {
+				...state,
+				DataPC: [...state.DataPC.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto), ...payload].sort((a, b) => a.Fila - b.Fila)
+				//treePartyControl: [...state.treePartyControl.filter( (filtro1) => filtro1.CodPresupuesto !== '1504' ), ...payload]
+			};
+		case REMOVE_ITEM:
+			return {
+				...state,
+				//treePartyControl: [...state.treePartyControl.filter((filtro1) => filtro1.CodPresupuesto !== payload[0].CodPresupuesto)].sort((a, b) => a.Fila - b.Fila)
+				DataPC: [...state.DataPC.filter((filtro1) => filtro1.CodPresupuesto !== payload)].sort((a, b) => a.Fila - b.Fila)
+			};
 
 
 
@@ -577,12 +648,12 @@ export default (state = initialState, { type, payload }) => {
 				DataTitulos: [...payload]
 			};
 		case LISTAR_PARTIDAS:
-				return {
-					...state,
-					//DataUbicaciones: [...state.DataUbicaciones, ...payload]
-					DataPartidas: [...payload]
-				};
-	
+			return {
+				...state,
+				//DataUbicaciones: [...state.DataUbicaciones, ...payload]
+				DataPartidas: [...payload]
+			};
+
 
 		/*case LIMPIAR_UBICACIONES:
 			return {

@@ -131,7 +131,7 @@ Unidad: "glb",*/
 const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 
-
+	const [ancho, setAncho] = useState('90vw')
 	const dispatch = useDispatch();
 	// const [loading, setLoading] = useState(true);
 	const [allLevels, setAllLevels] = useState(null)
@@ -618,7 +618,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 		const codSub = Item.CodSubpresupuesto;
 		const codItem = Item.Item;
 
-		dispatch(limpiaAsociado());
+		
 
 		setItemSel(Item)
 
@@ -725,15 +725,19 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 		}
 
 		if (levelPC === 2) {
+			
 			if (ultimoMETRADO !== codP + codSub + codItem) {
-				dispatch(selectMETRADOS(codP, codSub, codItem, ''));
 				dispatch(cleanDataChart22());
+				setTimeout(() => {
+					dispatch(selectMETRADOS(codP, codSub, codItem, ''));					
+				}, 500);
+				
 			}
 			setUltimoMETRADO(codP + codSub + codItem);
 		}
 
 		if (levelPC === 3) {
-
+			dispatch(limpiaAsociado());
 			if (ultimoASOCIADOS !== codP + codSub + codItem) {
 				dispatch(selectAsociados(codP, codSub, codItem, ''));
 			}
@@ -746,6 +750,12 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 				dispatch(selectEstructura(codP, codSub, codItem, ''));
 			}
 			setUltimoESTRUCTURA(codP + codSub + codItem);
+			dispatch(limpiaAsociado());
+			if (ultimoASOCIADOS !== codP + codSub + codItem) {
+				dispatch(selectAsociados(codP, codSub, codItem, ''));
+			}
+			setUltimoASCOCIADOS(codP + codSub + codItem);
+
 
 		}
 
@@ -755,6 +765,11 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 				dispatch(selectCalculoDet(codP, codSub, codItem, ''));
 			}
 			setUltimoCALCULO(codP + codSub + codItem);
+			dispatch(limpiaAsociado());
+			if (ultimoASOCIADOS !== codP + codSub + codItem) {
+				dispatch(selectAsociados(codP, codSub, codItem, ''));
+			}
+			setUltimoASCOCIADOS(codP + codSub + codItem);			
 
 		}
 
@@ -1007,23 +1022,23 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 		//targetNode = visibleRows[e.toIndex].node;
 		let visibleRows = e.component.getVisibleRows(),
-		sourceNode = e.component.getNodeByKey(e.itemData.OrdenJerarquico),
-		targetNode = visibleRows[e.toIndex].node;
+			sourceNode = e.component.getNodeByKey(e.itemData.OrdenJerarquico),
+			targetNode = visibleRows[e.toIndex].node;
 		console.log('va a ');
 		console.log(targetNode);
 		//alert();
 		//targetNode = visibleRows[e.toIndex].node;
-		
-		if (e.itemData.Descripcion !== targetNode.data.Descripcion){
+
+		if (e.itemData.Descripcion !== targetNode.data.Descripcion) {
 			const swalWithBootstrapButtons = Swal.mixin({
 				customClass: {
-				  confirmButton: 'btn btn-dark',
-				  cancelButton: 'btn btn-light'
+					confirmButton: 'btn btn-dark',
+					cancelButton: 'btn btn-light'
 				},
 				buttonsStyling: false
-			  })
-			  
-			  swalWithBootstrapButtons.fire({
+			})
+
+			swalWithBootstrapButtons.fire({
 				title: 'Estas Seguro de mover ' + e.itemData.Descripcion + ' dentro de ' + targetNode.data.Descripcion + ' ?',
 				text: "Esta acción no podrá ser revertida!",
 				icon: 'warning',
@@ -1031,36 +1046,36 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 				confirmButtonText: 'Si, moverlo!',
 				cancelButtonText: 'No, salir!',
 				reverseButtons: true
-			  }).then((result) => {
+			}).then((result) => {
 				if (result.isConfirmed) {
-	
-					
+
+
 					//realizar movimiento
-	
-	
-	
-					
-					
+
+
+
+
+
 					//localStorage.setItem("EliminadoResp", resp[0].Response);
-	
+
 				} else if (
-				  /* Read more about handling dismissals below */
-				  result.dismiss === Swal.DismissReason.cancel
+					/* Read more about handling dismissals below */
+					result.dismiss === Swal.DismissReason.cancel
 				) {
-				  swalWithBootstrapButtons.fire(
-					'Accion cancelada',
-					'No se han realizado Cambios :)',
-					':)'
-				  )
+					swalWithBootstrapButtons.fire(
+						'Accion cancelada',
+						'No se han realizado Cambios :)',
+						'error'
+					)
 				}
-			  })
+			})
 
 
 		}
 
 
 
-		
+
 		/*let visibleRows = e.component.getVisibleRows(),
 		  sourceNode = e.component.getNodeByKey(e.itemData.OrdenJerarquico),
 		  targetNode = visibleRows[e.toIndex].node;
@@ -1073,6 +1088,49 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 		  targetNode = targetNode.parent;
 		}*/
 	}
+
+
+	const onReorder= (e) =>{
+		//console.log('datos de reorder...');
+		//console.log(e);
+		
+		
+		/*const visibleRows = e.component.getVisibleRows();
+		let sourceData = e.itemData;
+		let employees = this.state.employees;
+		const sourceIndex = employees.indexOf(sourceData);*/
+	
+		/*if (e.dropInsideItem) {
+		  sourceData = { ...sourceData, Head_ID: visibleRows[e.toIndex].key };
+		  employees = [...employees.slice(0, sourceIndex), sourceData, ...employees.slice(sourceIndex + 1)];
+		} else {
+		  const toIndex = e.fromIndex > e.toIndex ? e.toIndex - 1 : e.toIndex;
+		  let targetData = toIndex >= 0 ? visibleRows[toIndex].node.data : null;
+	
+		  if (targetData && e.component.isRowExpanded(targetData.ID)) {
+			sourceData = { ...sourceData, Head_ID: targetData.ID };
+			targetData = null;
+		  } else {
+			const headId = targetData ? targetData.Head_ID : -1;
+			if(sourceData.Head_ID !== headId) {
+			  sourceData = { ...sourceData, Head_ID: headId };
+			}
+		  }
+	
+		  employees = [...employees.slice(0, sourceIndex), ...employees.slice(sourceIndex + 1)];
+	
+		  const targetIndex = employees.indexOf(targetData) + 1;
+		  employees = [...employees.slice(0, targetIndex), sourceData, ...employees.slice(targetIndex)];
+		}
+	
+		this.setState({
+		  employees
+		});*/
+	  }
+
+
+
+
 
 	const { selectedRowKeys, recursive, selectionMode, selectedEmployeeNames } = state;
 	return (
@@ -1101,16 +1159,51 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 				show={showTit}
 			/>
 
-			<BuscaPartida
+			{/* <BuscaPartida
 				setShow={setShowPart}
 				subseleccionado={subseleccionado}
 				itemAgregar={itemAgregar}
 				setItemAgregar={setItemAgregar}
 				CodPresupuesto={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}
 				show={showPart}
-			/>
+			/> */}
+
+
+
+
+
 
 			<div id="ContenedorTotal1" className="d-flex flex-wrap justify-content-between overflow-hidden h-100" style={{ height: height - 20, fontSize: '0.8rem !important' }}>
+
+
+
+				{showPart &&
+					<>
+						<div className="" style={{ position: 'absolute', height: '100%', width: '100%', marginTop: '0px', top: '0px', left: '0px', zIndex: '9', background: 'rgba(0, 0, 0, 0.3)' }}>
+							<div className="" style={{ position: 'absolute', height: '98vw', width: '95%', marginTop: '15px', top: '15px', left: '2.5%', zIndex: '9' }}>
+								<BuscaPartida
+									setShow={setShowPart}
+									subseleccionado={subseleccionado}
+									itemAgregar={itemAgregar}
+									setItemAgregar={setItemAgregar}
+									CodPresupuesto={proyects.DatosPresupuesto && proyects.DatosPresupuesto[0] ? proyects.DatosPresupuesto[0].CodPresupuesto : ''}
+									show={showPart}
+									itemSelected={itemSelected}
+								//setNuevoPres={setNuevoPres}
+								/>
+								<Button1 variant="outline-info" style={{ position: 'absolute', right: '32px', top: '12px', background: '#398bf7', color: 'white' }} onClick={() => {
+									setShowPart(false);
+								}
+								}><i class="fas fa-times"></i></Button1>
+								{/* <div className="btn btn-outline-dark" style={{position: 'absolute', height:'35px', width:'35px', top:'10px', right:'10px', color:'#CDCDCD' }} onClick={ () => { setDatosGenerales(false) }}>
+					<i className="far fa-window-close fa-3x" style={{position:'absolute', top:'-2px', left:'-3px'}}></i>
+				</div> */}
+							</div>
+						</div>
+					</>}
+
+
+
 				<Resizable
 					id="RPrincipal"
 					//className="tree-fixed p-0 d-flex justify-content-between"
@@ -1464,9 +1557,10 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 										<RowDragging
 											//onDragChange={onDragChange}
 											onDragEnd={onDragChange}
-											//onReorder={onReorder}
+											onReorder={onReorder}
+											
 											allowDropInsideItem={true}
-											allowReordering={false}
+											allowReordering={true}
 											showDragIcons={false}
 										/>
 										<SearchPanel visible={true} />
@@ -2015,7 +2109,7 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 
 
 			<div id="ContDet2" className="" style={{
-				position: 'absolute', top: height + 3, height: window.innerHeight - height - 60, width: '100%',
+				position: 'absolute', top: height + 3, height: window.innerHeight - height - 60, width: '99%',
 				/*background: 'rgb(242,245,246)',
 				background: '-moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%)',
 				background: '-webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%)',
@@ -2113,8 +2207,11 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 									active={level === 3}
 									onClick={() => {
 										if (ultimoASOCIADOS !== itemSeleccionado) {
-											dispatch(selectAsociados(itemSeleccionado.substring(0, 7), itemSeleccionado.substring(7, 10), itemSeleccionado.substring(10, 25), ''));
-											setUltimoASCOCIADOS(itemSeleccionado);
+											dispatch(limpiaAsociado());
+											setTimeout(() => {
+												dispatch(selectAsociados(itemSeleccionado.substring(0, 7), itemSeleccionado.substring(7, 10), itemSeleccionado.substring(10, 25), ''));
+												setUltimoASCOCIADOS(itemSeleccionado);													
+											}, 500);
 										}
 
 									}}
@@ -2137,8 +2234,28 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 										})
 
 									} else {
-										setLevel(4);
-										setLevelPC(4);
+
+										if (!proyects.DataAsociado || proyects.DataAsociado.length===0) {
+
+											setLevel(3);
+											setLevelPC(3);
+											Swal.fire({
+												title: 'Error!',
+												text: 'Debe asociar elementos primero',
+												icon: 'error',
+												confirmButtonText: 'Ok'
+											})
+
+										}else{
+											setLevel(4);
+											setLevelPC(4);
+	
+
+										}
+
+
+
+
 									}
 								}}
 							>
@@ -2174,8 +2291,26 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 										})
 
 									} else {
-										setLevel(5);
-										setLevelPC(5);
+
+										if (!proyects.DataAsociado || proyects.DataAsociado.length===0) {
+
+											setLevel(3);
+											setLevelPC(3);
+											Swal.fire({
+												title: 'Error!',
+												text: 'Debe asociar elementos primero',
+												icon: 'error',
+												confirmButtonText: 'Ok'
+											})
+
+										}else{
+											setLevel(5);
+											setLevelPC(5);
+										}
+
+
+
+										
 									}
 								}}
 							>
@@ -2242,18 +2377,21 @@ const Items = ({ widthItems, widthNav = 0, levelStart = 1, idProject }) => {
 									<Asociados
 										levelStart={1}
 										idProject={proyects.idCard}
+										itemSel={itemSel}
 									/>
 								) : (
 									levelPC === 4 ? (
 										<Estructura
 											levelStart={1}
 											idProject={proyects.idCard}
+											itemSel={itemSel}
 										/>
 									) : (
 										levelPC === 5 ? (
 											<Calculo
 												levelStart={1}
 												idProject={proyects.idCard}
+												itemSel={itemSel}
 											/>
 										) : (
 											levelPC === 2 ? (

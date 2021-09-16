@@ -48,8 +48,8 @@ const Presupuestos = ({ match }) => {
 	const [levelPC1, setLevelPC1] = useState(1);
 	const [level1, setLevel1] = useState(2);
 
-
-
+	
+	const [favoritos, setFavoritos] = useState(false);
 
 	const [reducido, setReducido] = useState(false);
 
@@ -289,7 +289,7 @@ const Presupuestos = ({ match }) => {
 
 									<DropDownButton
 										splitButton={true}
-										width='180px'
+										width='160px'
 										useSelectMode={false}
 										text={modo}
 										//icon="dist/img/manager.png"
@@ -353,13 +353,33 @@ const Presupuestos = ({ match }) => {
 
 										}}
 									/>
-									<Button1 variant="outline-info" style={{ position: 'absolute', right: '2px', top: '5px',  }} onClick={() => {
+									<Button1 variant="outline-info" style={{ position: 'absolute', right: '-8px', top: '5px',  }} onClick={() => {
 										//setNuevoPres(false);
 
 										//BUSCAR PRESUPUESTO
 									}
 									}><i class="fas fa-search fa-fw"></i></Button1>
 
+									<Button1 variant="outline-info" style={{ position: 'absolute', right: '28px', top: '5px', width:'25px', height:'28px'  }} onClick={() => {
+										//setNuevoPres(false);
+										setFavoritos(!favoritos)
+										//BUSCAR PRESUPUESTO
+									}
+									}>
+									{favoritos ? 
+									<img src="https://img.icons8.com/color/48/000000/star--v1.png"
+									style={{ width:'25px', height:'28px', marginTop:'-10px', marginLeft:'-8px'}}
+									/>:
+									<img src="https://img.icons8.com/color/50/000000/filled-star--v1.png"
+									style={{ width:'25px', height:'28px', marginTop:'-10px', marginLeft:'-8px'}}
+									/>
+									}
+									</Button1>
+
+									{/* <img src="https://img.icons8.com/color/50/000000/filled-star--v1.png"
+									style={{ position:'absolute', width:'25px', marginLeft:'165px', marginTop:'8px'}}
+									/> */}
+									
 									{/* <input
 										className="form-control form-control"
 										type="search"

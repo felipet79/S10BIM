@@ -17,6 +17,8 @@ import TreeList, {
 	SearchPanel
 } from 'devextreme-react/tree-list';
 import { useState } from 'react';
+import CellRend from './Cellrend';
+import { Template } from 'devextreme-react';
 
 const BuscaCliente = ({ tipo='',presupuestoN, show, setShow }) => {
 	const dispatch = useDispatch();
@@ -183,6 +185,7 @@ const BuscaCliente = ({ tipo='',presupuestoN, show, setShow }) => {
 							
 							width={'35%'}
 							dataField="Descripcion"
+							cellTemplate="Template1"
 							//cellRender={renderCell}
 						//background={#e8f7fe}
 						/>
@@ -234,6 +237,7 @@ const BuscaCliente = ({ tipo='',presupuestoN, show, setShow }) => {
 							enabled={true}
 							defaultPageSize={15}
 						/>
+						<Template name="Template1" render={CellRend} />
 					</TreeList>
 
 					{/* <div className="" style={{background:'#3c8dbc', width:'100%', height:'2px' }}>

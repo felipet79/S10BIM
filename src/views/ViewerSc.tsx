@@ -884,7 +884,7 @@ export const ViewerSc = (props) => {
 
                             //var objSelected = viewer.getSelection()[n];
                             var objSelected = dbId;
-                            E_Id = objSelected;
+                            E_Id = dbId;
                             n = n + 1;
                             viewer.getProperties(objSelected, (props) => {
                                 
@@ -1006,7 +1006,8 @@ export const ViewerSc = (props) => {
                                 }
 
                                 elementos.push({
-                                    'Id': E_Id,
+                                    //'Id': E_Id,                                    
+                                    'Id': props.dbId,
                                     'Categoria': E_cat,
                                     'Familia': E_fam,
                                     'Tipo': E_tip,
@@ -2881,7 +2882,7 @@ export const ViewerSc = (props) => {
         if (proyects.agregandoReg) {
 
             if (proyects.agregandoReg === 'Asociado') {
-                alert('Agregando Registro de asociado');
+               // alert('Agregando Registro de asociado');
             }
 
         }
@@ -2911,11 +2912,9 @@ export const ViewerSc = (props) => {
 
                 const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Tipo.trim() === proyects.filaAsociadoSel.Tipo.trim());
                 if (filtr) {
-                    //console.log('este es el filtro')
-                    //console.log(filtr)
                     if (viewer){
 
-                        viewer.getProperties(filtr[0].Id, (props) => {
+                        /*viewer.getProperties(filtr[0].Id, (props) => {
                             for (var Propiedad of props.properties) {
                                 Propies.push({
                                     'ID': Propiedad.displayName,
@@ -2923,14 +2922,12 @@ export const ViewerSc = (props) => {
                                 });    
                                
                             }
-                        })
+                        })*/
                         let ids='';
                         for (let i=0;i<filtr.length;i++)
                         {
                             ids=ids+filtr[i].UniqueId+',';
                         }
-                        //console.log('estos son los ids')
-                        //console.log(ids)
                         highlightRevit(ids);
                     }
 
@@ -2974,30 +2971,26 @@ export const ViewerSc = (props) => {
                 //const filtr = proyects.DataElementos.filter((filtro1) => filtro1.UniqueId.trim() === '12923f74-c1bc-409a-a76d-4d7f4fa7040d-00090650');
                 //const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Tipo.trim() === 'sin tipo');
                 if (filtr) {
-                    console.log('este es el filtro')
-                    console.log(filtr)
+                   // console.log('este es el filtro')
+                    //console.log(filtr)
                     if (viewer){
 
-                        viewer.getProperties(filtr[0]?.Id, (props) => {
+                     /*   viewer.getProperties(filtr[0]?.Id, (props) => {
                             for (var Propiedad of props.properties) {
                                 Propies.push({
                                     'ID': Propiedad.displayName,
                                     'Name': Propiedad.displayName,
                                 });    
-                                /* if (Propiedad.displayName === 'Nombre de tipo'){
-                                     T_TipoT.push(Propiedad.displayValue);
-                                     //enc=1;
-                                 }*/
                             }
-                        })
+                        })*/
                         let ids='';
                         for (let i=0;i<filtr.length;i++)
                         {
                             ids=ids+filtr[i].UniqueId+',';
                         }
-                        console.log('estos son los ids')
+                        /*console.log('estos son los ids')
                         console.log(filtr)
-                        console.log(ids)
+                        console.log(ids)*/
                         highlightRevit(ids);
                         //highlightRevit('380444ae-b94c-4c6e-ad5a-08a1a8974d62-0006ad5e');
                         //highlightRevit('12923f74-c1bc-409a-a76d-4d7f4fa7040d-000902e5,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000902eb,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a085b,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a0da0,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a0dc1,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a0df7,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a0e0f,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a0e31,12923f74-c1bc-409a-a76d-4d7f4fa7040d-000a1436,47e46396-fd7f-44bb-941c-3dd493a1b714,12923f74-c1bc-409a-a76d-4d7f4fa7040d-00090650');
@@ -3043,18 +3036,18 @@ export const ViewerSc = (props) => {
                     //console.log(filtr)
                     if (viewer){
 
-                        viewer.getProperties(filtr[0].Id, (props) => {
+                       /* viewer.getProperties(filtr[0].Id, (props) => {
                             for (var Propiedad of props.properties) {
                                 Propies.push({
                                     'ID': Propiedad.displayName,
                                     'Name': Propiedad.displayName,
                                 });    
-                                /* if (Propiedad.displayName === 'Nombre de tipo'){
+                                 if (Propiedad.displayName === 'Nombre de tipo'){
                                      T_TipoT.push(Propiedad.displayValue);
                                      //enc=1;
-                                 }*/
+                                 }
                             }
-                        })
+                        })*/
                         let ids='';
                         for (let i=0;i<filtr.length;i++)
                         {
@@ -3091,11 +3084,68 @@ export const ViewerSc = (props) => {
             }
             //console.log('estas son las propies')
             //console.log(Propies)
-            dispatch(ponerPropiedades(Propies));
+            //dispatch(ponerPropiedades(Propies));
         }
 
 
     }, [proyects.filaAsociadoSel]);
+
+
+
+useEffect(() => {
+        //alert('cambiaron mis asociados')
+       // console.log('cambiaron mis asociados');
+        //console.log(proyects.DataAsociado);
+
+        var Propies = [];
+        Propies.push({
+            'ID': '',
+            'Name': '',
+        });    
+
+        if (proyects.DataAsociado.length>0){
+
+            if (proyects.DataAsociado[0].Categoria !=='')            
+            {
+                const filtr = proyects.DataElementos.filter((filtro1) => filtro1.Categoria.trim() === proyects.DataAsociado[0].Categoria.trim());
+            
+                if (filtr) {
+                    //console.log('este es el filtro')
+                    //console.log(filtr)
+                    if (viewer){
+                        //console.log('este es el elemento que coge')
+                        //console.log(filtr[filtr.length-1])
+                        //console.log(filtr[1000])
+                        viewer.getProperties(filtr[0].Id, (props) => {
+                           // console.log('este es propiedades')
+                            //console.log(props)
+                            for (var Propiedad of props.properties) {
+                                            
+                                if ( Propiedad.displayName!=='viewable_in')
+                                Propies.push({
+                                    'ID': Propiedad.displayName,
+                                    'Name': Propiedad.displayName,
+                                });    
+                               
+                            }
+                        })
+                       
+                    }
+            }
+
+        }
+           // console.log('estas son las propies')
+            //console.log(Propies)
+            dispatch(ponerPropiedades(Propies));
+        }
+
+
+    }, [proyects.DataAsociado]);
+
+
+
+
+
 
     const laneId = 'demo-lane'
     const lanes = [

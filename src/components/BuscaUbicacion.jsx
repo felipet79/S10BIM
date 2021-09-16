@@ -16,11 +16,12 @@ import TreeList, {
 	Column
 } from 'devextreme-react/tree-list';
 import { useEffect, useState } from 'react';
-import { TextBox } from 'devextreme-react';
+import { Template, TextBox } from 'devextreme-react';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import { Link } from 'react-router-dom';
 import { limpiaUbicaciones, selectUBICACIONES } from '../actions/proyects.actions';
+import { CellNormal } from './Cellrend';
 
 
 const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
@@ -222,17 +223,21 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 
 						<Column
 							width={'33%'}
-							dataField="Departamento" />
+							dataField="Departamento" 
+							cellTemplate="Template1"
+							/>
 						<Column
 							width={'33%'}
 							dataField="Descripcion"
 							alignment={'right'}
+							cellTemplate="Template1"
 						/>
 						<Column
 							width={'33%'}
 							dataField="Provincia"
 							caption="Provincia"
 							alignment={'right'}
+							cellTemplate="Template1"
 						/>
 
 						{/*<Column
@@ -270,7 +275,7 @@ const BuscaUbicacion = ({ tipo='',presupuestoN,show, setShow }) => {
 							enabled={true}
 							defaultPageSize={20}
 						/>
-
+						<Template name="Template1" render={CellNormal} />
 					</TreeList>
 					<div className="" style={{ position: 'relative', width: '100%', height: '30px' }}></div>
 					<Pagination count={tpagina} page={pagina} onChange={handleChange} style={{ position: 'absolute', right: '25px', top: '655px' }} />

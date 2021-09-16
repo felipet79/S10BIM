@@ -830,6 +830,7 @@ const BuscaModelo = ({ show, setShow, subseleccionado, setSubSeleccionado ,item,
 								defaultExpandedRowKeys={[1, 2, 3, 5]}
 								columnAutoWidth={false}
 								rootValue={-1}
+								rowAlternationEnabled={true}
 								//selectedRowKeys={selectedRowKeys}
 
 								//onSelectionChanged={() => {alert('hola')}}
@@ -876,6 +877,7 @@ const BuscaModelo = ({ show, setShow, subseleccionado, setSubSeleccionado ,item,
 									defaultPageSize={15}
 								/>
 								<Template name="employeeTemplate" render={EmployeeCell} />
+								
 							</TreeList>
 
 

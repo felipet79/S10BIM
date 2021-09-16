@@ -1,12 +1,78 @@
 import { CheckBox } from 'devextreme-react';
+import { useDispatch } from 'react-redux';
+import React from 'react'
+import { guardarEstructura } from '../actions/proyects.actions';
+
+
+
 
 
 
 
 export const CellCheck = (options) => {
   const datos = options.data;
-  console.log(' Esta es la da en CelllCheck');
-  console.log(options);
+  
+
+  //console.log(' Esta es la da en CelllCheck');
+  //console.log(options);
+  //console.log(options.data);
+  /*if (!employee) {
+    return <span className="name">not assigned</span>;
+  }*/
+  
+  //const dispatch = useDispatch();
+
+  return (
+    <>
+      <div style={{ padding:'7px'}} >
+        <CheckBox
+          defaultValue={options.displayValue==='true' ? true:false}
+          //value={options.displayValue==='true' ? true:false}
+          onValueChange={(e)=>{
+           console.log(e);
+           console.log(datos)
+           //console.log(datos.CodPresupuesto,datos.CodSubpresupuesto,datos.Item,datos.CodEstructura,datos.Nivel,datos.Campo,e,'')
+           datos.Mostrar=e;
+           //e tiene true o false aqui modificar state del campo que corresponde
+           
+            /*let gg;
+            if (e)
+            gg='true';
+            else
+            gg='false';*/
+            //dispatch(guardarEstructura(datos.CodPresupuesto,datos.CodSubpresupuesto,datos.Item,datos.CodEstructura,datos.Nivel,datos.Campo,gg,''));
+           //guardarEstructura(datos.CodPresupuesto,datos.CodSubpresupuesto,datos.Item,datos.CodEstructura,datos.Nivel,datos.Campo,gg,'');
+          }}
+          
+        />
+        </div>
+    </>
+  );
+}
+
+export const CellNormal = (options) => {
+  const datos = options.data;
+  //console.log(' Esta es la da en CelllCheck');
+  //console.log(options);
+  //console.log(options.data);
+  /*if (!employee) {
+    return <span className="name">not assigned</span>;
+  }*/
+
+  return (
+    <>
+      <div style={{ padding:'7px'}} >
+        &nbsp;<span >{options.displayValue}</span>
+      </div>
+    </>
+  );
+}
+
+
+export const CellCheckresp = (options) => {
+  const datos = options.data;
+  //console.log(' Esta es la da en CelllCheck');
+  //console.log(options);
   //console.log(options.data);
   /*if (!employee) {
     return <span className="name">not assigned</span>;
@@ -41,7 +107,6 @@ export const CellCheck = (options) => {
   );
 }
 
-
 export function CellRend_Items(options) {
   const employee = options.data;
   /*console.log(' Esta es la da en CelllRend');
@@ -53,6 +118,7 @@ export function CellRend_Items(options) {
   //const [alto, setAlto] = useState('20px');
   let pading='7px';
   let fsize='12px';
+  let brad='0px';
   /*if (!employee) {
     return <span className="name">not assigned</span>;
   }*/
@@ -72,6 +138,7 @@ export function CellRend_Items(options) {
     //bordes='80px 30px 0px 0px;'
     pading='0px';
     fsize='10px';
+    brad='10px 0px 3px 10px';
     //color='transparent'
   }
 
@@ -92,9 +159,9 @@ export function CellRend_Items(options) {
 
       
       { options.data.Unidad !== null ?
-      <div style={{ background: 'transparent', backgroundSize:'cover', /*height:alto,*/ padding:'7px', boxShadow:'0.0px 0.05px 0.0px 0.0px rgba(0,0,0,0.02) inset', paddingLeft:pading, fontSize:fsize }} >
+      <div style={{/*height:alto,*/ padding:'7px', fontWeight:'500', /*boxShadow:'0.0px 0.05px 0.0px 0.0px rgba(0,0,0,0.02) inset',*/ paddingLeft:pading, fontSize:fsize }} >
         &nbsp;<span >{options.displayValue}</span></div>
-      : <div style={{ background: color,  height:alto, padding:'7px', borderRadius:'4px', boxShadow:'0.0px 0.5px 0.5px 0.0px rgba(0,0,0,0.06) inset', paddingLeft:pading, fontSize:fsize }} >
+      : <div style={{ background: color,  height:alto, padding:'7px', borderRadius:brad, fontWeight:'600', color:'rgb(70, 68, 68)', /*boxShadow:'0.0px 0.5px 0.5px 0.0px rgba(0,0,0,0.06) inset',*/ paddingLeft:pading, fontSize:fsize }} >
         &nbsp;<span >{options.displayValue}</span></div>      
       }      
 
@@ -117,6 +184,7 @@ export function CellRend_Metrados(options) {
   //const [alto, setAlto] = useState('20px');
   let pading='7px';
   let fsize='12px';
+  let brad='0px';
   /*if (!employee) {
     return <span className="name">not assigned</span>;
   }*/
@@ -138,6 +206,7 @@ export function CellRend_Metrados(options) {
     //fsize='10px';
     //color='transparent'
     margen='8px'
+    brad='6px';
   }
 
 
@@ -157,9 +226,9 @@ export function CellRend_Metrados(options) {
 
       
       { options.data.Tipo === "Medicion" ?
-      <div style={{ background: 'transparent', backgroundSize:'cover', /*height:alto,*/ padding:'7px', boxShadow:'0.0px 0.05px 0.0px 0.0px rgba(0,0,0,0.02) inset', paddingLeft:pading, fontSize:fsize }} >
+      <div style={{ /*height:alto,*/ padding:'7px', fontWeight:'500',/*boxShadow:'0.0px 0.02px 0.0px 0.0px rgba(0,0,0,0.02) inset',*/ paddingLeft:pading, fontSize:fsize }} >
         &nbsp;<span >{options.displayValue}</span></div>
-      : <div style={{ marginLeft:margen, background: color,  height:alto, padding:'7px', borderRadius:'4px', boxShadow:'0.0px 0.5px 0.5px 0.0px rgba(0,0,0,0.06) inset', paddingLeft:pading, fontSize:fsize }} >
+      : <div style={{ marginLeft:margen, background: color,  height:alto, padding:'7px', borderRadius:brad,fontWeight:'600', color:'rgb(70, 68, 68)', /*boxShadow:'0.0px 0.05px 0.5px 0.0px rgba(0,0,0,0.04) inset',*/ paddingLeft:pading, fontSize:fsize }} >
         &nbsp;<span >{options.displayValue}</span></div>      
       }      
 
@@ -170,6 +239,27 @@ export function CellRend_Metrados(options) {
 
 
 export default function CellRend(options) {
+  const employee = options.data;
+  /*console.log(' Esta es la da en CelllRend');
+  console.log(options);
+  console.log(options.data);*/
+  /*if (!employee) {
+    return <span className="name">not assigned</span>;
+  }*/
+
+  return (
+    <>
+      <div style={{ padding:'7px' }} >
+        &nbsp;<span >{options.displayValue}</span></div>
+ 
+      
+    </>
+  );
+}
+
+
+
+export function CellRendresp(options) {
   const employee = options.data;
   /*console.log(' Esta es la da en CelllRend');
   console.log(options);

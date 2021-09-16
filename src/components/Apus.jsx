@@ -163,6 +163,7 @@ const Apus = ({ levelStart = 1, idProject }) => {
 				rootValue={-1}
 				showRowLines={true}
 				showColumnLines={true}
+				rowAlternationEnabled={true}
 
 				//selectedRowKeys={selectedRowKeys}
 

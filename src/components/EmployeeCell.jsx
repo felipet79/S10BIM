@@ -10,13 +10,14 @@ export default function EmployeeCell(options) {
 
   return (
     <React.Fragment>
+      <div style={{ padding:'7px'}}>
       {/* <div className="img" style={{ backgroundImage: `url(${employee.Picture})` }} /> */}
       { employee.Tipo === 'Proyecto' ?
-      <div className="img" style={{ backgroundImage: `url('img/manager.png')` }} />
+      <div className="img" style={{  backgroundImage: `url('img/manager.png')` }} />
       : employee.Tipo === 'Folder' ?
-      <div className="img" style={{ backgroundSize:'25px', backgroundImage: `url('img/project.png')` }} />
+      <div className="img" style={{  backgroundSize:'25px', backgroundImage: `url('img/project.png')` }} />
       : employee.Tipo === 'Modelo' ?
-      <div className="img" style={{ backgroundSize:'25px', backgroundImage: `url('img/subproject.png')` }} />
+      <div className="img" style={{  backgroundSize:'25px', backgroundImage: `url('img/subproject.png')` }} />
       : employee.Tipo === 'Version' ?
       ''
     //   <div className="img" style={{ backgroundImage: `url('manager3.png')` }} />
@@ -26,6 +27,7 @@ export default function EmployeeCell(options) {
       
       &nbsp;
       <span className="name">{employee.Descripcion}</span>
+      </div>
     </React.Fragment>
   );
 }

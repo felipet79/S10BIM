@@ -43,12 +43,24 @@ function MinusSquare1(props) {
 	return (
 		<div className="d-flex">
 			{/* <ion-icon name="chevron-down-outline"></ion-icon> */}
-			{/* <ion-icon name="caret-down-outline" style={{width:'12px', color: '#333337'}}></ion-icon> */}
-			<ion-icon name="add-outline" style={{width:'12px', color: '#333337'}}></ion-icon>
+			<ion-icon name="caret-down-outline" style={{width:'12px', color: '#333337'}}></ion-icon>
+			{/* <ion-icon name="add-outline" style={{width:'12px', color: '#333337'}}></ion-icon> */}
 			<img src={projectIcon44} alt="icons" width="18" style={{ marginRight: 10 }} {...props} />
 		</div>
 	);
 }
+
+function MinusSquare2(props) {
+	return (
+		<div className="d-flex">
+			{/* <ion-icon name="chevron-down-outline"></ion-icon> */}
+			<ion-icon name="caret-forward-outline" style={{width:'12px', color: '#333337'}}></ion-icon>
+			{/* <ion-icon name="add-outline" style={{width:'12px', color: '#333337'}}></ion-icon> */}
+			<img src={projectIcon44} alt="icons" width="18" style={{ marginRight: 10 }} {...props} />
+		</div>
+	);
+}
+
 
 function PlusSquare1(props) {
 	return (
@@ -174,7 +186,7 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 
 
-
+	const [abierto, setabierto] = useState(false);
 
 
 
@@ -256,6 +268,7 @@ const TreeCP = ({ levelStart = 1, idProject, filtrado, Accion }) => {
 
 		//console.log('ESTE ES EL SELECCIONADO');
 		//console.log(pc);
+		//pc.open=!pc.open;
 /*
 		CodPresupuesto: "18"
 Descripcion: "BIM4"
@@ -265,6 +278,8 @@ Nivel: 1
 PhantomId: "18"
 PhantomParentId: null
 */
+		setabierto(!abierto);
+
 		SetArbolSeleccionado({
 			CodPresupuesto:pc.CodPresupuesto,
 			Descripcion:pc.Descripcion,
@@ -889,14 +904,17 @@ PhantomParentId: null
 							)}
 
 						</StyledTreeItem> :
-						<StyledTreeItem
+						filter.open ? <StyledTreeItem
 						//icon={<IconoProjecto />}
 						icon={<MinusSquare1 />}
 						//defaultExpandIcon={<PlusSquare1 />}
 						nodeId={filter.CodPresupuesto}
 						label={filter.Descripcion}							
 						key={filter.CodPresupuesto}
-						onLabelClick={() => changeItem(filter, newTitle)}
+						//onLabelClick={() => changeItem(filter, newTitle)}
+						//onClick={() => filter.open=!filter.open}
+						onClick={() => {filter.open=!filter.open; changeItem(filter, newTitle)}}
+
 					>
 						{(nextLevel === lastLevel
 							? allLevels[nextLevel].filter(item => filter.CodPresupuesto === item.PhantomParentId).map(grupo3 => (
@@ -905,6 +923,8 @@ PhantomParentId: null
 									nodeId={grupo3.CodPresupuesto}
 									label={grupo3.Descripcion}
 									onLabelClick={() => changeItem(grupo3, `${newTitle} ≫ ${grupo3.Descripcion}`)}
+									onClick={() => {grupo3.open=!grupo3.open}}
+
 								/>
 								// </Link>
 							))
@@ -912,7 +932,37 @@ PhantomParentId: null
 
 						)}
 
-					</StyledTreeItem>
+					</StyledTreeItem>:
+					<StyledTreeItem
+					
+					//icon={<IconoProjecto />}
+					icon={<MinusSquare2 />}
+					//defaultExpandIcon={<PlusSquare1 />}
+					nodeId={filter.CodPresupuesto}
+					label={filter.Descripcion}							
+					key={filter.CodPresupuesto}
+					//onClick={() => filter.open=!filter.open}
+					//onLabelClick={() => changeItem(filter, newTitle)}
+					onClick={() => {filter.open=!filter.open; changeItem(filter, newTitle)}}
+
+				>
+					{(nextLevel === lastLevel
+						? allLevels[nextLevel].filter(item => filter.CodPresupuesto === item.PhantomParentId).map(grupo3 => (
+							<StyledTreeItem
+								icon={<MinusSquare1 />}
+								nodeId={grupo3.CodPresupuesto}
+								label={grupo3.Descripcion}
+								onLabelClick={() => changeItem(grupo3, `${newTitle} ≫ ${grupo3.Descripcion}`)}
+								onClick={() => {grupo3.open=!grupo3.open}}
+
+							/>
+							// </Link>
+						))
+						: drawerItems(nextLevel, filtro, filter.CodPresupuesto, (level === 1 ? '' : `${newTitle} ≫ `))
+
+					)}
+
+				</StyledTreeItem>
 					
 					)
 				})
@@ -931,6 +981,7 @@ PhantomParentId: null
 									key={parentId + data.CodSubpresupuesto}
 									//onLabelClick={( ) => changeItem1('', `${''} / ${''}`)}
 									onLabelClick={() => changeItem1(data, `${/*newTitle*/''} ${parentName}  ${data.Descripcion}`, parentId)}
+									
 								/>)
 						})) : ''
 				}
@@ -1133,6 +1184,7 @@ PhantomParentId: null
 				defaultExpandIcon={<PlusSquare />}
 				defaultEndIcon={<PlusSquare1 />}
 				multiSelect={false}				
+				
 			>
 
 				{

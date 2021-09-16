@@ -83,16 +83,18 @@ a{
     height: 6px;
     }
     ::-webkit-scrollbar-thumb{
-    background: linear-gradient(39deg,rgba(255,255,255,0.8) 14%, rgba(0,0,0,0.1) 64%);
+    background: linear-gradient(39deg,rgba(255,255,255,0.5) 9%, rgba(0,0,0,0.1) 24%);
     border-radius: 10px;
+    
     }
     ::-webkit-scrollbar-thumb:hover{
-    background: linear-gradient(10deg, rgba(0,0,0,0.2) 14%,rgba(0,0,0,0.1) 64%);
+    background: linear-gradient(10deg, rgba(0,0,0,0.02) 9%,rgba(0,0,0,0.1) 14%);
     }
     ::-webkit-scrollbar-track{
-    background: #FFFFFF;
+    background: #f0f0f0;
+    background: #f5f6f8;
     border-radius: 10px;
-    box-shadow: inset 7px 10px 12px 0px #F0F0F0;
+    box-shadow: inset 7px 10px 12px 0px #f5f6f8;
     }
 
 
@@ -215,7 +217,7 @@ a{
 }
 
 ::-webkit-scrollbar {
-    width: 0px;
+    width: 7px;
     height: 0px;
 }
 
@@ -552,6 +554,7 @@ element.style {
 .dx-treelist-headers .dx-treelist-table .dx-row > td {
     border-bottom: 0.2px solid #ddd;
     padding: 7px;
+    /*border-bottom: 0.2px solid rgb(70, 68, 68);*/
 }
 
 .dx-treelist-rowsview .dx-treelist-empty-space {
@@ -573,4 +576,15 @@ element.style {
  
     font-size: 1.275em;
  
+}
+
+.dx-datagrid-rowsview .dx-row-focused.dx-data-row:not(.dx-row-lines) > td, .dx-datagrid-rowsview .dx-row-focused.dx-data-row:not(.dx-row-lines) > tr:first-child > td {
+    /*border-top: 1px solid #5c95c5;
+    border-bottom: 1px solid #5c95c5;*/
+    border-top: none;    
+    color: black;
+    background-color: #cce5ff !important;
+
+    border-radius: 2px;
+    border-bottom: 4px solid #6ac5b1;    
 }
